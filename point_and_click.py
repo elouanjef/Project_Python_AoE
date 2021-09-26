@@ -5,8 +5,9 @@ pygame.init()
 
 clock = pygame.time.Clock()
 current_time = 0
-
-win = pygame.display.set_mode((1000, 500))
+win = pygame.display.set_mode((0, 0), pg.NOFRAME)
+pygame.display.toggle_fullscreen()
+#win = pygame.display.set_mode((1000, 500))
 
 pygame.display.set_caption("First Game")
 class character:
@@ -77,6 +78,11 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+                    #pygame.quit()
 
     #keys = pygame.key.get_pressed()
     if event.type == MOUSEBUTTONDOWN:
