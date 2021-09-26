@@ -6,6 +6,7 @@ from pygame.constants import K_ESCAPE
 from .settings import BLACK, BLUE, RED, WHITE ,TILE_SIZE, TILE_SIZE_MINI_MAP
 from .utils import  draw_text
 from .camera import Camera
+from .hud import Hud
 
 
 class Game:
@@ -22,6 +23,9 @@ class Game:
 
         #camera
         self.camera = Camera(self.width, self.height)
+
+        #hud
+        self.hud = Hud(self.width, self.height)
 
 
     #running
@@ -49,6 +53,7 @@ class Game:
 
     def update(self):
         self.camera.update()
+        self.hud.update()
 
     def draw(self):
         #his method is used to fill the display with black 
@@ -60,11 +65,17 @@ class Game:
         for x in range(self.world.grid_length_x):
             for y in range(self.world.grid_length_y):
 
-                #on minimap (draw with blue color)
-                sq = self.world.world[x][y]["cart_rect_mini_map"]
-                rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE_MINI_MAP, TILE_SIZE_MINI_MAP)
-                pg.draw.rect(self.screen,BLUE, rect, 1)
-                
+                #on rect minimap (draw with blue color)
+                #sq = self.world.world[x][y]["cart_rect_mini_map"]
+                #rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE_MINI_MAP, TILE_SIZE_MINI_MAP)
+                #pg.draw.rect(self.screen,BLUE, rect, 1)
+
+
+                #on iso_poly minimap (draw with blue color)
+                mini = self.world.world[x][y]["iso_poly_mini"]
+                mini = [(x + 200, y + 20) for x,y in mini]        # position x + ...., y  + ...
+                pg.draw.polygon(self.screen, BLUE, mini, 1)
+
                 
                 #on our isometric map (red color)
                 #create the world's block
@@ -88,13 +99,15 @@ class Game:
                 #p = [(x + self.width/2, y + self.height/4) for x,y in p]
                 #pg.draw.polygon(self.screen, RED, p, 1)
 
+
+        self.hud.draw(self.screen)
    
         draw_text(
             self.screen,                                    #print it on screen
             "fps={}".format(round(self.clock.get_fps())),   #get value
             25,                                             #text's size 
             WHITE,                                          #the text's colour
-            (900, 10)                                       #position of the text (x, y)
+            (900, 3)                                       #position of the text (x, y)
         )
         
 

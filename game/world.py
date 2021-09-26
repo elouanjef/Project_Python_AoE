@@ -55,7 +55,8 @@ class World:
         ]
 
         rect_mini_map = [
-            (grid_x * TILE_SIZE_MINI_MAP, grid_y*TILE_SIZE_MINI_MAP),
+            (grid_x * TILE_SIZE_MINI_MAP, grid_y*TILE_SIZE_MINI_MAP ),
+            #(grid_x * TILE_SIZE_MINI_MAP, grid_y*TILE_SIZE_MINI_MAP + 5 * TILE_SIZE_MINI_MAP ),                      #left and top location of every square in mini map
             (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
             (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP),
             (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
@@ -63,6 +64,7 @@ class World:
 
 
         iso_poly = [self.cart_to_iso(x, y) for x,y in rect]
+        iso_poly_mini = [self.cart_to_iso(x, y) for x,y in rect_mini_map]
 
         minx = min([x for x,y in iso_poly])
         miny = min([y for x,y in iso_poly])
@@ -91,9 +93,10 @@ class World:
         #this dict() store all kind of info of all elements in grid
         out = {
             "grid":  [grid_x,grid_y],
-            "cart_rect": rect,
-            "cart_rect_mini_map": rect_mini_map,
-            "iso_poly": iso_poly,
+            "cart_rect": rect,                      #square map
+            "cart_rect_mini_map": rect_mini_map,    #square mini map
+            "iso_poly": iso_poly,                   #iso_poly map
+            "iso_poly_mini": iso_poly_mini,         #isopoly minimap
             "render_pos": [minx, miny],
             "tile": tile
         }
