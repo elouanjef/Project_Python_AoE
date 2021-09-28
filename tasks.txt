@@ -1,12 +1,12 @@
 + menu 
-+ algo A*
-+ sauvgarder
-+ gestion des unite/batiment
-+ ajouter des personnages (one human + one I.A)
++ algo A*                                               ;Cong Khai
++ sauvgarder                                            ;
++ gestion des unite/batiment                            ;Elouan
++ ajouter des personnages (one human + one I.A)   
 + la methode de la mini
-+ collision
++ collision                                             ;Hoai
 + les themes
 + IA
 + randomising the map in intervalls
 + cheats commands
-
++ resource ()
