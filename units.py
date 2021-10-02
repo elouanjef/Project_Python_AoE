@@ -1,5 +1,10 @@
 from typing import Dict
 
+class attTroop:
+
+    archer_time = 3
+    archer_resWRGF = [20,20,20,30]
+
 class Unite:
 
     batiment = False
@@ -13,18 +18,7 @@ class Unite:
     costg = 0
     costr = 0
 
-    def attributs(self,costw,costr,costg,costf):
-        self.costw = costw
-        self.costr = costr
-        self.costg = costg
-        self.costf = costf
-        if self.soldat:
-            print("Unité ajoutée !",str(self.name),"vaut :",costw,"bois",costr,"pierre",costg,"or",costf,"nourriture")
-        elif self.batiment:
-            print("Bâtiment ajouté !",str(self.name),"vaut :",costw,"bois",costr,"pierre",costg,"or",costf,"nourriture")
-        elif self.villageois:
-            print("Villageois ajouté !", str(self.name), "vaut :", costw, "bois", costr, "pierre", costg, "or", costf,
-                  "nourriture")
+
 
     def __init__(self, name, type):
         self.name = name
@@ -43,6 +37,20 @@ class Unite:
             self.alive = True
         else: print("Il faut choisir un type valable")
 
+def attributs(nom,resWRGF):  # Cette fonction servira a retourner les informations sur la troupe ou le batiment pour ainsi dire :
+                                # elle met tant de temps à se construire, elle coute tant de bois etc...
+    costw = resWRGF[0]
+    costr = resWRGF[1]
+    costg = resWRGF[2]
+    costf = resWRGF[3]
+    if nom in ("arbalétrier"):
+        print("Un(e)",nom, "vaut :", costw, "bois", costr, "pierre", costg, "or", costf, "nourriture\nElle met",attTroop.archer_time,"secondes à se créer.")
+    elif nom.batiment:
+        print("Un(e)",nom, "vaut :", costw, "bois", costr, "pierre", costg, "or", costf, "nourriture")
+    elif nom.villageois:
+        print("Un(e)",nom, "vaut :", costw, "bois", costr, "pierre", costg, "or", costf, "nourriture")
+
+
 def millitaire(nb,troop,type):
     armee = {}
     for i in range (nb):
@@ -60,8 +68,13 @@ def construire(batiment,type):
 
 test_archers = millitaire(10,"arbalétrier","infanterie")
 
-print(test_archers)
+print(str(test_archers[5]))
+print(attributs((test_archers[5].name),attTroop.archer_resWRGF))
 
-test_batiment = construire("hotel de ville","economie")
 
-print(test_batiment)
+#test_batiment = construire("hotel de ville","economie")
+#print(test_batiment)
+
+
+
+#c'est un exemple, j'ai pas tout terminé, la fonction attribut n'est pas du tout au point
