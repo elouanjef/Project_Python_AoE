@@ -10,3 +10,4 @@
 + randomising the map in intervalls
 + cheats commands                                       ;Tuan
 + resource ()                                           ;Elouan
++ fog of war et map                                     ;Cong Khai
