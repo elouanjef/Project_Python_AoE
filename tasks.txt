@@ -9,4 +9,4 @@
 + IA
 + randomising the map in intervalls
 + cheats commands                                       ;Tuan
-+ resource ()
++ resource ()                                           ;Elouan
