@@ -1,18 +1,17 @@
-from typing import Dict
 import time
-from tqdm import tqdm #pour la barre de progression de recrutement des troupes ou de construction des bâtiments
+from tqdm import tqdm
+
 
 class Unite:
-
     batiment = False
     soldat = False
     villageois = False
     alive = False
     type = False
     name = False
-    resWRGF = [0,0,0,0]
+    resWRGF = [0, 0, 0, 0]
 
-    def __init__(self, name, type, resWRGF):
+    def __init__(self, name, type):
         self.name = name
         self.type = type
         if str(self.type) in ("cavalerie", "infanterie", "artillerie"):
@@ -28,40 +27,42 @@ class Unite:
             print("Il faut choisir un type valable")
 
 
-def militaire(nb,troop,type,resWRGF,t):
+def militaire(nb, troop, type, resWRGF, t):
     # test_resource(resWRGF)
     armee = {}
     for i in tqdm(range(nb)):
         time.sleep(t)
-        armee[i] = Unite(troop,type,resWRGF)
-        print("\nVous avez enrôlé",i+1,str(troop), "de type", str(type), "pour", resWRGF[0], "de bois",
+        armee[i] = Unite(troop, type)
+        print("\nVous avez enrôlé", i + 1, str(troop), "de type", str(type), "pour", resWRGF[0], "de bois",
               resWRGF[1], "de pierre", resWRGF[2], "d'or et", resWRGF[3], "de nourriture")
     return armee
+
 
 def villager(nb):
     # test_resource(resWRGF)
     villageois = {}
-    resWRGF = [0,0,0,50]
+    resWRGF = [0, 0, 0, 50]
     for i in tqdm(range(nb)):
         time.sleep(3)
-        villageois[i] = Unite("villageois","villageois",resWRGF)
-        print("\nVillageois créé pour",resWRGF[3],"de nourriture")
+        villageois[i] = Unite("villageois", "villageois")
+        print("\nVillageois créé pour", resWRGF[3], "de nourriture")
     return villageois
 
 
-#Peut-être rajouter une ligne pour dire combien le batiment met de temps à se construire,
-#avec une classe batiments avec tous les temps de construction des batiments, et du coup faire un print(self.temps_construction_eglise) par exemple
-def construire(name,type,resWRGF,t):
-    #test_resource(resWRGF)
+# Peut-être rajouter une ligne pour dire combien le batiment met de temps à se construire,
+# avec une classe batiments avec tous les temps de construction des batiments,
+# et du coup faire un print(self.temps_construction_eglise) par exemple
+def construire(name, type, resWRGF, t):
+    # test_resource(resWRGF)
     time.sleep(t)
-    construction = Unite(name,type,resWRGF)
-    print("\nVous avez bâti un(e)", str(name), "de type", str(type),"pour", resWRGF[0], "de bois",
-              resWRGF[1], "de pierre", resWRGF[2], "d'or et", resWRGF[3], "de nourriture")
+    construction = Unite(name, type)
+    print("\nVous avez bâti un(e)", str(name), "de type", str(type), "pour", resWRGF[0], "de bois",
+          resWRGF[1], "de pierre", resWRGF[2], "d'or et", resWRGF[3], "de nourriture")
     return construction
+
 
 test_villageois = villager(15)
 print(test_villageois)
-test_archers = militaire(10,"archer","infanterie",[0,0,20,30],3)
+test_archers = militaire(10, "archer", "infanterie", [0, 0, 20, 30], 3)
 
-test_hotel = construire("caserne","militaire",[200,100,0,0],10)
-#il reste à gérer le fait que ces methodes s'exécutent en même temps, le RTS
+test_hotel = construire("caserne", "militaire", [200, 100, 0, 0], 10)
