@@ -64,4 +64,4 @@ print(test_villageois)
 test_archers = militaire(10,"archer","infanterie",[0,0,20,30],3)
 
 test_hotel = construire("caserne","militaire",[200,100,0,0],10)
-
+#il reste à gérer le fait que ces methodes s'exécutent en même temps, le RTS
