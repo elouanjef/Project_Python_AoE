@@ -1,0 +1,12 @@
++ menu                                                  ;zakaria
++ algo A*                                               ;Cong Khai
++ sauvgarder                                            ;
++ gestion des unite/batiment                            ;Elouan
++ ajouter des personnages (one human + one I.A)   
++ la methode de la mini
++ collision                                             ;Hoai
++ les themes                                            
++ IA
++ randomising the map in intervalls
++ cheats commands                                       ;Tuan
++ resource ()                                           ;Elouan
