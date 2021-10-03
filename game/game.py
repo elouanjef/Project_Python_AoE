@@ -2,8 +2,7 @@ import pygame as pg
 import sys
 
 from .world import World
-from pygame.constants import K_ESCAPE
-from .settings import BLACK, BLUE, RED, WHITE ,TILE_SIZE, TILE_SIZE_MINI_MAP
+from settings import BLACK, BLUE, WHITE ,TILE_SIZE
 from .utils import  draw_text
 from .camera import Camera
 from .hud import Hud
@@ -18,14 +17,16 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
+        #hud 
+        self.hud = Hud(self.width, self.height)
+
+
         #create the world with 50 by 50 grid
-        self.world = World(50, 50, self.width, self.height)
+        self.world = World(self.hud, 50, 50, self.width, self.height)
 
         #camera
         self.camera = Camera(self.width, self.height)
 
-        #hud
-        self.hud = Hud(self.width, self.height)
 
 
     #running
@@ -54,52 +55,12 @@ class Game:
     def update(self):
         self.camera.update()
         self.hud.update()
+        self.world.update(self.camera)
 
     def draw(self):
         #his method is used to fill the display with black 
         self.screen.fill(BLACK)
-
-        self.screen.blit(self.world.grass_tiles, (self.camera.scroll.x, self.camera.scroll.y))
-
-        #draw coordinate lines 
-        for x in range(self.world.grid_length_x):
-            for y in range(self.world.grid_length_y):
-
-                #on rect minimap (draw with blue color)
-                #sq = self.world.world[x][y]["cart_rect_mini_map"]
-                #rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE_MINI_MAP, TILE_SIZE_MINI_MAP)
-                #pg.draw.rect(self.screen,BLUE, rect, 1)
-
-
-                #on iso_poly minimap (draw with blue color)
-                mini = self.world.world[x][y]["iso_poly_mini"]
-                mini = [(x + 200, y + 20) for x,y in mini]        # position x + ...., y  + ...
-                pg.draw.polygon(self.screen, BLUE, mini, 1)
-
-                
-                #on our isometric map (red color)
-                #create the world's block
-                render_pos = self.world.world[x][y]["render_pos"]
-
-                #this is the world merged with the computer's screen
-                #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
-
-
-                #create the other world's object
-                tile = self.world.world[x][y]["tile"]
-                if tile != "":
-                    self.screen.blit(self.world.tiles[tile], 
-                                    (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x, 
-                                     render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
-
-
-
-                #Grid on the main map
-                #p = self.world.world[x][y]["iso_poly"]
-                #p = [(x + self.width/2, y + self.height/4) for x,y in p]
-                #pg.draw.polygon(self.screen, RED, p, 1)
-
-
+        self.world.draw(self.screen,self.camera)
         self.hud.draw(self.screen)
    
         draw_text(

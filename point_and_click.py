@@ -1,15 +1,15 @@
-import pygame
-from pygame.constants import K_SPACE, MOUSEBUTTONDOWN
+import pygame as pg
+from pygame.constants import MOUSEBUTTONDOWN
 from math import  acos, sqrt, cos, sin
-pygame.init()
+pg.init()
 
-clock = pygame.time.Clock()
+clock = pg.time.Clock()
 current_time = 0
-win = pygame.display.set_mode((0, 0), pg.NOFRAME)
-pygame.display.toggle_fullscreen()
-#win = pygame.display.set_mode((1000, 500))
+win = pg.display.set_mode((0, 0), pg.NOFRAME)
+pg.display.toggle_fullscreen()
+#win = pg.display.set_mode((1000, 500))
 
-pygame.display.set_caption("First Game")
+pg.display.set_caption("First Game")
 class character:
     def __init__(self):
         self.x = 50
@@ -32,7 +32,7 @@ class character:
                 return -acos((a * a + b * b - c * c)/(2.0 * a * b))
     #Capture mouse click position
     # def mouse_click(self):
-    #   x,y = pygame.mouse.get_pos()
+    #   x,y = pg.mouse.get_pos()
     #   return x,y
 
     def move(self, target_x, target_y):
@@ -59,10 +59,10 @@ class character:
                     self.y-=velocity_y
             if((abs(target_x-self.x) < self.step_size)and (abs(target_y-self.y) < self.step_size)):
                 moving=False
-            pygame.time.delay(100)
+            pg.time.delay(100)
             win.fill((0, 0, 0))
-            pygame.draw.circle(win, crts.color, (crts.x, crts.y), crts.radius)
-            pygame.display.update()
+            pg.draw.circle(win, crts.color, (crts.x, crts.y), crts.radius)
+            pg.display.update()
             print("position: (%f, %f)" % (self.x,self.y))
 
     def cha_move(self):
@@ -73,20 +73,20 @@ class character:
 crts = character()
 run = True
 while run:
-    #pygame.time.delay(200)
+    #pg.time.delay(200)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             run = False
-            pygame.quit()
-        if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+            pg.quit()
+        if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
                     run = False
-                    #pygame.quit()
+                    #pg.quit()
 
-    #keys = pygame.key.get_pressed()
+    #keys = pg.key.get_pressed()
     if event.type == MOUSEBUTTONDOWN:
-        x,y = pygame.mouse.get_pos()
+        x,y = pg.mouse.get_pos()
         crts.move(x,y)
         #print(crts.x)
         #print(crts.y)
@@ -96,9 +96,9 @@ while run:
         
     win.fill((0, 0, 0))
 
-    pygame.draw.circle(win, crts.color, (crts.x, crts.y), crts.radius)
-    pygame.display.update()
+    pg.draw.circle(win, crts.color, (crts.x, crts.y), crts.radius)
+    pg.display.update()
 
 
 
-pygame.quit()
+pg.quit()

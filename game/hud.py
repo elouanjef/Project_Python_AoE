@@ -1,6 +1,7 @@
-from game.settings import HUD_COLOUR, WHITE
+from settings import HUD_COLOUR, WHITE, graphics_folder
 import pygame as pg
 from .utils import draw_text
+from os import path
 
 class Hud:
 
@@ -12,15 +13,18 @@ class Hud:
         self.hud_colour = HUD_COLOUR
 
         #resource hud
-        self.resouces_surface = pg.Surface((width, height * 0.02), pg.SRCALPHA)
-        self.resouces_surface.fill(self.hud_colour)
+        self.resources_surface = pg.Surface((width, height * 0.02), pg.SRCALPHA)
+        self.resources_rect = self.resources_surface.get_rect(topleft = (0, 0))
+        self.resources_surface.fill(self.hud_colour)
 
         #building hud
         self.build_surface = pg.Surface((width * 0.15, height * 0.25), pg.SRCALPHA)
+        self.build_rect = self.build_surface.get_rect(topleft = (self.width * 0.84, self.height * 0.74))
         self.build_surface.fill(self.hud_colour)
 
         #select hud
         self.select_surface = pg.Surface((width * 0.3, height * 0.2), pg.SRCALPHA)
+        self.select_rect = self.select_surface.get_rect(topleft = (self.width * 0.35, self.height * 0.79))
         self.select_surface.fill(self.hud_colour)
 
 
@@ -77,13 +81,13 @@ class Hud:
 
     def draw(self, screen):
 
-        if self.selected_tile is not None:
-            img = self.selected_tile["image"].copy()
-            img.set_alpha(100)
-            screen.blit(img, pg.mouse.get_pos())
+        # if self.selected_tile is not None:
+        #     img = self.selected_tile["image"].copy()
+        #     img.set_alpha(100)
+        #     screen.blit(img, pg.mouse.get_pos())
 
         #resource 
-        screen.blit(self.resouces_surface, (0, 0))
+        screen.blit(self.resources_surface, (0, 0))
         #build hud
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
         #select hud
@@ -102,10 +106,10 @@ class Hud:
     def load_images(self):
 
         #read images
-        building1 = pg.image.load("assets/graphics/building01.png")
-        building2 = pg.image.load("assets/graphics/building02.png")
-        tree = pg.image.load("assets/graphics/tree.png")
-        rock = pg.image.load("assets/graphics/rock.png")
+        building1 = pg.image.load(path.join(graphics_folder,"building01.png"))
+        building2 = pg.image.load(path.join(graphics_folder,"building02.png"))
+        tree = pg.image.load(path.join(graphics_folder,"tree.png"))
+        rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
         images = {
             "building1": building1,

@@ -1,13 +1,15 @@
 import pygame as pg
-from .settings import TILE_SIZE, TILE_SIZE_MINI_MAP
+from settings import RED, TILE_SIZE, TILE_SIZE_MINI_MAP,BLUE, WHITE ,graphics_folder
 import random
 import noise
+from os import path 
 
 class World:
 
 
     #create the dimensions of the world (isometric)
-    def __init__(self, grid_lenght_x, grid_length_y, width, height):
+    def __init__(self, hud,grid_lenght_x, grid_length_y, width, height):
+        self.hud = hud
         self.grid_length_x = grid_lenght_x
         self.grid_length_y = grid_length_y
         self.width = width
@@ -24,6 +26,100 @@ class World:
         
         self.tiles = self.load_images()
         self.world = self.create_world()
+
+        self.temp_tile = None
+
+    def update(self, camera):
+        mouse_pos = pg.mouse.get_pos()
+        mouse_action = pg.mouse.get_pressed()
+        self.temp_tile = None
+
+        if self.hud.selected_tile is not None:
+
+            grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+            
+
+            if self.can_place_tile(grid_pos):
+            
+                
+                img = self.hud.selected_tile["image"].copy()
+                img.set_alpha(100)
+
+                render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
+                iso_poly = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
+                collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
+                self.temp_tile = {
+                    "image": img,
+                    "render_pos": render_pos,
+                    "iso_poly": iso_poly,
+                    "collision": collision
+                }
+
+
+                if mouse_action[0] and not collision:
+                    self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
+                    self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
+                    self.hud.selected_tile = None
+
+    def draw(self, screen, camera):
+
+        screen.blit(self.grass_tiles, (camera.scroll.x,camera.scroll.y))
+
+        #draw coordinate lines 
+        for x in range(self.grid_length_x):
+            for y in range(self.grid_length_y):
+
+                #on rect minimap (draw with blue color)
+                #sq = self.world.world[x][y]["cart_rect_mini_map"]
+                #rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE_MINI_MAP, TILE_SIZE_MINI_MAP)
+                #pg.draw.rect(self.screen,BLUE, rect, 1)
+
+
+                #on iso_poly minimap (draw with blue color)
+                mini = self.world[x][y]["iso_poly_mini"]
+                mini = [(x + 200, y + 20) for x,y in mini]        # position x + ...., y  + ...
+                pg.draw.polygon(screen, BLUE, mini, 1)
+
+                
+                #on our isometric map (red color)
+                #create the world's block
+                render_pos = self.world[x][y]["render_pos"]
+
+                #this is the world merged with the computer's screen
+                #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
+
+
+                #create the other world's object
+                tile = self.world[x][y]["tile"]
+                if tile != "":
+                    screen.blit(self.tiles[tile], 
+                                    (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, 
+                                     render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
+
+
+
+                #Grid on the main map
+                #p = self.world.world[x][y]["iso_poly"]
+                #p = [(x + self.width/2, y + self.height/4) for x,y in p]
+                #pg.draw.polygon(self.screen, RED, p, 1)
+
+        if self.temp_tile is not None:
+            iso_poly = self.temp_tile["iso_poly"]
+            iso_poly = [(x + self.grass_tiles.get_width()/2 + camera.scroll.x,y + camera.scroll.y) for x,y in iso_poly]
+            if self.temp_tile["collision"]:
+                pg.draw.polygon(screen, RED, iso_poly, 3)
+            else:
+                pg.draw.polygon(screen, WHITE, iso_poly, 3)
+
+            render_pos = self.temp_tile["render_pos"]
+            screen.blit(
+                self.temp_tile["image"],
+                (
+                    render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
+                    render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y
+                )
+            )
+
 
 
     #create worlds based on created dimensions
@@ -73,7 +169,7 @@ class World:
         r = random.randint(1, 100)
 
         #make a group of tree --> a forest
-        perlin = 100 * noise.pnoise2(grid_x/self.perlin_scale, grid_y/self.perlin_scale)
+        perlin = 50 * noise.pnoise2(grid_x/self.perlin_scale, grid_y/self.perlin_scale)
 
 
         if (perlin >= 15) or (perlin <= -35):
@@ -98,7 +194,8 @@ class World:
             "iso_poly": iso_poly,                   #iso_poly map
             "iso_poly_mini": iso_poly_mini,         #isopoly minimap
             "render_pos": [minx, miny],
-            "tile": tile
+            "tile": tile,
+            "collision": False if tile == "" else True
         }
 
         return out
@@ -115,11 +212,48 @@ class World:
         iso_y = ( x + y )/2
         return iso_x,iso_y
 
+    def mouse_to_grid(self, x, y, scroll):
+        # transform to world position (removing camera scroll and offset)
+        world_x = x - scroll.x - self.grass_tiles.get_width()/2
+        world_y = y - scroll.y
+        #transform to card (inverse of card_to_iso)
+        card_y = (2*world_y - world_x)/2
+        card_x = card_y + world_x
+        #transform to grid coordinates
+        grid_x = int(card_x // TILE_SIZE)
+        grid_y = int(card_y // TILE_SIZE)
+        return grid_x, grid_y
+
+
 
     #load our blocks into the game
     def load_images(self):
-        block = pg.image.load("assets/graphics/block.png").convert_alpha()
-        tree = pg.image.load("assets/graphics/tree.png").convert_alpha()
-        rock = pg.image.load("assets/graphics/rock.png").convert_alpha()
+        block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
+        tree = pg.image.load(path.join(graphics_folder,"tree.png")).convert_alpha()
+        rock = pg.image.load(path.join(graphics_folder,"rock.png")).convert_alpha()
+        building1 = pg.image.load(path.join(graphics_folder,"building01.png")).convert_alpha()
+        building2 = pg.image.load(path.join(graphics_folder,"building02.png")).convert_alpha()
 
-        return {"block": block, "tree": tree, "rock": rock}
+        images = {
+            "building1": building1,
+            "building2": building2,
+            "tree": tree,
+            "rock": rock,
+            "block": block
+        }
+
+        return images
+        
+
+
+    def can_place_tile(self, grid_pos):
+        mouse_on_panel = False
+        for rect in [self.hud.resources_rect, self.hud.build_rect, self.hud.select_rect]:
+            if rect.collidepoint(pg.mouse.get_pos()):
+                mouse_on_panel = True
+        world_bounds = (0 <= grid_pos[0] <= self.grid_length_x) and (0 <= grid_pos[1] <= self.grid_length_x)
+
+        if world_bounds and not mouse_on_panel:
+            return True
+        else:
+            return False
