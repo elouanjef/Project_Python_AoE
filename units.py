@@ -3,14 +3,14 @@ import time
 
 
 class Unite:
-    
+
     batiment = False
     soldat = False
     villageois = False
     alive = False
     type = False
     name = False
-    resWRGF = [0, 0, 0, 0]
+    res = [0, 0, 0, 0]
 
     def __init__(self, name, type):
         self.name = name
@@ -27,50 +27,53 @@ class Unite:
         else:
             print("Il faut choisir un type valable")
 
-def militaire(nb, troop, type, resWRGF, t):
-    # test_resource(resWRGF)
+def militaire(nb, troop, type, res, t):
+    # test_resource(res)
     armee = {}
     for i in range(nb):
         time.sleep(t)
         armee[i] = Unite(troop, type)
-        print("Vous avez enrôlé", i + 1, str(troop), "de type", str(type), "pour", resWRGF[0], "de bois",
-              resWRGF[1], "de pierre", resWRGF[2], "d'or et", resWRGF[3], "de nourriture")
+        print("Vous avez enrôlé", i + 1, str(troop), "de type", str(type), "pour", res[0], "de bois",
+              res[1], "de pierre", res[2], "d'or et", res[3], "de nourriture")
     return armee
 
 def villager(nb):
-    # test_resource(resWRGF)
+    # test_resource(res)
     villageois = {}
-    resWRGF = [0, 0, 0, 50]
+    res = [0, 0, 0, 50]
     for i in range(nb):
         time.sleep(3)
         villageois[i] = Unite("villageois", "villageois")
-        print("Villageois créé pour", resWRGF[3], "de nourriture")
+        print("Villageois créé pour", res[3], "de nourriture")
     return villageois
 
-def construire(name, resWRGF, t):
-    # test_resource(resWRGF)
+def construire(name, res, t):
+    # test_resource(res)
     time.sleep(t)
     construction = Unite(name,'batiment')
-    print("Vous avez bâti un(e)", str(name), "pour", resWRGF[0], "de bois",
-          resWRGF[1], "de pierre", resWRGF[2], "d'or et", resWRGF[3], "de nourriture")
+    print("Vous avez bâti un(e)", str(name), "pour", res[0], "de bois",
+          res[1], "de pierre", res[2], "d'or et", res[3], "de nourriture")
     return construction
 
 
 #[ WOOD , ROCK , GOLD , FOOD ]
 units_res = {
+#caserne
     'archer' : [0, 0, 30, 20],
     'arbaletrier' : [0, 0, 20, 45],
     'mousquetaire' : [0, 0, 70, 30],
     'piquier' : [30, 0, 0, 30],
     'fantassin' : [25, 0, 35, 0],
 
+#usine
     'canon_lourd' : [150, 0, 80, 0],
     'couleuvrine'  : [200, 0, 80, 0],
 
+#ecurie
     'chevalier' : [0, 0, 100, 75],
     'uhlan' : [0, 0, 75, 60],
 
-
+#batiments
     'centre_ville' : [600, 0, 0, 0],
     'caserne' : [150, 0, 0, 0],
     'usine' : [200, 0, 0, 0],
@@ -81,19 +84,22 @@ units_res = {
 }
 
 units_time = {
+#caserne
     'archer' : 3,
     'arbaletrier' : 3,
     'mousquetaire' : 4,
     'piquier' : 4,
     'fantassin' : 5,
 
+#usine
     'canon_lourd' : 30,
     'couleuvrine'  : 30,
 
+#ecurie
     'chevalier' : 12,
     'uhlan' : 10,
 
-
+#batiments
     'centre_ville' : 60,
     'caserne' : 40,
     'usine' : 40,
@@ -104,19 +110,22 @@ units_time = {
 }
 
 units_age = {
+#caserne
     'archer' : 1,
     'arbaletrier' : 1,
     'mousquetaire' : 2,
     'piquier' : 1,
     'fantassin' : 2,
 
+#usine
     'canon_lourd' : 2,
     'couleuvrine'  : 2,
 
+#ecurie
     'chevalier' : 2,
     'uhlan' : 1,
 
-
+#batiments
     'centre_ville' : 1,
     'caserne' : 1,
     'usine' : 2,
