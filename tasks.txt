@@ -11,3 +11,4 @@
 + cheats commands                                       ;Tuan
 + resource ()                                           ;Elouan
 + fog of war et map                                     ;Cong Khai
++ RTS
