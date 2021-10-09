@@ -127,7 +127,6 @@ class Hud:
 
 
     def load_images(self):
-
         #read images
         #all images are saved in folder assets/graphics
         building1 = pg.image.load(path.join(graphics_folder,"building01.png"))
@@ -135,24 +134,20 @@ class Hud:
         tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
-
-
         #load des images  d'unites ici
-        #example: troop = pg.image.load(path.join.(graphic_folder,"le nom de fichier"))
-
-
-
+        troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
+        #troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
 
         #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
             "building1": building1,
             "building2": building2,
             "tree": tree,
-            "rock": rock
+            "rock": rock,
+            "troop": troop
             #ajouter les images d'unites ici
             #example "troop": troop;
         }
-
         return images
 
 

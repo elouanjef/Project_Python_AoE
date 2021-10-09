@@ -25,6 +25,7 @@ class World:
         
         
         self.tiles = self.load_images()
+
         self.world = self.create_world()
 
         self.temp_tile = None
@@ -234,16 +235,6 @@ class World:
                 tile = ""
 
 
-
-
-
-
-
-
-
-
-
-
         #this dict() store all kind of info of all elements in grid
         out = {
             "grid":  [grid_x,grid_y],
@@ -272,15 +263,6 @@ class World:
         return iso_x,iso_y
 
 
-
-
-
-
-
-
-
-
-
     def mouse_to_grid(self, x, y, scroll):
         # transform to world position (removing camera scroll and offset)
         world_x = x - scroll.x - self.grass_tiles.get_width()/2
@@ -294,14 +276,6 @@ class World:
         return grid_x, grid_y
 
 
-
-
-
-
-
-
-
-
     #load our blocks into the game
     def load_images(self):
         block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
@@ -309,17 +283,21 @@ class World:
         rock = pg.image.load(path.join(graphics_folder,"rock.png")).convert_alpha()
         building1 = pg.image.load(path.join(graphics_folder,"building01.png")).convert_alpha()
         building2 = pg.image.load(path.join(graphics_folder,"building02.png")).convert_alpha()
-
+        troop = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
         images = {
             "building1": building1,
             "building2": building2,
             "tree": tree,
             "rock": rock,
-            "block": block
+            "block": block,
+            "troop": troop
         }
 
         return images
         
+
+
+
 
     #colision here
     def can_place_tile(self, grid_pos):
