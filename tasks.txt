@@ -10,9 +10,5 @@
 + randomising the map in intervalls
 + cheats commands                                       ;Tuan
 + resource ()                                           ;Elouan
-<<<<<<< HEAD
-+ fog of war et map                                     ;Cong Khai
-=======
 + fog of war et map                                     ;Cong Khai
 + RTS
->>>>>>> 088a3a88cffcc07588440e91b1cb427df226f380
