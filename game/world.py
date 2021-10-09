@@ -30,11 +30,7 @@ class World:
 
         self.temp_tile = None
 
-
-
-
-
-
+        self.examine_tile = None
 
     #work in map
     def update(self, camera):
@@ -54,10 +50,6 @@ class World:
                 #print('placer hud')
                 img = self.hud.selected_tile["image"].copy()
                 img.set_alpha(100)
-
-
-
-
 
 
                 #this if is to avoid the error: "index out of range" when your mouse run out of map 
@@ -85,8 +77,17 @@ class World:
                     self.hud.selected_tile = None
                     #print('termine')
 
+        else:
+            grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
 
+            if self.can_place_tile(grid_pos):
+                if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
+                    collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
 
+                    if mouse_action[0] and collision:
+                        self.examine_tile = grid_pos
+                else:
+                    pass
 
     #quand le prog est grandi on doit update plusieuse choses comme heal, shield ou attack point ici
 
@@ -130,7 +131,11 @@ class World:
                                     (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, 
                                      render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
 
-
+                    if self.examine_tile is not None:
+                        if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
+                            mask = pg.mask.from_surface(self.tiles[tile]).outline()
+                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, y + render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y) for x,y in mask]
+                            pg.draw.polygon(screen, WHITE, mask, 3)
 
                 #Grid on the main map
                 #p = self.world.world[x][y]["iso_poly"]
