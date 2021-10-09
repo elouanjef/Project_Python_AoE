@@ -115,8 +115,8 @@ class Hud:
 
 
         #resource
-        pos = self.width - 325                              #resource info position
-        for resource in ["wood: ", "stone:", "gold:"]:
+        pos = self.width - 420                                           #resource info position
+        for resource in ["wood:{}".format(500), "stone:{}".format(250), "gold:{}".format(100),"food: {}".format(230)]:
             draw_text(screen, resource, 25, WHITE, (pos, 0))
             pos += 100
 
