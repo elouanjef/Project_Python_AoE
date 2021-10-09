@@ -19,6 +19,8 @@ def main():
     screen = pg.display.set_mode((0, 0), pg.NOFRAME)
     pg.display.toggle_fullscreen()
 
+    #screen = pg.display.set_mode((800, 800))
+
     clock = pg.time.Clock()
 
     #implement menus

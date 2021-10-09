@@ -88,10 +88,6 @@ while run:
     if event.type == MOUSEBUTTONDOWN:
         x,y = pg.mouse.get_pos()
         crts.move(x,y)
-        #print(crts.x)
-        #print(crts.y)
-        #print(crts.step_size)
-
 
         
     win.fill((0, 0, 0))

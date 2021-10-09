@@ -10,8 +10,8 @@ class World:
     #create the dimensions of the world (isometric)
     def __init__(self, hud,grid_lenght_x, grid_length_y, width, height):
         self.hud = hud
-        self.grid_length_x = grid_lenght_x
-        self.grid_length_y = grid_length_y
+        self.grid_length_x = grid_lenght_x    #number of square in x-dimension   
+        self.grid_length_y = grid_length_y    #number of sqaure in y-demension
         self.width = width
         self.height = height
 
@@ -29,37 +29,70 @@ class World:
 
         self.temp_tile = None
 
+
+
+
+
+
+
+    #work in map
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
         self.temp_tile = None
 
+
+        #je vais creer une fonction pour garder cette if-else condition
         if self.hud.selected_tile is not None:
 
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-            
-
+            #print(f"grid_pos(0): {grid_pos[0]}  grid_pos(1): {grid_pos[1]}")
+            #on placer hud ici
             if self.can_place_tile(grid_pos):
             
-                
+                #print('placer hud')
                 img = self.hud.selected_tile["image"].copy()
                 img.set_alpha(100)
 
-                render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
-                iso_poly = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
-                collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
-                self.temp_tile = {
-                    "image": img,
-                    "render_pos": render_pos,
-                    "iso_poly": iso_poly,
-                    "collision": collision
-                }
 
 
+
+
+
+                #this if is to avoid the error: "index out of range" when your mouse run out of map 
+                if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
+                    render_pos = self.world[grid_pos[0]][grid_pos[1]].get("render_pos")
+                    iso_poly = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
+                    collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
+                    self.temp_tile = {
+                        "image": img,
+                        "render_pos": render_pos,
+                        "iso_poly": iso_poly,
+                        "collision": collision
+                    }
+                else:
+                    pass
+
+
+                #left-click to build
                 if mouse_action[0] and not collision:
+                    #print('Placed')
                     self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
+                    #print('1')
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
+                    #print('2')
                     self.hud.selected_tile = None
+                    #print('termine')
+
+
+
+
+    #quand le prog est grandi on doit update plusieuse choses comme heal, shield ou attack point ici
+
+
+
+
+
 
     def draw(self, screen, camera):
 
@@ -122,6 +155,10 @@ class World:
 
 
 
+
+
+
+
     #create worlds based on created dimensions
     def create_world(self):
 
@@ -137,6 +174,11 @@ class World:
                 self.grass_tiles.blit(self.tiles["block"], (render_pos[0] + self.grass_tiles.get_width()/2, render_pos[1]))
 
         return world
+
+
+
+
+
 
     
     def grid_to_world(self, grid_x,grid_y):
@@ -165,6 +207,12 @@ class World:
         minx = min([x for x,y in iso_poly])
         miny = min([y for x,y in iso_poly])
 
+
+
+
+
+
+        #create a random map
         #Choose a random position in map
         r = random.randint(1, 100)
 
@@ -186,6 +234,16 @@ class World:
                 tile = ""
 
 
+
+
+
+
+
+
+
+
+
+
         #this dict() store all kind of info of all elements in grid
         out = {
             "grid":  [grid_x,grid_y],
@@ -196,6 +254,7 @@ class World:
             "render_pos": [minx, miny],
             "tile": tile,
             "collision": False if tile == "" else True
+            #update the attribute here: heal, attack or shield
         }
 
         return out
@@ -212,6 +271,16 @@ class World:
         iso_y = ( x + y )/2
         return iso_x,iso_y
 
+
+
+
+
+
+
+
+
+
+
     def mouse_to_grid(self, x, y, scroll):
         # transform to world position (removing camera scroll and offset)
         world_x = x - scroll.x - self.grass_tiles.get_width()/2
@@ -223,6 +292,13 @@ class World:
         grid_x = int(card_x // TILE_SIZE)
         grid_y = int(card_y // TILE_SIZE)
         return grid_x, grid_y
+
+
+
+
+
+
+
 
 
 
@@ -245,15 +321,19 @@ class World:
         return images
         
 
-
+    #colision here
     def can_place_tile(self, grid_pos):
         mouse_on_panel = False
         for rect in [self.hud.resources_rect, self.hud.build_rect, self.hud.select_rect]:
-            if rect.collidepoint(pg.mouse.get_pos()):
+            if rect.collidepoint(pg.mouse.get_pos()):      
+                #Essentially you pass a co-ordinate to pygame.Rect.collidepoint(), 
+                #and it will return True if that point is within the bounds of the rectangle.
                 mouse_on_panel = True
         world_bounds = (0 <= grid_pos[0] <= self.grid_length_x) and (0 <= grid_pos[1] <= self.grid_length_x)
 
         if world_bounds and not mouse_on_panel:
+            #print('can place')
             return True
         else:
+            #print('cannot place')
             return False
