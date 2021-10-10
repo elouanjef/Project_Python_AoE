@@ -36,6 +36,12 @@ class World:
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
+
+
+        if mouse_action[2]:
+            self.examine_tile = None
+            self.hud.examined_tile = None
+
         self.temp_tile = None
 
 
@@ -86,6 +92,7 @@ class World:
 
                     if mouse_action[0] and collision:
                         self.examine_tile = grid_pos
+                        self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
                 else:
                     pass
 
