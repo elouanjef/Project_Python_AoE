@@ -2,7 +2,7 @@
 + algo A*                                               ;Cong Khai
 + sauvgarder                                            ;Tan
 + gestion des unite/batiment                            ;Elouan
-+ ajouter des personnages (one human + one I.A)   
++ ajouter des personnages (one human + one I.A)         ;Tuan
 + la methode de la mini
 + collision                                             ;Hoai
 + les themes                                            ;Tan
