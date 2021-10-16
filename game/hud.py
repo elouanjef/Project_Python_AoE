@@ -1,4 +1,5 @@
-from settings import HUD_COLOUR, WHITE, graphics_folder
+#from game.buildings import LumberMill, TownCenter
+from settings import HUD_COLOUR, RED, WHITE, graphics_folder
 import pygame as pg
 from .utils import draw_text
 from os import path
@@ -104,11 +105,12 @@ class Hud:
         if self.examined_tile is not None:
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
-            img = self.images[self.examined_tile["tile"]].copy()
-            img_scale = self.scale_image(img, h = h*0.9)
-            screen.blit(img_scale, (self.width * 0.35 + 10, self.height*0.79 +10))
+            img = self.examined_tile.image.copy()
+            img_scale = self.scale_image(img, h = h*0.7)
+            screen.blit(img_scale, (self.width * 0.35 + 10, self.height*0.79 + 40))
             #text in information box
-            draw_text(screen, self.examined_tile["tile"], 40, WHITE, self.select_rect.center)
+            draw_text(screen, self.examined_tile.name, 40, WHITE, self.select_rect.topleft)
+            draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
 
         #icon for entity selecting
         for tile in self.tiles:
@@ -132,22 +134,20 @@ class Hud:
     def load_images(self):
         #read images
         #all images are saved in folder assets/graphics
-        building1 = pg.image.load(path.join(graphics_folder,"building01.png"))
-        building2 = pg.image.load(path.join(graphics_folder,"building02.png"))
-        tree = pg.image.load(path.join(graphics_folder,"tree.png"))
-        rock = pg.image.load(path.join(graphics_folder,"rock.png"))
+        TownCenter = pg.image.load(path.join(graphics_folder,"building01.png"))
+        LumberMill = pg.image.load(path.join(graphics_folder,"building02.png"))
+        #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
+        #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
         #load des images  d'unites ici
-        troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
+        #troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
         #troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
 
         #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
-            "building1": building1,
-            "building2": building2,
-            "tree": tree,
-            "rock": rock,
-            "troop": troop
+            "TownCenter": TownCenter,
+            "LumberMill": LumberMill
+            #"troop": troop
             #ajouter les images d'unites ici
             #example "troop": troop;
         }

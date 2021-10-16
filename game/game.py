@@ -17,12 +17,15 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
+        #entities
+        self.entities = []
+
         #hud 
         self.hud = Hud(self.width, self.height)
 
 
         #create the world with 50 by 50 grid
-        self.world = World(self.hud, 50, 50, self.width, self.height)
+        self.world = World(self.entities,self.hud, 50, 50, self.width, self.height)
 
         #camera
         self.camera = Camera(self.width, self.height)
@@ -54,6 +57,7 @@ class Game:
 
     def update(self):
         self.camera.update()
+        for e in self.entities: e.update()
         self.hud.update()
         self.world.update(self.camera)
 

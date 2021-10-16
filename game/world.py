@@ -3,12 +3,16 @@ from settings import RED, TILE_SIZE, TILE_SIZE_MINI_MAP,BLUE, WHITE ,graphics_fo
 import random
 import noise
 from os import path 
+from .buildings import TownCenter, LumberMill
+
+
 
 class World:
 
 
     #create the dimensions of the world (isometric)
-    def __init__(self, hud,grid_lenght_x, grid_length_y, width, height):
+    def __init__(self,entities, hud,grid_lenght_x, grid_length_y, width, height):
+        self.entities = entities
         self.hud = hud
         self.grid_length_x = grid_lenght_x    #number of square in x-dimension   
         self.grid_length_y = grid_length_y    #number of sqaure in y-demension
@@ -22,15 +26,14 @@ class World:
         #convert_alpha():   change the pixel format of an image including per pixel alphas convert_alpha(Surface) -> Surface convert_alpha() -> Surface 
         #                   Creates a new copy of the surface with the desired pixel format. The new surface will be in a format suited for quick blitting to the given format
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
-        
-        
         self.tiles = self.load_images()
-
         self.world = self.create_world()
 
-        self.temp_tile = None
+        self.buildings = [[None for x in range(self.grid_length_x)] for y in range(self.grid_length_y)]
 
+        self.temp_tile = None
         self.examine_tile = None
+       
 
     #work in map
     def update(self, camera):
@@ -75,24 +78,32 @@ class World:
 
                 #left-click to build
                 if mouse_action[0] and not collision:
-                    #print('Placed')
-                    self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
-                    #print('1')
+                    if self.hud.selected_tile["name"] == "TownCenter":
+                        ent = TownCenter(render_pos)
+                        self.entities.append(ent)
+                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                    elif self.hud.selected_tile["name"]  == "LumberMill":
+                        ent = LumberMill(render_pos)
+                        self.entities.append(ent)
+                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                    #self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
-                    #print('2')
                     self.hud.selected_tile = None
-                    #print('termine')
+                    
 
         else:
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
 
             if self.can_place_tile(grid_pos):
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
-                    collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
-
-                    if mouse_action[0] and collision:
+                    building = self.buildings[grid_pos[0]][grid_pos[1]]
+                    #collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
+                    
+                    if mouse_action[0] and (building is not None):
+                        
                         self.examine_tile = grid_pos
-                        self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
+                        self.hud.examined_tile = building
+                        #self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
                 else:
                     pass
 
@@ -138,16 +149,31 @@ class World:
                                     (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, 
                                      render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
 
-                    if self.examine_tile is not None:
-                        if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
-                            mask = pg.mask.from_surface(self.tiles[tile]).outline()
-                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, y + render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y) for x,y in mask]
-                            pg.draw.polygon(screen, WHITE, mask, 3)
-
+                    
                 #Grid on the main map
                 #p = self.world.world[x][y]["iso_poly"]
                 #p = [(x + self.width/2, y + self.height/4) for x,y in p]
                 #pg.draw.polygon(self.screen, RED, p, 1)
+
+
+                #draw entities
+                building = self.buildings[x][y]
+                if building is not None:
+                    
+                    screen.blit(building.image, 
+                                    (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, 
+                                     render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
+
+                    if self.examine_tile is not None:
+                        if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
+                            mask = pg.mask.from_surface(building.image).outline()
+                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y) for x,y in mask]
+                            pg.draw.polygon(screen, WHITE, mask, 3)
+                else:
+                    pass
+
+
+
 
         if self.temp_tile is not None:
             iso_poly = self.temp_tile["iso_poly"]
