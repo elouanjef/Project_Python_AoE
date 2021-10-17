@@ -3,9 +3,9 @@
 + sauvgarder                                            ;Tan
 + gestion des unite/batiment                            ;Elouan
 + ajouter des personnages (one human + one I.A)         ;Tuan
-+ la methode de la mini
++ la methode de la mini                                 ;Tan
 + collision                                             ;Hoai
-+ les themes                                            ;Tan
++ les themes                                            
 + IA
 + randomising the map in intervalls
 + cheats commands                                       ;Tuan
