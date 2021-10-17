@@ -20,10 +20,25 @@ class TownCenter:
             self.health -= 10
 
 
+class Barracks:
+
+    def __init__(self, pos):
+        image = pg.image.load(path.join(graphics_folder, "building02.png"))
+        self.image = image
+        self.name = "Barracks"
+        self.rect = self.image.get_rect(topleft=pos)
+        # [ WOOD , ROCK , GOLD , FOOD ]
+        self.res = [125, 0, 0, 0]
+        self.health = 350
+
+    def update(self):
+        if self.health != 0:
+            self.health -= 10
+
 class LumberMill:
 
     def __init__(self, pos):
-       image = pg.image.load(path.join(graphics_folder,"building02.png"))
+       image = pg.image.load(path.join(graphics_folder,"building03.png"))
        self.image = image
        self.name = "LumberMill"
        self.rect = self.image.get_rect(topleft=pos)
@@ -33,6 +48,49 @@ class LumberMill:
     def update(self):
         if self.health != 0:
             self.health -= 10
+
+class Siege:
+
+    def __init__(self, pos):
+        image = pg.image.load(path.join(graphics_folder, "building04.png"))
+        self.image = image
+        self.name = "Siege"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.res = [200, 0, 0, 0]
+        self.health = 350
+
+    def update(self):
+        if self.health != 0:
+            self.health -= 10
+
+class Stable:
+
+    def __init__(self, pos):
+        image = pg.image.load(path.join(graphics_folder, "building05.png"))
+        self.image = image
+        self.name = "Stable"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.res = [150, 0, 0, 0]
+        self.health = 350
+
+    def update(self):
+        if self.health != 0:
+            self.health -= 10
+
+class House:
+
+    def __init__(self, pos):
+        image = pg.image.load(path.join(graphics_folder, "building06.png"))
+        self.image = image
+        self.name = "LumberMill"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.res = [25, 0, 0, 0]
+        self.health = 550
+
+    def update(self):
+        if self.health != 0:
+            self.health -= 10
+
 
 
 
