@@ -17,7 +17,7 @@ class TownCenter:
     
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 
 class Barracks:
@@ -33,7 +33,7 @@ class Barracks:
 
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 class LumberMill:
 
@@ -47,7 +47,7 @@ class LumberMill:
     
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 class Siege:
 
@@ -61,7 +61,7 @@ class Siege:
 
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 class Stable:
 
@@ -75,7 +75,7 @@ class Stable:
 
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 class House:
 
@@ -89,7 +89,7 @@ class House:
 
     def update(self):
         if self.health != 0:
-            self.health -= 10
+            self.health -= 1
 
 
 
