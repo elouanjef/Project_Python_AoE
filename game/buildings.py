@@ -7,7 +7,7 @@ from os import path
 class TownCenter:
 
     def __init__(self, pos):
-        image = pg.image.load(path.join(graphics_folder,"building01.png"))
+        image = image_T
         self.image = image
         self.name = "TownCenter"
         self.rect = self.image.get_rect(topleft=pos)
@@ -23,7 +23,7 @@ class TownCenter:
 class Barracks:
 
     def __init__(self, pos):
-        image = pg.image.load(path.join(graphics_folder, "building02.png"))
+        image = imate_B
         self.image = image
         self.name = "Barracks"
         self.rect = self.image.get_rect(topleft=pos)
@@ -43,7 +43,7 @@ class Barracks:
 class LumberMill:
 
     def __init__(self, pos):
-       image = pg.image.load(path.join(graphics_folder,"building03.png"))
+       image = image_M
        self.image = image
        self.name = "LumberMill"
        self.rect = self.image.get_rect(topleft=pos)
