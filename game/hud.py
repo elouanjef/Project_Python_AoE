@@ -134,8 +134,8 @@ class Hud:
     def load_images(self):
         #read images
         #all images are saved in folder assets/graphics
-        TownCenter = pg.image.load(path.join(graphics_folder,"building01.png"))
-        LumberMill = pg.image.load(path.join(graphics_folder,"building02.png"))
+        TownCenter = image_T
+        LumberMill = image_M
         #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
