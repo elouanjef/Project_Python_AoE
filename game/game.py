@@ -2,7 +2,7 @@ import pygame as pg
 import sys
 
 from .world import World
-from settings import BLACK, BLUE, WHITE ,TILE_SIZE
+from settings import *
 from .utils import  draw_text
 from .camera import Camera
 from .hud import Hud
@@ -57,7 +57,7 @@ class Game:
 
     def update(self):
         self.camera.update()
-        for e in self.entities: e.update()
+        for e in self.entities: e.update(CONSTRUCTION)
         self.hud.update()
         self.world.update(self.camera)
 

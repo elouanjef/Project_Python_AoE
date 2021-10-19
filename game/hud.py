@@ -1,5 +1,5 @@
 #from game.buildings import LumberMill, TownCenter
-from settings import HUD_COLOUR, RED, WHITE, graphics_folder
+from settings import *
 import pygame as pg
 from .utils import draw_text
 from os import path
