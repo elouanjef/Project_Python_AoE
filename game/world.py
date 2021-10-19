@@ -4,6 +4,7 @@ import random
 import noise
 from os import path 
 from .buildings import TownCenter, LumberMill
+import resource
 
 
 
@@ -11,7 +12,7 @@ class World:
 
 
     #create the dimensions of the world (isometric)
-    def __init__(self,entities, hud,grid_lenght_x, grid_length_y, width, height):
+    def __init__(self,entities, hud,grid_lenght_x, grid_length_y, width, height): #, resource
         self.entities = entities
         self.hud = hud
         self.grid_length_x = grid_lenght_x    #number of square in x-dimension   
@@ -19,6 +20,7 @@ class World:
         self.width = width
         self.height = height
 
+        self.resource = resource
 
         self.perlin_scale = self.grid_length_x/2
 
@@ -93,8 +95,10 @@ class World:
 
         else:
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+#            [wood, rock, gold, food] = self.resource.get_res()
 
-            if self.can_place_tile(grid_pos):
+            if self.can_place_tile(grid_pos) :#and wood > resource:
+
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
                     #collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]

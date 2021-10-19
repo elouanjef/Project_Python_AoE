@@ -6,6 +6,7 @@ from settings import *
 from .utils import  draw_text
 from .camera import Camera
 from .hud import Hud
+from resource import *
 
 
 class Game:
@@ -23,9 +24,11 @@ class Game:
         #hud 
         self.hud = Hud(self.width, self.height)
 
+        #resource
+        #self.resource = Resource(0,0,0,0)
 
         #create the world with 50 by 50 grid
-        self.world = World(self.entities,self.hud, 50, 50, self.width, self.height)
+        self.world = World(self.entities,self.hud, 50, 50, self.width, self.height )      # ,self.resource
 
         #camera
         self.camera = Camera(self.width, self.height)

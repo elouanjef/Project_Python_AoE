@@ -25,3 +25,5 @@ graphics_folder = path.join(AOE_folder,"assets/graphics") #Path for graphic
 image_T = pg.image.load(path.join(graphics_folder,"building01.png"))
 image_M = pg.image.load(path.join(graphics_folder,"building02.png"))
 image_B = pg.image.load(path.join(graphics_folder,"building02.png"))
+
+resource_TC = [600, 0, 0, 0]
