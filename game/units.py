@@ -180,23 +180,6 @@ class Archer:
         if self.health != 0:
             self.health -= 1
 
-class Crossbowman:
-
-    def __init__(self, pos):
-        image = pg.image.load(path.join(graphics_folder, "unit02.png"))
-        self.image = image
-        self.name = "Crossbowman"
-        self.rect = self.image.get_rect(topleft=pos)
-        # [ WOOD , ROCK , GOLD , FOOD ]
-        self.attack = 4
-        self.range = 6
-        self.res = [0, 0, 20, 40]
-        self.health = 40
-
-    def update(self):
-        if self.health != 0:
-            self.health -= 1
-
 class Infantryman:
 
     def __init__(self, pos):
