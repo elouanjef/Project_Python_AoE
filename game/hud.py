@@ -134,8 +134,9 @@ class Hud:
     def load_images(self):
         #read images
         #all images are saved in folder assets/graphics
-        TownCenter = image_T
-        LumberMill = image_M
+        TownCenter = building01
+        LumberMill = building02
+        Barracks = building03
         #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
@@ -146,7 +147,8 @@ class Hud:
         #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
             "TownCenter": TownCenter,
-            "LumberMill": LumberMill
+            "LumberMill": LumberMill,
+            "Barracks" : Barracks
             #"troop": troop
             #ajouter les images d'unites ici
             #example "troop": troop;

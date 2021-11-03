@@ -9,7 +9,7 @@ from os import path
 class TownCenter:
 
     def __init__(self, pos):
-        image = image_T
+        image = building01
         self.image = image
         self.name = "Town center"
         self.rect = self.image.get_rect(topleft=pos)
@@ -31,7 +31,7 @@ class TownCenter:
 class Barracks:
 
     def __init__(self, pos):
-        image = image_B
+        image = building03
         self.image = image
         self.name = "Barracks"
         self.rect = self.image.get_rect(topleft=pos)
@@ -52,7 +52,7 @@ class Barracks:
 class LumberMill:
 
     def __init__(self, pos):
-       image = image_M
+       image = building02
        self.image = image
        self.name = "Lumber mill"
        self.rect = self.image.get_rect(topleft=pos)
