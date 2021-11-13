@@ -8,13 +8,14 @@ from os import path
 
 class TownCenter:
 
-    def __init__(self, pos):
+    def __init__(self, pos,resource_manager):
         image = building01
         self.image = image
-        self.name = "Town center"
+        self.name = "TownCenter"
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
-
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
         self.health_max = 1000
         self.health = 0
 
@@ -30,13 +31,14 @@ class TownCenter:
 
 class Barracks:
 
-    def __init__(self, pos):
+    def __init__(self, pos, resource_manager):
         image = building03
         self.image = image
         self.name = "Barracks"
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
-        self.res = [125, 0, 0, 0]
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
         self.health_max = 350
         self.health = 0
 
@@ -51,21 +53,30 @@ class Barracks:
 
 class LumberMill:
 
-    def __init__(self, pos):
+    def __init__(self, pos, resource_manager):
        image = building02
        self.image = image
-       self.name = "Lumber mill"
+       self.name = "LumberMill"
        self.rect = self.image.get_rect(topleft=pos)
-       self.res = [150, 0, 0, 0]
+       self.resource_manager = resource_manager
+       self.resource_manager.cost_to_resource(self.name)
        self.health_max = 500
        self.health = 0
+       self.resource_cooldown = pg.time.get_ticks()
 
     def update(self, action):
+
         if action == 0:
             if self.health != 0:
                 self.health -= 1
         elif action == 1:
             if self.health < self.health_max:
                 self.health += 1
+            elif self.health == self.health_max:
+                now = pg.time.get_ticks()
+                if now - self.resource_cooldown > 2000:
+                    self.resource_manager.resources["wood"] += 1
+                    self.resource_cooldown = now
+
 
     

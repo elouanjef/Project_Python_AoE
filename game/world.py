@@ -12,7 +12,9 @@ class World:
 
 
     #create the dimensions of the world (isometric)
-    def __init__(self,entities, hud,grid_lenght_x, grid_length_y, width, height): #, resource
+    def __init__(self,resource_manager, entities, hud,grid_lenght_x, grid_length_y, width, height):
+
+        self.resource_manager = resource_manager
         self.entities = entities
         self.hud = hud
         self.grid_length_x = grid_lenght_x    #number of square in x-dimension   
@@ -81,15 +83,15 @@ class World:
                 #left-click to build
                 if mouse_action[0] and not collision:
                     if self.hud.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos)
+                        ent = TownCenter(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"]  == "LumberMill":
-                        ent = LumberMill(render_pos)
+                        ent = LumberMill(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "Barracks":
-                        ent = Barracks(render_pos)
+                        ent = Barracks(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
 

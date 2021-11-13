@@ -1,13 +1,26 @@
 from .hud import *
 
-class Resource:
-    def __init__(self, wood, rock, gold, food):
-        self.gold = gold
-        self.rock = rock
-        self.wood = wood
-        self.food = food
+class ResourceManager:
+    def __init__(self):
+        self.resources = {
+            "wood" : 500,
+            "rock" : 500,
+            "gold" : 500,
+            "food" : 500
+        }
+        self.costs = {
+            "TownCenter": { "wood": 450, "rock": 0, "gold": 0, "food": 0 },
+            "Barracks": { "wood": 125, "rock": 0, "gold": 0, "food": 0 },
+            "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0}
+        }
 
-    def get_res(self):
-        return [self.wood, self.rock, self.gold, self.food]
+    def cost_to_resource(self, building):
+        for resource, cost in self.costs[building].items():
+            self.resources[resource] -= cost
 
-    #def consume(self, res):
+    def is_affordable(self, building):
+        affordable = True
+        for resource, cost in self.costs[building].items():
+            if cost > self.resources[resource]:
+                affordable = False
+        return affordable
