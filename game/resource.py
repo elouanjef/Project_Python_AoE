@@ -11,7 +11,8 @@ class ResourceManager:
         self.costs = {
             "TownCenter": { "wood": 450, "rock": 0, "gold": 0, "food": 0 },
             "Barracks": { "wood": 125, "rock": 0, "gold": 0, "food": 0 },
-            "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0}
+            "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0},
+            "Archer" : {"wood": 0, "rock": 0, "gold": 0, "food": 20}
         }
 
     def cost_to_resource(self, building):
@@ -24,3 +25,36 @@ class ResourceManager:
             if cost > self.resources[resource]:
                 affordable = False
         return affordable
+
+
+import time
+
+class Resource:
+    tree = False
+    rock = False
+    gold = False
+    bush = False
+    animal = False
+
+    def __init__(self,type):
+        self.type = type
+        if str(self.type) == 'tree': self.tree = True
+        elif str(self.type) == 'rock': self.rock = True
+        elif str(self.type) == 'gold': self.gold = True
+        elif str(self.type) == 'bush': self.bush = True
+        elif str(self.type) == 'animal': self.animal = True
+        else : print('Type de ressource non valable.')
+
+def chop(villager):
+    t = 300
+    #move.to(click)
+    time.sleep(t)
+    #destroy_entity(entity)  pourra être géré quand on saura comment gérer les entités sur la carte tels que les arbres ou les rochers etc...
+
+"""
+def mineR(villager):
+
+def mineG(villager):
+
+def food(villager):
+"""

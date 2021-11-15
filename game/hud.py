@@ -1,8 +1,9 @@
-#from game.buildings import LumberMill, TownCenter
+# from game.buildings import LumberMill, TownCenter
 from settings import *
 import pygame as pg
 from .utils import draw_text
 from os import path
+
 
 class Hud:
 
@@ -14,48 +15,45 @@ class Hud:
 
         self.hud_colour = HUD_COLOUR
 
-        #resource hud
+        # resource hud
         self.resources_surface = pg.Surface((width, height * 0.02), pg.SRCALPHA)
-        self.resources_rect = self.resources_surface.get_rect(topleft = (0, 0))
+        self.resources_rect = self.resources_surface.get_rect(topleft=(0, 0))
         self.resources_surface.fill(self.hud_colour)
 
-        #building hud
+        # building hud
         self.build_surface = pg.Surface((width * 0.15, height * 0.25), pg.SRCALPHA)
-        self.build_rect = self.build_surface.get_rect(topleft = (self.width * 0.84, self.height * 0.74))
+        self.build_rect = self.build_surface.get_rect(topleft=(self.width * 0.84, self.height * 0.74))
         self.build_surface.fill(self.hud_colour)
 
-        #select hud
+        # select hud
         self.select_surface = pg.Surface((width * 0.3, height * 0.2), pg.SRCALPHA)
-        self.select_rect = self.select_surface.get_rect(topleft = (self.width * 0.35, self.height * 0.79))    
+        self.select_rect = self.select_surface.get_rect(topleft=(self.width * 0.35, self.height * 0.79))
         self.select_surface.fill(self.hud_colour)
-
 
         self.images = self.load_images()
 
-
-        #create a new hud
+        # create a new hud
         self.tiles = self.create_build_hud()
 
         self.selected_tile = None
         self.examined_tile = None
 
-
-    #afficher les batiments pour choisir et construire
+    # afficher les batiments pour choisir et construire
     def create_build_hud(self):
 
-        #position in the inventory
-        render_pos = [self.width * 0.84 + 10,self.height * 0.74 + 10]
+        # position in the inventory
+        render_pos = [self.width * 0.84 + 10, self.height * 0.74 + 10]  # 0.84 0.74
         object_width = self.build_surface.get_width() // 8
 
-        tiles =[]
-        #print('create_build_hud')
-        for image_name, image in self.images.items():   #ajouter l'image dans la fonction load_image()
-            #print('in for create_build_hud')
+        tiles = []
+        # print('create_build_hud')
+        for image_name, image in self.images.items():  # ajouter l'image dans la fonction load_image()
+            # print('in for create_build_hud')
             pos = render_pos.copy()
             image_tmp = image.copy()
-            image_scale = self.scale_image(image_tmp, w = object_width)
-            #choose the rect around the entity
-            rect = image_scale.get_rect(topleft = pos)
+            image_scale = self.scale_image(image_tmp, w=object_width)
+            # choose the rect around the entity
+            rect = image_scale.get_rect(topleft=pos)  # center
 
             tiles.append(
                 {
@@ -64,35 +62,32 @@ class Hud:
                     "image": self.images[image_name],
                     "rect": rect,
                     "affordable": True
-                    #on peut ajouter plusieuse attibutes ici
+                    # on peut ajouter plusieuse attibutes ici
                 }
             )
 
-            #positionn in inventory for each entity
+            # positionn in inventory for each entity
             render_pos[0] += image_scale.get_width() + 10
-
 
         return tiles
 
-
     def update(self):
-        #work in inventory
+        # work in inventory
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
-        #unselect entity
+        # unselect entity
         if mouse_action[2]:
             self.selected_tile = None
 
         for tile in self.tiles:
             if self.resource_manager.is_affordable(tile["name"]):
                 tile["affordable"] = True
-            else :tile["affordable"] = False
+            else:
+                tile["affordable"] = False
             if tile["rect"].collidepoint(mouse_pos) and tile["affordable"]:
-            #tile["rect"] is defined in create_build_hud()
+                # tile["rect"] is defined in create_build_hud()
                 if mouse_action[0]:
                     self.selected_tile = tile
-                    
-
 
     def draw(self, screen):
 
@@ -101,33 +96,30 @@ class Hud:
         #     img.set_alpha(100)
         #     screen.blit(img, pg.mouse.get_pos())
 
-        #resource 
+        # resource
         screen.blit(self.resources_surface, (0, 0))
-        #build hud
+        # build hud
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
-        #select hud
+        # select hud
         if self.examined_tile is not None:
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img = self.examined_tile.image.copy()
-            img_scale = self.scale_image(img, h = h*0.7)
-            screen.blit(img_scale, (self.width * 0.35 + 10, self.height*0.79 + 40))
-            #text in information box
-            draw_text(screen, self.examined_tile.name, 40, WHITE, self.select_rect.topleft)
+            img_scale = self.scale_image(img, h=h * 0.7)
+            screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 40))
+            # text in information box
+            draw_text(screen, self.examined_tile.game_name, 40, WHITE, self.select_rect.topleft)
             draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
 
-        #icon for entity selecting
+        # icon for entity selecting
         for tile in self.tiles:
             icon = tile["icon"].copy()
             if not tile["affordable"]:
                 icon.set_alpha(100)
             screen.blit(icon, tile["rect"].topleft)
 
-
-
-
-        #resource
-        pos = self.width - 420                                           #resource info position
+        # resource
+        pos = self.width - 420  # resource info position
 
         for resource, resource_value in self.resource_manager.resources.items():
             txt = resource + ": " + str(resource_value)
@@ -139,37 +131,33 @@ class Hud:
             pos += 100
             """
 
-
-
-
-
-
     def load_images(self):
-        #read images
-        #all images are saved in folder assets/graphics
+        # read images
+        # all images are saved in folder assets/graphics
         TownCenter = building01
         LumberMill = building02
         Barracks = building03
-        #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
-        #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
+        Archer = archer
+        # tree = pg.image.load(path.join(graphics_folder,"tree.png"))
+        # rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
-        #load des images  d'unites ici
-        #troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
-        #troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
+        # load des images  d'unites ici
+        # troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
+        # troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
 
-        #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
+        # on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
             "TownCenter": TownCenter,
             "LumberMill": LumberMill,
-            "Barracks" : Barracks
-            #"troop": troop
-            #ajouter les images d'unites ici
-            #example "troop": troop;
+            "Barracks": Barracks,
+            # "Archer" : Archer
+            # "troop": troop
+            # ajouter les images d'unites ici
+            # example "troop": troop;
         }
         return images
 
-
-    def scale_image(self, image, w = None, h = None):
+    def scale_image(self, image, w=None, h=None):
 
         if (w == None) and (h == None):
             pass
@@ -183,6 +171,5 @@ class Hud:
             image = pg.transform.scale(image, (int(w), int(h)))
         else:
             image = pg.transform.scale(image, (int(w), int(h)))
-
 
         return image

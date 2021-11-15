@@ -1,21 +1,18 @@
 import pygame as pg
 import sys
 
-from pygame import key
-
 from .world import World
 from settings import *
-from .utils import  draw_text
+from .utils import draw_text
 from .camera import Camera
 from .hud import Hud
 from .resource import ResourceManager
-
+from .units import Archer
 
 
 class Game:
 
-
-    #preparing the screen and coordinates for the game
+    # preparing the screen and coordinates for the game
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
@@ -24,65 +21,59 @@ class Game:
         # resource
         self.resource_manager = ResourceManager()
 
-        #entities
+        # entities
         self.entities = []
 
-        #hud 
+        # hud
         self.hud = Hud(self.resource_manager, self.width, self.height)
 
-        #create the world with 50 by 50 grid
-        self.world = World(self.resource_manager, self.entities,self.hud, 50, 50, self.width, self.height )
-
-        #camera
+        # create the world with 50 by 50 grid
+        self.world = World(self.resource_manager, self.entities, self.hud, 50, 50, self.width, self.height)
+        for _ in range(10): Archer(self.world.world[25][25], self.world)
+        # camera
         self.camera = Camera(self.width, self.height)
 
-
-
-    #running
+    # running
     def run(self):
         self.playing = True
         while self.playing:
-            self.clock.tick(60)    #we can change fps here by increasing this number. ATTENTION: be careful the configuration of the computer. 
+            self.clock.tick(
+                60)  # we can change fps here by increasing this number. ATTENTION: be careful the configuration of the computer.
             self.events()
             self.update()
             self.draw()
 
-
-    #capture the events
+    # capture the events
     def events(self):
         for event in pg.event.get():
-            #Exit the game by clicking the red cross
+            # Exit the game by clicking the red cross
             if event.type == pg.QUIT:
                 pg.quit()
                 sys.exit()
-            #Exit game by pressing escape (Echap in fr)  button on the keyboard
+            # Exit game by pressing escape (Echap in fr)  button on the keyboard
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
-                if event.key == pg.K_DELETE:
-                    check_destroy = True
-        
 
     def update(self):
         self.camera.update()
-        for e in self.entities: e.update(CONSTRUCTION)
+        for e in self.entities: e.update()
         self.hud.update()
         self.world.update(self.camera)
 
     def draw(self):
-        #his method is used to fill the display with black 
+        # his method is used to fill the display with black
         self.screen.fill(BLACK)
-        self.world.draw(self.screen,self.camera)
+        self.world.draw(self.screen, self.camera)
         self.hud.draw(self.screen)
-   
+
         draw_text(
-            self.screen,                                    #print it on screen
-            "fps={}".format(round(self.clock.get_fps())),   #get value
-            25,                                             #text's size
-            WHITE,                                          #the text's colour
-            (900, 3)                                       #position of the text (x, y)
+            self.screen,  # print it on screen
+            "fps={}".format(round(self.clock.get_fps())),  # get value
+            25,  # text's size
+            WHITE,  # the text's colour
+            (900, 3)  # position of the text (x, y)
         )
-        
 
         pg.display.flip()
