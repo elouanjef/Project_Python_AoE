@@ -8,7 +8,8 @@ from settings import *
 from .utils import  draw_text
 from .camera import Camera
 from .hud import Hud
-from resource import *
+from .resource import ResourceManager
+
 
 
 class Game:
@@ -20,17 +21,17 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
+        # resource
+        self.resource_manager = ResourceManager()
+
         #entities
         self.entities = []
 
         #hud 
-        self.hud = Hud(self.width, self.height)
-
-        #resource
-        #self.resource = Resource(0,0,0,0)
+        self.hud = Hud(self.resource_manager, self.width, self.height)
 
         #create the world with 50 by 50 grid
-        self.world = World(self.entities,self.hud, 50, 50, self.width, self.height )      # ,self.resource
+        self.world = World(self.resource_manager, self.entities,self.hud, 50, 50, self.width, self.height )
 
         #camera
         self.camera = Camera(self.width, self.height)
@@ -78,7 +79,7 @@ class Game:
         draw_text(
             self.screen,                                    #print it on screen
             "fps={}".format(round(self.clock.get_fps())),   #get value
-            25,                                             #text's size 
+            25,                                             #text's size
             WHITE,                                          #the text's colour
             (900, 3)                                       #position of the text (x, y)
         )

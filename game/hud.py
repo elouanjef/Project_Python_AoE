@@ -6,8 +6,9 @@ from os import path
 
 class Hud:
 
-    def __init__(self, width, height):
+    def __init__(self, resource_manager, width, height):
 
+        self.resource_manager = resource_manager
         self.width = width
         self.height = height
 
@@ -61,7 +62,8 @@ class Hud:
                     "name": image_name,
                     "icon": image_scale,
                     "image": self.images[image_name],
-                    "rect": rect
+                    "rect": rect,
+                    "affordable": True
                     #on peut ajouter plusieuse attibutes ici
                 }
             )
@@ -82,9 +84,11 @@ class Hud:
             self.selected_tile = None
 
         for tile in self.tiles:
-
-            if tile["rect"].collidepoint(mouse_pos):
-            #tile["rect"] is defined in create_build_hud() 
+            if self.resource_manager.is_affordable(tile["name"]):
+                tile["affordable"] = True
+            else :tile["affordable"] = False
+            if tile["rect"].collidepoint(mouse_pos) and tile["affordable"]:
+            #tile["rect"] is defined in create_build_hud()
                 if mouse_action[0]:
                     self.selected_tile = tile
                     
@@ -114,17 +118,26 @@ class Hud:
 
         #icon for entity selecting
         for tile in self.tiles:
-            screen.blit(tile["icon"], tile["rect"].topleft)
+            icon = tile["icon"].copy()
+            if not tile["affordable"]:
+                icon.set_alpha(100)
+            screen.blit(icon, tile["rect"].topleft)
 
 
 
 
         #resource
         pos = self.width - 420                                           #resource info position
+
+        for resource, resource_value in self.resource_manager.resources.items():
+            txt = resource + ": " + str(resource_value)
+            draw_text(screen, txt, 25, WHITE, (pos, 0))
+            pos += 100
+            """
         for resource in ["wood:{}".format(500), "stone:{}".format(250), "gold:{}".format(100),"food: {}".format(230)]:
             draw_text(screen, resource, 25, WHITE, (pos, 0))
             pos += 100
-
+            """
 
 
 
@@ -134,8 +147,9 @@ class Hud:
     def load_images(self):
         #read images
         #all images are saved in folder assets/graphics
-        TownCenter = image_T
-        LumberMill = image_M
+        TownCenter = building01
+        LumberMill = building02
+        Barracks = building03
         #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
@@ -146,7 +160,8 @@ class Hud:
         #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
             "TownCenter": TownCenter,
-            "LumberMill": LumberMill
+            "LumberMill": LumberMill,
+            "Barracks" : Barracks
             #"troop": troop
             #ajouter les images d'unites ici
             #example "troop": troop;

@@ -1,9 +1,9 @@
 import pygame as pg
-from settings import RED, TILE_SIZE, TILE_SIZE_MINI_MAP,BLUE, WHITE ,graphics_folder
+from settings import*
 import random
 import noise
 from os import path 
-from .buildings import TownCenter, LumberMill
+from .buildings import TownCenter, LumberMill, Barracks
 import resource
 from settings import *
 
@@ -13,7 +13,9 @@ class World:
 
 
     #create the dimensions of the world (isometric)
-    def __init__(self,entities, hud,grid_lenght_x, grid_length_y, width, height): #, resource
+    def __init__(self,resource_manager, entities, hud,grid_lenght_x, grid_length_y, width, height):
+
+        self.resource_manager = resource_manager
         self.entities = entities
         self.hud = hud
         self.grid_length_x = grid_lenght_x    #number of square in x-dimension   
@@ -81,14 +83,17 @@ class World:
                 #left-click to build
                 if mouse_action[0] and not collision:
                     if self.hud.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos)
+                        ent = TownCenter(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"]  == "LumberMill":
-                        ent = LumberMill(render_pos)
+                        ent = LumberMill(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                    #elif self.hud.selected_tile["name"] == "Barrack"
+                    elif self.hud.selected_tile["name"] == "Barracks":
+                        ent = Barracks(render_pos, self.resource_manager)
+                        self.entities.append(ent)
+                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     #self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
                     self.hud.selected_tile = None
@@ -340,12 +345,14 @@ class World:
         block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
         tree = pg.image.load(path.join(graphics_folder,"tree.png")).convert_alpha()
         rock = pg.image.load(path.join(graphics_folder,"rock.png")).convert_alpha()
-        building1 = pg.image.load(path.join(graphics_folder,"building01.png")).convert_alpha()
-        building2 = pg.image.load(path.join(graphics_folder,"building02.png")).convert_alpha()
-        building3 = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
+        building1 = building01.convert_alpha()
+        building2 = building02.convert_alpha()
+        building3 = building03.convert_alpha()
+        troop = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
         images = {
             "building1": building1,
             "building2": building2,
+            "building3": building3,
             "tree": tree,
             "rock": rock,
             "block": block,
