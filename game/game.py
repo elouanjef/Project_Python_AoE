@@ -1,6 +1,8 @@
 import pygame as pg
 import sys
 
+from pygame import key
+
 from .world import World
 from settings import *
 from .utils import  draw_text
@@ -57,6 +59,9 @@ class Game:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
+                if event.key == pg.K_DELETE:
+                    check_destroy = True
+        
 
     def update(self):
         self.camera.update()

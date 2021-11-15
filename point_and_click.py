@@ -1,18 +1,18 @@
 import pygame as pg
 
 
-class Ship():
+class Character():
 
     def __init__(self, speed, color):
         self.image = pg.Surface((10, 10))
         self.image.set_colorkey((12,34,56))
         self.image.fill((12,34,56))
-        pg.draw.circle(self.image, color, (5, 5), 5)
+        pg.draw.circle(self.image, color, (50, 50), 5)
         self.rect = self.image.get_rect()
         self.color = color
 
-        self.pos = pg.Vector2(0, 0)
-        self.set_target((0, 0))
+        self.pos = pg.Vector2(50, 50)
+        self.set_target((50, 50))
         self.speed = speed
 
     def set_target(self, pos):
@@ -44,21 +44,21 @@ def main():
     pg.display.toggle_fullscreen()
     clock = pg.time.Clock()
 
-    group = Ship(1.5, pg.Color('white'))
+    Unit = Character(1.5, pg.Color('white'))
 
     while not quit:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return 
             if event.type == pg.MOUSEBUTTONDOWN:
-                group.set_target(pg.mouse.get_pos())
+                Unit.set_target(pg.mouse.get_pos())
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
 
-        group.update()
+        Unit.update()
         screen.fill((20, 20, 20))
-        group.draw(screen)
+        Unit.draw(screen)
         pg.display.flip()
         clock.tick(60)
 

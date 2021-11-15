@@ -18,6 +18,12 @@ HUD_COLOUR = (198, 155, 93, 175)
 CONSTRUCTION = 1
 DESTROY = 0
 
+
+# global check_destroy 
+# check_destroy = False
+
+check_destroy = False
+
 #Paths definitions
 #Gameplay folder
 AOE_folder = path.dirname(__file__) #Path of the Project_Python_AoE foler

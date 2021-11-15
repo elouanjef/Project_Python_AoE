@@ -14,6 +14,7 @@ class TownCenter:
         self.name = "Town center"
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
+        self.pos = pos
 
         self.health_max = 1000
         self.health = 0
@@ -39,6 +40,7 @@ class Barracks:
         self.res = [125, 0, 0, 0]
         self.health_max = 350
         self.health = 0
+        self.pos = pos
 
     def update(self, action):
         if action == 0:
@@ -59,6 +61,7 @@ class LumberMill:
        self.res = [150, 0, 0, 0]
        self.health_max = 500
        self.health = 0
+       self.pos = pos
 
     def update(self, action):
         if action == 0:

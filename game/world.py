@@ -5,6 +5,7 @@ import noise
 from os import path 
 from .buildings import TownCenter, LumberMill
 import resource
+from settings import *
 
 
 
@@ -41,14 +42,13 @@ class World:
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
+        
 
-
-        if mouse_action[2]:
-            self.examine_tile = None
-            self.hud.examined_tile = None
+        # if mouse_action[2]:
+        #     self.examine_tile = None
+        #     self.hud.examined_tile = None
 
         self.temp_tile = None
-
 
         #je vais creer une fonction pour garder cette if-else condition
         if self.hud.selected_tile is not None:
@@ -88,6 +88,7 @@ class World:
                         ent = LumberMill(render_pos)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                    #elif self.hud.selected_tile["name"] == "Barrack"
                     #self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
                     self.hud.selected_tile = None
@@ -102,12 +103,28 @@ class World:
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
                     #collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
-                    
                     if mouse_action[0] and (building is not None):
                         
                         self.examine_tile = grid_pos
                         self.hud.examined_tile = building
                         #self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
+                        
+                    if mouse_action[2]:
+                        if building is not None:
+                            self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                            index = self.entities.index(building)
+                            self.examine_tile = None
+                            self.hud.examined_tile = None
+                            #print(index)
+                            self.entities.pop(index)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = None  
+                                                
+
+                        
+                    elif mouse_action[0] and (building is None):
+                        self.examine_tile = None
+                        self.hud.examined_tile = None
+
                 else:
                     pass
 
@@ -325,14 +342,14 @@ class World:
         rock = pg.image.load(path.join(graphics_folder,"rock.png")).convert_alpha()
         building1 = pg.image.load(path.join(graphics_folder,"building01.png")).convert_alpha()
         building2 = pg.image.load(path.join(graphics_folder,"building02.png")).convert_alpha()
-        troop = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
+        building3 = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
         images = {
             "building1": building1,
             "building2": building2,
             "tree": tree,
             "rock": rock,
             "block": block,
-            "troop": troop
+            "building3": building3
         }
 
         return images
