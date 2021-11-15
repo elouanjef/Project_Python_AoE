@@ -28,8 +28,10 @@ check_destroy = False
 #Gameplay folder
 AOE_folder = path.dirname(__file__) #Path of the Project_Python_AoE foler
 graphics_folder = path.join(AOE_folder,"assets/graphics") #Path for graphic
-building01 = pg.image.load(path.join(graphics_folder,"building01.png"))
-building02 = pg.image.load(path.join(graphics_folder,"building02.png"))
-building03 = pg.image.load(path.join(graphics_folder,"building03.png"))
+building01 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building01.png")), (200, 130))
+building02 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building02.png")), (200, 130))
+building03 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building03.png")), (200, 130))
+
+archer = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archer.png")), (30,40))
 
 resource_TC = [600, 0, 0, 0]
