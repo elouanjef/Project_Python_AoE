@@ -8,6 +8,7 @@ from .camera import Camera
 from .hud import Hud
 from .resource import ResourceManager
 from .units import Archer
+from .events import *
 
 
 class Game:
@@ -17,6 +18,9 @@ class Game:
         self.screen = screen
         self.clock = clock
         self.width, self.height = self.screen.get_size()
+
+        #event
+        self.events = Event(clock)
 
         # resource
         self.resource_manager = ResourceManager()
@@ -28,7 +32,7 @@ class Game:
         self.hud = Hud(self.resource_manager, self.width, self.height)
 
         # create the world with 50 by 50 grid
-        self.world = World(self.resource_manager, self.entities, self.hud, 50, 50, self.width, self.height)
+        self.world = World(self.resource_manager, self.entities, self.hud, 50, 50, self.width, self.height,self.events)
         for _ in range(10): Archer(self.world.world[25][25], self.world)
         # camera
         self.camera = Camera(self.width, self.height)
@@ -39,9 +43,10 @@ class Game:
         while self.playing:
             self.clock.tick(
                 60)  # we can change fps here by increasing this number. ATTENTION: be careful the configuration of the computer.
-            self.events()
+            #self.events()
             self.update()
             self.draw()
+            self.events.events()
 
     # capture the events
     def events(self):

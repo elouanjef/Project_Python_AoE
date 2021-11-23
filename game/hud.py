@@ -117,7 +117,26 @@ class Hud:
             mouse_pos = pg.mouse.get_pos()
             mouse_action = pg.mouse.get_pressed()
             if mouse_action[0] and button.rect.collidepoint(mouse_pos):
-                print('clicked')
+                print('clicked1')
+
+            button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'D', 15, 'white on black')
+            button2.button()
+            mouse_pos = pg.mouse.get_pos()
+            mouse_action = pg.mouse.get_pressed()
+            if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                print('clicked2')
+
+
+
+
+
+
+
+
+
+
+
+
 
         # icon for entity selecting
         for tile in self.tiles:

@@ -6,12 +6,13 @@ from os import path
 from .buildings import TownCenter, LumberMill, Barracks
 from .units import Archer
 import resource
+from .events import *
 
 
 class World:
 
     # create the dimensions of the world (isometric)
-    def __init__(self, resource_manager, entities, hud, grid_lenght_x, grid_length_y, width, height):
+    def __init__(self, resource_manager, entities, hud, grid_lenght_x, grid_length_y, width, height, events):
 
         self.resource_manager = resource_manager
         self.entities = entities
@@ -39,6 +40,8 @@ class World:
 
         self.temp_tile = None
         self.examine_tile = None
+
+        self.events = events
 
     # work in map
     def update(self, camera):
@@ -117,6 +120,35 @@ class World:
                         self.examine_tile = grid_pos
                         self.hud.examined_tile = building
                         # self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
+                
+                    
+                    if mouse_action[2]:
+                        if building is not None:
+                            self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                            index = self.entities.index(building)
+                            self.examine_tile = None
+                            self.hud.examined_tile = None
+                            #print(index)
+                            self.entities.pop(index)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = None
+                
+                    if self.events.get_destroy():
+                        if building is not None:
+                            self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                            index = self.entities.index(building)
+                            self.examine_tile = None
+                            self.hud.examined_tile = None
+                            #print(index)
+                            self.entities.pop(index)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = None
+                            self.events.remise()
+                            
+                        
+                    elif mouse_action[0] and (building is None):
+                        self.examine_tile = None
+                        self.hud.examined_tile = None
+                
+                
                 else:
                     pass
 
