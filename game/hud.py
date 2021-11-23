@@ -3,6 +3,7 @@ from settings import *
 import pygame as pg
 from .utils import draw_text
 from os import path
+from .button import *
 
 
 class Hud:
@@ -110,6 +111,13 @@ class Hud:
             # text in information box
             draw_text(screen, self.examined_tile.game_name, 40, WHITE, self.select_rect.topleft)
             draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
+
+            button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'C', 15, 'white on black')
+            button.button()
+            mouse_pos = pg.mouse.get_pos()
+            mouse_action = pg.mouse.get_pressed()
+            if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                print('clicked')
 
         # icon for entity selecting
         for tile in self.tiles:
