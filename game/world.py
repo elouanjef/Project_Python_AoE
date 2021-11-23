@@ -26,6 +26,10 @@ class World:
 
         self.perlin_scale = self.grid_length_x / 2
 
+
+        self.chossing_pos_x = None
+        self.chossing_pos_y = None
+
         self.grass_tiles = pg.Surface(
             (grid_lenght_x * TILE_SIZE * 2, grid_length_y * TILE_SIZE + 2 * TILE_SIZE)).convert_alpha()
         # convert_alpha():   change the pixel format of an image including per pixel alphas convert_alpha(Surface) -> Surface convert_alpha() -> Surface
@@ -83,7 +87,7 @@ class World:
                 # left-click to build
                 if mouse_action[0] and not collision:
                     if self.hud.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos, self.resource_manager)
+                        ent = TownCenter(render_pos, self.resource_manager, self.events)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "LumberMill":
@@ -109,6 +113,10 @@ class World:
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
             #            [wood, rock, gold, food] = self.resource.get_res()
 
+
+
+            # grid_pos = self.mouse_to_grid(self.chossing_pos_x, self.chossing_pos_y, camera.scroll)
+            #grid_pos = [self.chossing_pos_x,self.chossing_pos_y]
             if self.can_place_tile(grid_pos):  # and wood > resource:
 
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
@@ -132,16 +140,32 @@ class World:
                             self.entities.pop(index)
                             self.buildings[grid_pos[0]][grid_pos[1]] = None
                 
+                    # if self.events.get_destroy():
+                    #     if building is not None:
+                    #         self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                    #         index = self.entities.index(building)
+                    #         self.examine_tile = None
+                    #         self.hud.examined_tile = None
+                    #         #print(index)
+                    #         self.entities.pop(index)
+                    #         self.buildings[grid_pos[0]][grid_pos[1]] = None
+                    #         self.events.remise()
+
+
                     if self.events.get_destroy():
+                        building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
                         if building is not None:
-                            self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                            self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
                             index = self.entities.index(building)
                             self.examine_tile = None
                             self.hud.examined_tile = None
                             #print(index)
                             self.entities.pop(index)
-                            self.buildings[grid_pos[0]][grid_pos[1]] = None
+                            self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
                             self.events.remise()
+                            self.chossing_pos_x, self.chossing_pos_y = None, None
+                        
+
                             
                         
                     elif mouse_action[0] and (building is None):
@@ -206,13 +230,25 @@ class World:
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
+
+
+
+
+
                     if self.examine_tile is not None:
                         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
                             mask = pg.mask.from_surface(building.image).outline()
                             mask = [(x + render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                      y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y)
                                     for x, y in mask]
+                            self.chossing_pos_x, self.chossing_pos_y = x, y
                             pg.draw.polygon(screen, WHITE, mask, 3)
+
+
+
+
+
+
                 else:
                     pass
 

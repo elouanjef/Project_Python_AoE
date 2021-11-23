@@ -27,6 +27,10 @@ class Event:
                     self.timer += self.dt
                     self.destroy = True
 
+
+    def set_destroy(self):
+        self.destroy = True
+
     # def count(self):
     #     self.timer += self.dt
     #     if self.timer > 0.5:
@@ -37,4 +41,3 @@ class Event:
 
     def get_destroy(self):
         return self.destroy
-

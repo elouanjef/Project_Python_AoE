@@ -8,11 +8,14 @@ from .button import *
 
 class Hud:
 
-    def __init__(self, resource_manager, width, height):
+    def __init__(self, resource_manager, width, height, events):
 
         self.resource_manager = resource_manager
         self.width = width
         self.height = height
+
+
+        self.events = events
 
         self.hud_colour = HUD_COLOUR
 
@@ -117,14 +120,17 @@ class Hud:
             mouse_pos = pg.mouse.get_pos()
             mouse_action = pg.mouse.get_pressed()
             if mouse_action[0] and button.rect.collidepoint(mouse_pos):
-                print('clicked1')
+                self.events.set_destroy()
 
             button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'D', 15, 'white on black')
             button2.button()
             mouse_pos = pg.mouse.get_pos()
             mouse_action = pg.mouse.get_pressed()
-            if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+            if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+
                 print('clicked2')
+
+
 
 
 

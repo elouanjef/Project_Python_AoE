@@ -29,7 +29,7 @@ class Game:
         self.entities = []
 
         # hud
-        self.hud = Hud(self.resource_manager, self.width, self.height)
+        self.hud = Hud(self.resource_manager, self.width, self.height, self.events)
 
         # create the world with 50 by 50 grid
         self.world = World(self.resource_manager, self.entities, self.hud, 50, 50, self.width, self.height,self.events)

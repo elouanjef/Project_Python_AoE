@@ -10,9 +10,10 @@ from os import path
 
 class TownCenter:
 
-    def __init__(self, pos, resource_manager):
+    def __init__(self, pos, resource_manager, events):
         image = building01
         self.image = image
+        self.events = events
         self.name = "TownCenter"
         self.game_name = "Town center"
         self.rect = self.image.get_rect(topleft=pos)
@@ -25,6 +26,9 @@ class TownCenter:
     def update(self):
         if self.health < self.health_max:
             self.health += 1
+
+    def destroy(self):
+        self.events.destroy = True
 
 
 class Barracks:
