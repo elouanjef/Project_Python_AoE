@@ -121,6 +121,9 @@ class Hud:
             mouse_action = pg.mouse.get_pressed()
             if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                 self.events.set_destroy()
+                #self.events.update_destroy()
+                
+                
 
             button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'D', 15, 'white on black')
             button2.button()

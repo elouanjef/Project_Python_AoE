@@ -8,8 +8,7 @@ class Event:
         self.destroy = False
         self.clock = clock
         self.timer = 0
-        # / 1000 to convert milliseconds to seconds.
-        self.dt = self.clock.tick(30) / 1000
+        self.dt = clock.tick(30)/1000
     #capture the events
     def events(self):
         for event in pg.event.get():
@@ -19,25 +18,34 @@ class Event:
                 sys.exit()
             #Exit game by pressing escape (Echap in fr)  button on the keyboard
             if event.type == pg.KEYDOWN:
+                
                 if event.key == pg.K_ESCAPE:
                     pg.quit()
                     sys.exit()
 
                 if event.key == pg.K_DELETE:
-                    self.timer += self.dt
                     self.destroy = True
+                    self.timer = 0.0001
 
 
     def set_destroy(self):
         self.destroy = True
+        self.update_destroy()
 
-    # def count(self):
-    #     self.timer += self.dt
-    #     if self.timer > 0.5:
-    #         self.remise()
 
     def remise(self):
         self.destroy = False
 
     def get_destroy(self):
         return self.destroy
+
+    def update_destroy(self):
+        if (self.timer != 0):
+            if (self.timer > 0.5):
+                #print("too late")
+                self.timer = 0
+                self.destroy = False
+            else:
+                self.timer += self.dt
+        return self.destroy
+

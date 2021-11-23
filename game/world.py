@@ -153,23 +153,27 @@ class World:
                     #         self.events.remise()
 
 
-                    if self.events.get_destroy():
-                        building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
-                        if building is not None:
-                            self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
-                            index = self.entities.index(building)
-                            self.examine_tile = None
-                            self.hud.examined_tile = None
-                            #print(index)
-                            self.entities.pop(index)
-                            self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
-                            self.events.remise()
-                            self.chossing_pos_x, self.chossing_pos_y = None, None
+                    # if self.events.get_destroy():
+                    if self.events.update_destroy():
+                        if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
+                            building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
+                            if building is not None:
+                                self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
+                                index = self.entities.index(building)
+                                self.examine_tile = None
+                                self.hud.examined_tile = None
+                                #print(index)
+                                self.entities.pop(index)
+                                self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
+                                self.events.remise()
+                                self.chossing_pos_x, self.chossing_pos_y = None, None
                         
 
                             
                         
                     elif mouse_action[0] and (building is None):
+                        self.chossing_pos_x = None
+                        self.chossing_pos_y = None
                         self.examine_tile = None
                         self.hud.examined_tile = None
                 
