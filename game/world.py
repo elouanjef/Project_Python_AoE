@@ -131,14 +131,15 @@ class World:
                 
                     
                     if mouse_action[2]:
+                        building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
                         if building is not None:
-                            self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
+                            self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
                             index = self.entities.index(building)
                             self.examine_tile = None
                             self.hud.examined_tile = None
                             #print(index)
                             self.entities.pop(index)
-                            self.buildings[grid_pos[0]][grid_pos[1]] = None
+                            self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
                 
                     # if self.events.get_destroy():
                     #     if building is not None:
