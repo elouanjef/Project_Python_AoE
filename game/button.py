@@ -9,8 +9,10 @@ class Button:
         self.colors = colors
 
 
-    def button(self):
-        fg, bg = self.colors.split(" on ")
+    def button(self, color = ""):
+        if color == "":
+            color = self.colors
+        fg, bg = color.split(" on ")
         font = pg.font.SysFont("Arial", self.size)
         text_render = font.render(self.text, 1, fg)
         x, y, w , h = text_render.get_rect()

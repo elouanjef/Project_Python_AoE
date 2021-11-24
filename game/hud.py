@@ -115,27 +115,72 @@ class Hud:
             draw_text(screen, self.examined_tile.game_name, 40, WHITE, self.select_rect.topleft)
             draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
 
-            button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'C', 15, 'white on black')
-            button.button()
-            mouse_pos = pg.mouse.get_pos()
-            mouse_action = pg.mouse.get_pressed()
-            if mouse_action[0] and button.rect.collidepoint(mouse_pos):
-                self.events.set_destroy()
-                #self.events.update_destroy()
-                
-                
+            if self.examined_tile.name == "TownCenter":
 
-            button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'D', 15, 'white on black')
-            button2.button()
-            mouse_pos = pg.mouse.get_pos()
-            mouse_action = pg.mouse.get_pressed()
-            if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+                button.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                    button.button("black on blue")
+                    self.events.set_destroy()
+                    #self.events.update_destroy()
+                    
+                    
 
-                print('clicked2')
+                button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'Y', 15, 'white on black')
+                button2.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+                    button2.button("black on green")
+                    self.events.remise()
+                    print('clicked2')
+
+
+                button3 = Button(screen, (self.width * 0.6 + 20, self.height*0.9 + 60),'Z', 15, 'white on black')
+                button3.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button3.rect.collidepoint(mouse_pos):
+                    self.events.remise()
+                    button3.button("black on green")
+                    print('clicked2')
 
 
 
 
+            if self.examined_tile.name == "Barracks":
+                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+                button.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                    button.button("black on blue")
+                    self.events.set_destroy()
+
+
+
+
+
+                button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'Y', 15, 'white on black')
+                button2.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+                    button2.button("black on green")
+                    self.events.remise()
+                    print('clicked2')
+
+
+            if self.examined_tile.name == "LumberMill":
+                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+                button.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                    button.button("black on blue")
+                    self.events.set_destroy()
 
 
 

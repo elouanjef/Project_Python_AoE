@@ -3,7 +3,7 @@ from .hud import *
 class ResourceManager:
     def __init__(self):
         self.resources = {
-            "wood" : 500,
+            "wood" : 5000,
             "rock" : 500,
             "gold" : 500,
             "food" : 500
