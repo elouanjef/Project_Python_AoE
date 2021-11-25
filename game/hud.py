@@ -1,10 +1,14 @@
 # from game.buildings import LumberMill, TownCenter
+import game.units
 from settings import *
 import pygame as pg
 from .utils import draw_text
 from os import path
 from .button import *
-
+from game.units import Archer, Infantryman
+from game.buildings import *
+import game.game
+from resource import *
 
 class Hud:
 
@@ -13,7 +17,6 @@ class Hud:
         self.resource_manager = resource_manager
         self.width = width
         self.height = height
-
 
         self.events = events
 
@@ -39,12 +42,16 @@ class Hud:
         # create a new hud
         self.tiles = self.create_build_hud()
 
+
         self.selected_tile = None
         self.examined_tile = None
 
-    def create_unit(self, unit, pos):
-        self.unit = unit
-        unit(self.world.buildings.rect, self.world)
+        self.archer_c = False
+        self.infantryman_c = False
+
+    def create_troop(self, bat):
+        if bat == 'a':
+            Archery.create_troop_a()
 
     #afficher les batiments pour choisir et construire
     def create_build_hud(self):
@@ -177,6 +184,8 @@ class Hud:
                     button2.button("black on green")
                     self.events.remise()
                     print('Infantryman created')
+                    self.events.create_troop('infantryman')
+                    self.events.get_troop() #-> infantryman
 
                 #bouton créer infantryman
 
@@ -201,8 +210,9 @@ class Hud:
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-
                     print('Archer created')
+                    self.events.create_troop('archer')
+                    self.events.get_troop()  # -> archer
 
                 #bouton créer archer
 

@@ -13,14 +13,17 @@ import random
 
 class Archer:
 
-    def __init__(self, tile, world):
+    def __init__(self, tile, world, resource_manager):
         image = archer
         self.world = world
-        self.world.entities.append(self)
+#        self.world.entities.append(self)
         self.tile = tile
         self.image = image
         self.name = "Archer"
         self.game_name = "Archer"
+        #self.rect = self.image.get_rect(topleft=pos)
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
          #self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
        # self.resource_manager = resource_manager
@@ -32,6 +35,7 @@ class Archer:
         self.move_timer = pg.time.get_ticks()
 
         self.create_path()
+
 
     def create_path(self):
         searching_for_path = True
@@ -69,7 +73,7 @@ class Archer:
 
 class Infantryman:
 
-    def __init__(self, tile, world):
+    def __init__(self, tile, world, resource_manager):
         image = infantryman
         self.world = world
         self.world.entities.append(self)
@@ -77,6 +81,8 @@ class Infantryman:
         self.image = image
         self.name = "Infantryman"
         self.game_name = "Infantryman"
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
          #self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
        # self.resource_manager = resource_manager
@@ -144,6 +150,7 @@ class Catapult:
         image = pg.image.load(path.join(graphics_folder, "unit05.png"))
         self.image = image
         self.name = "Catapult"
+
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.attack = 60

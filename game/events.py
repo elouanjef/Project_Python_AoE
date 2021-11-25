@@ -6,6 +6,7 @@ import sys
 class Event:
     def __init__(self,clock) -> None:
         self.destroy = False
+        self.troop = None
         self.clock = clock
         self.timer = 0
         self.dt = clock.tick(30)/1000
@@ -48,4 +49,13 @@ class Event:
             else:
                 self.timer += self.dt
         return self.destroy
+
+    def create_troop(self, troop):
+        self.troop = str(troop)
+
+    def get_troop(self):
+        return self.troop
+
+    def remise_troop(self):
+        self.troop = None
 

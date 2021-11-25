@@ -47,10 +47,34 @@ class World:
 
         self.events = events
 
+
+
+
     # work in map
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
+
+        if self.hud.events.get_troop() != None:
+            if self.examine_tile != None:
+                pos = self.examine_tile
+                pos_x = pos[0]
+                pos_y = pos[1]
+
+                if self.hud.events.get_troop() == 'archer':
+                    Archer(self.world[pos_x][pos_y], self, self.resource_manager)
+                    self.examine_tile = None
+                    self.hud.events.remise_troop()
+
+                elif self.hud.events.get_troop() == 'infantryman':
+                    Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
+                    self.examine_tile = None
+                    self.hud.events.remise_troop()
+
+            self.hud.events.remise_troop()
+
+        else:
+            pass
 
         if mouse_action[2]:
             self.examine_tile = None
@@ -99,20 +123,14 @@ class World:
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "Archery":
-                        ent = Archery(render_pos, self.resource_manager)
+                        ent = Archery(render_pos, self.resource_manager, self.world)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                    elif self.hud.selected_tile["name"] == "Archer":
-                        ent = Archer(render_pos, self.resource_manager)
-                        self.entities.append(ent)
-                        self.units[grid_pos[0]][grid_pos[1]] = ent
-                    elif self.hud.selected_tile["name"] == "Infantryman":
-                        ent = Infantryman(render_pos, self.resource_manager)
-                        self.entities.append(ent)
-                        self.units[grid_pos[0]][grid_pos[1]] = ent
 
 
-                    # self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
+
+
+                    #self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
                     self.hud.selected_tile = None
@@ -185,6 +203,11 @@ class World:
                         self.chossing_pos_y = None
                         self.examine_tile = None
                         self.hud.examined_tile = None
+
+
+
+
+
                 
                 
                 else:

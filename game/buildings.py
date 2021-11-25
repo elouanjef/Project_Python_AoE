@@ -47,11 +47,13 @@ class Barracks:
 
 class Archery:
 
-    def __init__(self, pos, resource_manager):
+    def __init__(self, pos, resource_manager, world):
         image = archery
         self.image = image
         self.name = "Archery"
         self.game_name = "Archery"
+        self.pos = pos
+        self.world = world
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
@@ -62,6 +64,8 @@ class Archery:
     def update(self):
         if self.health < self.health_max:
             self.health += 1
+
+
 
 class LumberMill:
 
