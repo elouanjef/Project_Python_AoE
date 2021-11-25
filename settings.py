@@ -28,10 +28,12 @@ check_destroy = False
 #Gameplay folder
 AOE_folder = path.dirname(__file__) #Path of the Project_Python_AoE foler
 graphics_folder = path.join(AOE_folder,"assets/graphics") #Path for graphic
-building01 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building01.png")), (200, 130))
-building02 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building02.png")), (200, 130))
-building03 = pg.transform.scale(pg.image.load(path.join(graphics_folder,"building03.png")), (200, 130))
+#buildings
+towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (200, 130))
+lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder,"lumbermill.png")), (200, 130))
+barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder,"barracks.png")), (200, 130))
+archery = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archery.png")), (200, 130))
 
+#units
 archer = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archer.png")), (30,40))
-
-resource_TC = [600, 0, 0, 0]
+infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder,"Barbarian.png")), (38,48))

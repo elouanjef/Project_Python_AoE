@@ -10,10 +10,9 @@ from os import path
 
 class TownCenter:
 
-    def __init__(self, pos, resource_manager, events):
-        image = building01
+    def __init__(self, pos, resource_manager):
+        image = towncenter
         self.image = image
-        self.events = events
         self.name = "TownCenter"
         self.game_name = "Town center"
         self.rect = self.image.get_rect(topleft=pos)
@@ -27,14 +26,11 @@ class TownCenter:
         if self.health < self.health_max:
             self.health += 1
 
-    def destroy(self):
-        self.events.destroy = True
-
 
 class Barracks:
 
     def __init__(self, pos, resource_manager):
-        image = building03
+        image = barracks
         self.image = image
         self.name = "Barracks"
         self.game_name = "Barracks"
@@ -49,11 +45,28 @@ class Barracks:
         if self.health < self.health_max:
             self.health += 1
 
+class Archery:
+
+    def __init__(self, pos, resource_manager):
+        image = archery
+        self.image = image
+        self.name = "Archery"
+        self.game_name = "Archery"
+        self.rect = self.image.get_rect(topleft=pos)
+        # [ WOOD , ROCK , GOLD , FOOD ]
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
+        self.health_max = 350
+        self.health = 0
+
+    def update(self):
+        if self.health < self.health_max:
+            self.health += 1
 
 class LumberMill:
 
     def __init__(self, pos, resource_manager):
-        image = building02
+        image = lumbermill
         self.image = image
         self.name = "LumberMill"
         self.game_name = "Lumber mill"

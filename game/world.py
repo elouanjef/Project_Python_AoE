@@ -3,8 +3,8 @@ from settings import *
 import random
 import noise
 from os import path
-from .buildings import TownCenter, LumberMill, Barracks
-from .units import Archer
+from .buildings import TownCenter, LumberMill, Barracks, Archery
+from .units import Archer, Infantryman
 import resource
 from .events import *
 
@@ -87,7 +87,7 @@ class World:
                 # left-click to build
                 if mouse_action[0] and not collision:
                     if self.hud.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos, self.resource_manager, self.events)
+                        ent = TownCenter(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "LumberMill":
@@ -98,10 +98,19 @@ class World:
                         ent = Barracks(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                    elif self.hud.selected_tile["name"] == "Archery":
+                        ent = Archery(render_pos, self.resource_manager)
+                        self.entities.append(ent)
+                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "Archer":
                         ent = Archer(render_pos, self.resource_manager)
                         self.entities.append(ent)
                         self.units[grid_pos[0]][grid_pos[1]] = ent
+                    elif self.hud.selected_tile["name"] == "Infantryman":
+                        ent = Infantryman(render_pos, self.resource_manager)
+                        self.entities.append(ent)
+                        self.units[grid_pos[0]][grid_pos[1]] = ent
+
 
                     # self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
@@ -121,7 +130,7 @@ class World:
 
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
-                    units = self.buildings[grid_pos[0]][grid_pos[1]]
+                    units = self.units[grid_pos[0]][grid_pos[1]]
                     # collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
 
                     if mouse_action[0] and (building is not None):
@@ -386,14 +395,16 @@ class World:
         block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
         tree = pg.image.load(path.join(graphics_folder, "tree.png")).convert_alpha()
         rock = pg.image.load(path.join(graphics_folder, "rock.png")).convert_alpha()
-        building1 = building01.convert_alpha()
-        building2 = building02.convert_alpha()
-        building3 = building03.convert_alpha()
+        building1 = towncenter.convert_alpha()
+        building2 = lumbermill.convert_alpha()
+        building3 = barracks.convert_alpha()
+        building4 = archery.convert_alpha()
         troop = pg.image.load(path.join(graphics_folder, "cart_E.png")).convert_alpha()
         images = {
             "building1": building1,
             "building2": building2,
             "building3": building3,
+            "building4": building4,
             "tree": tree,
             "rock": rock,
             "block": block,

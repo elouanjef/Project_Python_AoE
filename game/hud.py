@@ -42,7 +42,11 @@ class Hud:
         self.selected_tile = None
         self.examined_tile = None
 
-    # afficher les batiments pour choisir et construire
+    def create_unit(self, unit, pos):
+        self.unit = unit
+        unit(self.world.buildings.rect, self.world)
+
+    #afficher les batiments pour choisir et construire
     def create_build_hud(self):
 
         # position in the inventory
@@ -117,7 +121,7 @@ class Hud:
 
             if self.examined_tile.name == "TownCenter":
 
-                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+                button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
                 button.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
@@ -125,20 +129,21 @@ class Hud:
                     button.button("black on blue")
                     self.events.set_destroy()
                     #self.events.update_destroy()
+                    print("Town center destroyed")
                     
                     
 
-                button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'Y', 15, 'white on black')
+                button2 = Button(screen, (self.width * 0.6 - 70, self.height*0.9 + 60),'Villager', 15, 'white on black')
                 button2.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-                    print('clicked2')
+                    print('Villager created')
 
 
-                button3 = Button(screen, (self.width * 0.6 + 20, self.height*0.9 + 60),'Z', 15, 'white on black')
+                button3 = Button(screen, (self.width * 0.6 - 90, self.height*0.9 + 60),'Z', 15, 'white on black')
                 button3.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
@@ -151,36 +156,67 @@ class Hud:
 
 
             if self.examined_tile.name == "Barracks":
-                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+                button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
                 button.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
+                    print("Barracks destroyed")
+
+                #bouton pour détruire
 
 
 
-
-
-                button2 = Button(screen, (self.width * 0.6 + 35, self.height*0.9 + 60),'Y', 15, 'white on black')
+                button2 = Button(screen, (self.width * 0.6 - 100, self.height*0.9 + 60),'Infantryman', 15, 'white on black')
                 button2.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-                    print('clicked2')
+                    print('Infantryman created')
 
+                #bouton créer infantryman
 
-            if self.examined_tile.name == "LumberMill":
-                button = Button(screen, (self.width * 0.6 + 50, self.height*0.9 + 60),'X', 15, 'white on red')
+            if self.examined_tile.name == "Archery":
+                button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
                 button.button()
                 mouse_pos = pg.mouse.get_pos()
                 mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
+                    print("Archery destroyed")
+
+                #bouton pour détruire
+
+
+
+                button2 = Button(screen, (self.width * 0.6 - 60, self.height*0.9 + 60),'Archer', 15, 'white on black')
+                button2.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+                    button2.button("black on green")
+                    self.events.remise()
+
+                    print('Archer created')
+
+                #bouton créer archer
+
+
+
+            if self.examined_tile.name == "LumberMill":
+                button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
+                button.button()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
+                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                    button.button("black on blue")
+                    self.events.set_destroy()
+                    print("Lumber mill destroyed")
 
 
 
@@ -215,10 +251,12 @@ class Hud:
     def load_images(self):
         # read images
         # all images are saved in folder assets/graphics
-        TownCenter = building01
-        LumberMill = building02
-        Barracks = building03
+        TownCenter = towncenter
+        LumberMill = lumbermill
+        Barracks = barracks
+        Archery = archery
         Archer = archer
+        Infantryman = infantryman
         # tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         # rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
@@ -231,6 +269,7 @@ class Hud:
             "TownCenter": TownCenter,
             "LumberMill": LumberMill,
             "Barracks": Barracks,
+            "Archery": Archery,
             # "Archer" : Archer
             # "troop": troop
             # ajouter les images d'unites ici
