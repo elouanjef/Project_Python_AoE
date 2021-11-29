@@ -48,6 +48,10 @@ class World:
         self.events = events
 
 
+        #choose tree, rock or gold
+        self.choose = None
+
+
 
 
     # work in map
@@ -126,11 +130,6 @@ class World:
                         ent = Archery(render_pos, self.resource_manager, self.world)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
-
-
-
-
-                    #self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.hud.selected_tile["name"]
                     self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
                     self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
                     self.hud.selected_tile = None
@@ -138,49 +137,36 @@ class World:
 
         else:
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-            #            [wood, rock, gold, food] = self.resource.get_res()
-
-
-
-            # grid_pos = self.mouse_to_grid(self.chossing_pos_x, self.chossing_pos_y, camera.scroll)
-            #grid_pos = [self.chossing_pos_x,self.chossing_pos_y]
             if self.can_place_tile(grid_pos):  # and wood > resource:
-
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
+                    collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
                     units = self.units[grid_pos[0]][grid_pos[1]]
-                    # collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
+
 
                     if mouse_action[0] and (building is not None):
                         self.examine_tile = grid_pos
                         self.hud.examined_tile = building
-                        # self.hud.examined_tile = self.world[grid_pos[0]][grid_pos[1]]
+
+                    if mouse_action[0] and collision:
+                        self.choose = grid_pos
+                        self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
+
                 
                     
                     if mouse_action[2]:
-                        building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
-                        if building is not None:
-                            self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
-                            index = self.entities.index(building)
-                            self.examine_tile = None
-                            self.hud.examined_tile = None
-                            #print(index)
-                            self.entities.pop(index)
-                            self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
-                
-                    # if self.events.get_destroy():
-                    #     if building is not None:
-                    #         self.world[grid_pos[0]][grid_pos[1]]["collision"] = False  
-                    #         index = self.entities.index(building)
-                    #         self.examine_tile = None
-                    #         self.hud.examined_tile = None
-                    #         #print(index)
-                    #         self.entities.pop(index)
-                    #         self.buildings[grid_pos[0]][grid_pos[1]] = None
-                    #         self.events.remise()
+                        if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
+                            building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
+                            if building is not None:
+                                self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
+                                index = self.entities.index(building)
+                                self.examine_tile = None
+                                self.hud.examined_tile = None
+                                self.entities.pop(index)
+                                self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
+                                self.events.remise()
+                                self.chossing_pos_x, self.chossing_pos_y = None, None
 
-
-                    # if self.events.get_destroy():
                     if self.events.update_destroy():
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
                             building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
@@ -194,24 +180,12 @@ class World:
                                 self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
                                 self.events.remise()
                                 self.chossing_pos_x, self.chossing_pos_y = None, None
-                        
-
-                            
-                        
                     elif mouse_action[0] and (building is None):
                         self.chossing_pos_x = None
                         self.chossing_pos_y = None
                         self.examine_tile = None
                         self.hud.examined_tile = None
 
-
-
-
-
-                
-                
-                else:
-                    pass
 
     # quand le prog est grandi on doit update plusieuse choses comme heal, shield ou attack point ici
 
@@ -222,37 +196,21 @@ class World:
         # draw coordinate lines
         for x in range(self.grid_length_x):
             for y in range(self.grid_length_y):
-
-                # on rect minimap (draw with blue color)
-                # sq = self.world.world[x][y]["cart_rect_mini_map"]
-                # rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE_MINI_MAP, TILE_SIZE_MINI_MAP)
-                # pg.draw.rect(self.screen,BLUE, rect, 1)
-
-                # on iso_poly minimap (draw with blue color)
                 mini = self.world[x][y]["iso_poly_mini"]
                 mini = [(x + 200, y + 20) for x, y in mini]  # position x + ...., y  + ...
                 pg.draw.polygon(screen, BLUE, mini, 1)
-
-                # on our isometric map (red color)
-                # create the world's block
                 render_pos = self.world[x][y]["render_pos"]
-
-                # this is the world merged with the computer's screen
-                # self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
-
                 # create the other world's object
                 tile = self.world[x][y]["tile"]
                 if tile != "":
                     screen.blit(self.tiles[tile],
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
-
-                # Grid on the main map
-                # p = self.world.world[x][y]["iso_poly"]
-                # p = [(x + self.width/2, y + self.height/4) for x,y in p]
-                # pg.draw.polygon(self.screen, RED, p, 1)
-
-                # draw entities
+                    if self.choose is not None:
+                        if (x == self.choose[0]) and (y == self.choose[1]):
+                            mask = pg.mask.from_surface(self.tiles[tile]).outline()
+                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, y + render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y) for x, y in mask]
+                            pg.draw.polygon(screen, (255, 255, 255), mask, 3)
 
                 units = self.units[x][y]
                 if units is not None:
@@ -267,11 +225,6 @@ class World:
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
-
-
-
-
-
                     if self.examine_tile is not None:
                         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
                             mask = pg.mask.from_surface(building.image).outline()
@@ -281,13 +234,18 @@ class World:
                             self.chossing_pos_x, self.chossing_pos_y = x, y
                             pg.draw.polygon(screen, WHITE, mask, 3)
 
+                
+
+                # if self.examine_tile is not None:
+                #         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
+                #             mask = pg.mask.from_surface(building.image).outline()
+                #             mask = [(x + render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                #                      y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y)
+                #                     for x, y in mask]
+                #             self.chossing_pos_x, self.chossing_pos_y = x, y
+                #             pg.draw.polygon(screen, WHITE, mask, 3)
 
 
-
-
-
-                else:
-                    pass
 
         if self.temp_tile is not None:
             iso_poly = self.temp_tile["iso_poly"]
@@ -416,8 +374,10 @@ class World:
     # load our blocks into the game
     def load_images(self):
         block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
-        tree = pg.image.load(path.join(graphics_folder, "tree.png")).convert_alpha()
-        rock = pg.image.load(path.join(graphics_folder, "rock.png")).convert_alpha()
+        # tree = pg.image.load(path.join(graphics_folder, "tree.png")).convert_alpha()
+        tree = Tree_img.convert_alpha()
+        #rock = pg.image.load(path.join(graphics_folder, "rock.png")).convert_alpha()
+        rock = Rock_img.convert_alpha()
         building1 = towncenter.convert_alpha()
         building2 = lumbermill.convert_alpha()
         building3 = barracks.convert_alpha()
@@ -433,7 +393,6 @@ class World:
             "block": block,
             "troop": troop
         }
-
         return images
 
     # colision here
@@ -441,14 +400,10 @@ class World:
         mouse_on_panel = False
         for rect in [self.hud.resources_rect, self.hud.build_rect, self.hud.select_rect]:
             if rect.collidepoint(pg.mouse.get_pos()):
-                # Essentially you pass a co-ordinate to pygame.Rect.collidepoint(),
-                # and it will return True if that point is within the bounds of the rectangle.
                 mouse_on_panel = True
         world_bounds = (0 <= grid_pos[0] <= self.grid_length_x) and (0 <= grid_pos[1] <= self.grid_length_x)
 
         if world_bounds and not mouse_on_panel:
-            # print('can place')
             return True
         else:
-            # print('cannot place')
             return False

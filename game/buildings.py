@@ -92,3 +92,34 @@ class LumberMill:
 
 
 
+class Tree:
+    def __init__(self, pos, resource_manager):
+        image = Tree_img
+        self.image = image
+        self.name = "Tree"
+        self.game_name = "Tree"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
+        self.the_rest = 500
+        self.resource_cooldown = pg.time.get_ticks()
+    def cupper(self):
+        self.the_rest -= 50
+        return 50
+
+
+
+class Rock:
+    def __init__(self, pos, resource_manager):
+        image = Rock_img
+        self.image = image
+        self.name = "Rock"
+        self.game_name = "Rock"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
+        self.the_rest = 500
+        self.resource_cooldown = pg.time.get_ticks()
+    def miner(self):
+        self.the_rest -= 50
+        return 50

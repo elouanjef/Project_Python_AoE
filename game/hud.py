@@ -1,5 +1,4 @@
 # from game.buildings import LumberMill, TownCenter
-import game.units
 from settings import *
 import pygame as pg
 from .utils import draw_text
@@ -7,7 +6,6 @@ from os import path
 from .button import *
 from game.units import Archer, Infantryman
 from game.buildings import *
-import game.game
 from resource import *
 
 class Hud:
@@ -42,12 +40,16 @@ class Hud:
         # create a new hud
         self.tiles = self.create_build_hud()
 
+        #choose tree, rock or gold
+        self.choose = None
+
 
         self.selected_tile = None
         self.examined_tile = None
 
         self.archer_c = False
         self.infantryman_c = False
+
 
     def create_troop(self, bat):
         if bat == 'a':
@@ -106,16 +108,22 @@ class Hud:
 
     def draw(self, screen):
 
-        # if self.selected_tile is not None:
-        #     img = self.selected_tile["image"].copy()
-        #     img.set_alpha(100)
-        #     screen.blit(img, pg.mouse.get_pos())
 
         # resource
         screen.blit(self.resources_surface, (0, 0))
         # build hud
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
         # select hud
+
+        # if self.choose is not None:
+        #     w, h = self.select_rect.width, self.select_rect.height
+        #     screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+        #     img = self.images[self.choose["tile"]].copy()
+        #     img_scale = self.scale_image(img, h=h*0.9)
+        #     screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+        #     draw_text(screen, self.examined_tile["tile"], 40, (255, 255, 255), self.select_rect.center)
+
+
         if self.examined_tile is not None:
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
@@ -228,16 +236,6 @@ class Hud:
                     self.events.set_destroy()
                     print("Lumber mill destroyed")
 
-
-
-
-
-
-
-
-
-
-
         # icon for entity selecting
         for tile in self.tiles:
             icon = tile["icon"].copy()
@@ -261,6 +259,8 @@ class Hud:
     def load_images(self):
         # read images
         # all images are saved in folder assets/graphics
+        # Rock_image = Rock_img
+        # Tree_image = Tree_img
         TownCenter = towncenter
         LumberMill = lumbermill
         Barracks = barracks
@@ -280,6 +280,8 @@ class Hud:
             "LumberMill": LumberMill,
             "Barracks": Barracks,
             "Archery": Archery,
+            # "tree": Tree_img,
+            # "rock": Rock_img
             # "Archer" : Archer
             # "troop": troop
             # ajouter les images d'unites ici
