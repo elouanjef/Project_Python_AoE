@@ -7,6 +7,7 @@ from .buildings import TownCenter, LumberMill, Barracks, Archery
 from .units import Archer, Infantryman
 import resource
 from .events import *
+from .map_resource_class import *
 
 
 class World:
@@ -46,8 +47,6 @@ class World:
         self.examine_tile = None
 
         self.events = events
-
-
         #choose tree, rock or gold
         self.choose = None
 
@@ -83,6 +82,7 @@ class World:
         if mouse_action[2]:
             self.examine_tile = None
             self.hud.examined_tile = None
+            self.choose = None
 
         self.temp_tile = None
 
@@ -149,8 +149,14 @@ class World:
                         self.hud.examined_tile = building
 
                     if mouse_action[0] and collision:
+                        #print(f'{grid_pos}')
                         self.choose = grid_pos
                         self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
+
+
+                    if mouse_action[0] and not collision:
+                        self.choose = None
+                        self.hud.choose = None
 
                 
                     
@@ -232,19 +238,7 @@ class World:
                                      y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y)
                                     for x, y in mask]
                             self.chossing_pos_x, self.chossing_pos_y = x, y
-                            pg.draw.polygon(screen, WHITE, mask, 3)
-
-                
-
-                # if self.examine_tile is not None:
-                #         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
-                #             mask = pg.mask.from_surface(building.image).outline()
-                #             mask = [(x + render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                #                      y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y)
-                #                     for x, y in mask]
-                #             self.chossing_pos_x, self.chossing_pos_y = x, y
-                #             pg.draw.polygon(screen, WHITE, mask, 3)
-
+                            pg.draw.polygon(screen, GREEN, mask, 2)
 
 
         if self.temp_tile is not None:
@@ -334,6 +328,17 @@ class World:
             else:
                 tile = ""
 
+
+
+        #We create the tree's object here
+        if (tile == "tree"):
+            map_resource = Map_Tree()
+        #We create the rock's object here
+        elif (tile == "rock"):
+            map_resource = Map_Rock()
+        #Tile's Object
+        else:
+            map_resource = Map_Tree()
         # this dict() store all kind of info of all elements in grid
         out = {
             "grid": [grid_x, grid_y],
@@ -343,8 +348,9 @@ class World:
             "iso_poly_mini": iso_poly_mini,  # isopoly minimap
             "render_pos": [minx, miny],
             "tile": tile,
-            "collision": False if tile == "" else True
+            "collision": False if tile == "" else True,
             # update the attribute here: heal, attack or shield
+            "class": map_resource
         }
 
         return out

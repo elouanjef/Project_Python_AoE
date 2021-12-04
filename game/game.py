@@ -33,7 +33,7 @@ class Game:
 
 
         # create the world with 50 by 50 grid
-        self.world = World(self.resource_manager, self.entities, self.hud, 50, 50, self.width, self.height,self.events)
+        self.world = World(self.resource_manager, self.entities, self.hud, 75, 75, self.width, self.height,self.events)
         #Archer(self.world.world[25][25], self.world, self.resource_manager)
         #Infantryman(self.world.world[26][26], self.world, self.resource_manager)
         #create_unit(Archer)

@@ -15,9 +15,7 @@ class Hud:
         self.resource_manager = resource_manager
         self.width = width
         self.height = height
-
         self.events = events
-
         self.hud_colour = HUD_COLOUR
 
         # resource hud
@@ -42,11 +40,8 @@ class Hud:
 
         #choose tree, rock or gold
         self.choose = None
-
-
         self.selected_tile = None
         self.examined_tile = None
-
         self.archer_c = False
         self.infantryman_c = False
 
@@ -115,13 +110,20 @@ class Hud:
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
         # select hud
 
-        # if self.choose is not None:
-        #     w, h = self.select_rect.width, self.select_rect.height
-        #     screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
-        #     img = self.images[self.choose["tile"]].copy()
-        #     img_scale = self.scale_image(img, h=h*0.9)
-        #     screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-        #     draw_text(screen, self.examined_tile["tile"], 40, (255, 255, 255), self.select_rect.center)
+        if self.choose is not None:
+            w, h = self.select_rect.width, self.select_rect.height
+            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+            if (self.choose["tile"] == 'tree'):
+                img = Tree_img
+                img_scale = self.scale_image(img, h=h*0.9)
+                draw_text(screen, "Rest: " + str(self.choose["class"].get_rest()), 20, BLUE , (self.width * 0.35 + 300, self.height * 0.79 + 50))
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+            if (self.choose["tile"] == 'rock'):
+                img = Rock_img
+                img_scale = self.scale_image(img, h=h*0.9)
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+                draw_text(screen, "Rest: " + str(self.choose["class"].get_rest()), 20, BLUE , (self.width * 0.35 + 300, self.height * 0.79 + 50))
+            draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + 300, self.height * 0.79 + 10))
 
 
         if self.examined_tile is not None:
@@ -267,21 +269,21 @@ class Hud:
         Archery = archery
         Archer = archer
         Infantryman = infantryman
-        # tree = pg.image.load(path.join(graphics_folder,"tree.png"))
-        # rock = pg.image.load(path.join(graphics_folder,"rock.png"))
+        #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
+        #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 
-        # load des images  d'unites ici
-        # troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
-        # troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
+        #load des images  d'unites ici
+        #troop = pg.image.load(path.join(graphics_folder,"cart_E.png"))
+        #troop_scale = self.scale_image(troop,self.build_surface.get_width() // 8)
 
-        # on peut l'appeller sous le nom "image_name" comme dans la ligne 63
+        #on peut l'appeller sous le nom "image_name" comme dans la ligne 63
         images = {
             "TownCenter": TownCenter,
             "LumberMill": LumberMill,
             "Barracks": Barracks,
             "Archery": Archery,
-            # "tree": Tree_img,
-            # "rock": Rock_img
+            #"tree": Tree_img,
+            #"rock": Rock_img
             # "Archer" : Archer
             # "troop": troop
             # ajouter les images d'unites ici
