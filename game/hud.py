@@ -162,10 +162,10 @@ class Hud:
             draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
 
             if self.examined_tile.name == "TownCenter":
-
                 button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
                 button.button()
-
+                mouse_action = pg.mouse.get_pressed()
+                mouse_pos = pg.mouse.get_pos()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
@@ -176,8 +176,8 @@ class Hud:
 
                 button2 = Button(screen, (self.width * 0.6 - 70, self.height*0.9 + 60),'Villager', 15, 'white on black')
                 button2.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
+                #mouse_pos = pg.mouse.get_pos()
+                #mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
@@ -186,8 +186,8 @@ class Hud:
 
                 button3 = Button(screen, (self.width * 0.6 - 90, self.height*0.9 + 60),'Z', 15, 'white on black')
                 button3.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
+                #mouse_pos = pg.mouse.get_pos()
+                #mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button3.rect.collidepoint(mouse_pos):
                     self.events.remise()
                     button3.button("black on green")
