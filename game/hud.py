@@ -42,13 +42,12 @@ class Hud:
         self.choose = None
         self.selected_tile = None
         self.examined_tile = None
+
+        self.examined_unit = None
+
         self.archer_c = False
         self.infantryman_c = False
 
-
-    def create_troop(self, bat):
-        if bat == 'a':
-            Archery.create_troop_a()
 
     #afficher les batiments pour choisir et construire
     def create_build_hud(self):
@@ -102,13 +101,39 @@ class Hud:
                     self.selected_tile = tile
 
     def draw(self, screen):
-
-
         # resource
         screen.blit(self.resources_surface, (0, 0))
         # build hud
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
         # select hud
+        if self.examined_unit is not None:
+
+            mouse_pos = pg.mouse.get_pos()
+            mouse_action = pg.mouse.get_pressed()
+
+            w, h = self.select_rect.width, self.select_rect.height
+            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+            if (self.examined_unit.game_name == 'Archer'):
+                img = archer
+                img_scale = self.scale_image(img, h=h*0.70)
+                draw_text(screen, "Health: " + str(self.examined_unit.get_health()), 20, WHITE , (self.width * 0.35 + 300, self.height * 0.79 + 50))
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
+                          (self.width * 0.35 + 300, self.height * 0.79 + 20))
+                if mouse_action[2]:
+                    self.events.change_unit_pos()
+
+
+
+            if(self.examined_unit.game_name == 'Infantryman'):
+                img = infantryman
+                img_scale = self.scale_image(img, h=h * 0.70)
+                draw_text(screen, "Health: " + str(self.examined_unit.get_health()), 20, WHITE, (self.width * 0.35 + 300, self.height * 0.79 + 50))
+                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
+                          (self.width * 0.35 + 300, self.height * 0.79 + 20))
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+                if mouse_action[2]:
+                    self.events.change_unit_pos()
 
         if self.choose is not None:
             w, h = self.select_rect.width, self.select_rect.height
@@ -140,8 +165,7 @@ class Hud:
 
                 button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')
                 button.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
+
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
