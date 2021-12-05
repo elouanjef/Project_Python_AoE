@@ -259,14 +259,17 @@ class World:
                 render_pos_mini = self.world[x][y]["render_pos_mini"]
                 if tile == "tree":
                     #screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, MARRON,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 2)
-                if tile == "rock":
+                    pg.draw.circle(screen, MARRON,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 1)
+                elif tile == "rock":
                     #screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, VIOLET,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 2)
-                
+                    pg.draw.circle(screen, VIOLET,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 1)
+                elif self.units[x][y-1] != None:
+                    pg.draw.circle(screen, WHITE,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 1)
+                elif self.buildings[x][y] != None:
+                    pg.draw.circle(screen, GREEN,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 1)
                 mini = self.world[x][y]["iso_poly_mini"]
                 mini = [(x + 200, y + 20) for x, y in mini]  # position x + ...., y  + ...
-                pg.draw.polygon(screen, BLUE, mini, 1)
+                pg.draw.polygon(screen, MINI_MAP_COLOUR, mini, 1)
 
 
         if self.temp_tile is not None:
