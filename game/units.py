@@ -28,48 +28,25 @@ class Archer:
         # [ WOOD , ROCK , GOLD , FOOD ]
        # self.resource_manager = resource_manager
        # self.resource_manager.cost_to_resource(self.name)
-       # self.health_max = 35
-    #    self.health = 0
+        self.health = 35
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
 
-        self.create_path()
 
+    def get_health(self):
+        return self.health
 
-    def create_path(self):
-        searching_for_path = True
-        while searching_for_path:
-            x = random.randint(0, self.world.grid_length_x - 1)
-            y = random.randint(0, self.world.grid_length_y - 1)
-            dest_tile = self.world.world[x][y]
-
-            if not dest_tile["collision"]:
-                self.grid = Grid(matrix=self.world.collision_matrix)
-                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
-                self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=pathfinding.core.diagonal_movement.DiagonalMovement.never)
-                self.path_index = 0
-                self.path, runs = finder.find_path(self.start, self.end, self.grid)
-                searching_for_path = False
-
-
-    def change_tile(self, new_tile):
+    def change_tile(self, pos):
+        x = pos[0]
+        y = pos[1]-1
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
-        self.world.units[new_tile[0]][new_tile[1]] = self
-        self.tile = self.world.world[new_tile[0]][new_tile[1]]
+        self.world.units[x][y] = self
+        self.tile = self.world.world[x][y]
 
     def update(self):
         now = pg.time.get_ticks()
-        if now - self.move_timer > 1000:
-            new_pos = self.path[self.path_index]
-
-            self.change_tile(new_pos)
-            self.move_timer = now
-            self.path_index+=1
-            if self.path_index == len(self.path) -  1:
-                self.create_path()
-
+        #on pourra mettre ici attaquer, perdre de la vie etc..
 
 class Infantryman:
 
@@ -87,46 +64,25 @@ class Infantryman:
         # [ WOOD , ROCK , GOLD , FOOD ]
        # self.resource_manager = resource_manager
        # self.resource_manager.cost_to_resource(self.name)
-       # self.health_max = 35
-    #    self.health = 0
+        self.health = 50
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
 
-        self.create_path()
 
-    def create_path(self):
-        searching_for_path = True
-        while searching_for_path:
-            x = random.randint(0, self.world.grid_length_x - 1)
-            y = random.randint(0, self.world.grid_length_y - 1)
-            dest_tile = self.world.world[x][y]
+    def get_health(self):
+        return self.health
 
-            if not dest_tile["collision"]:
-                self.grid = Grid(matrix=self.world.collision_matrix)
-                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
-                self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=pathfinding.core.diagonal_movement.DiagonalMovement.never)
-                self.path_index = 0
-                self.path, runs = finder.find_path(self.start, self.end, self.grid)
-                searching_for_path = False
-
-
-    def change_tile(self, new_tile):
+    def change_tile(self, pos):
+        x = pos[0]
+        y = pos[1]-1
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
-        self.world.units[new_tile[0]][new_tile[1]] = self
-        self.tile = self.world.world[new_tile[0]][new_tile[1]]
+        self.world.units[x][y] = self
+        self.tile = self.world.world[x][y]
 
     def update(self):
         now = pg.time.get_ticks()
-        if now - self.move_timer > 1000:
-            new_pos = self.path[self.path_index]
 
-            self.change_tile(new_pos)
-            self.move_timer = now
-            self.path_index+=1
-            if self.path_index == len(self.path) -  1:
-                self.create_path()
 class Cavalry:
 
     def __init__(self, pos):

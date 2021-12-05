@@ -45,6 +45,7 @@ class World:
 
         self.temp_tile = None
         self.examine_tile = None
+        self.examine_unit = None
 
         self.events = events
         #choose tree, rock or gold
@@ -58,31 +59,15 @@ class World:
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
 
-        if self.hud.events.get_troop() != None:
-            if self.examine_tile != None:
-                pos = self.examine_tile
-                pos_x = pos[0]
-                pos_y = pos[1]
-
-                if self.hud.events.get_troop() == 'archer':
-                    Archer(self.world[pos_x][pos_y], self, self.resource_manager)
-                    self.examine_tile = None
-                    self.hud.events.remise_troop()
-
-                elif self.hud.events.get_troop() == 'infantryman':
-                    Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
-                    self.examine_tile = None
-                    self.hud.events.remise_troop()
-
-            self.hud.events.remise_troop()
-
-        else:
-            pass
-
         if mouse_action[2]:
             self.examine_tile = None
             self.hud.examined_tile = None
             self.choose = None
+
+        if mouse_action[0]:
+            self.examine_unit = None
+            self.hud.examined_unit = None
+
 
         self.temp_tile = None
 
@@ -141,18 +126,22 @@ class World:
                 if (grid_pos[0] < self.grid_length_x and grid_pos[1] < self.grid_length_y):
                     collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
-                    units = self.units[grid_pos[0]][grid_pos[1]]
+                    units = self.units[grid_pos[0]][grid_pos[1]-1]
 
 
                     if mouse_action[0] and (building is not None):
                         self.examine_tile = grid_pos
                         self.hud.examined_tile = building
 
+                    if mouse_action[0] and (units is not None):
+                        self.examine_unit = grid_pos
+                        self.hud.examined_unit = units
+
+
                     if mouse_action[0] and collision:
                         #print(f'{grid_pos}')
                         self.choose = grid_pos
                         self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
-
 
                     if mouse_action[0] and not collision:
                         self.choose = None
@@ -160,7 +149,7 @@ class World:
 
                 
                     
-                    if mouse_action[2]:
+                    """if mouse_action[2]:
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
                             building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
                             if building is not None:
@@ -171,7 +160,31 @@ class World:
                                 self.entities.pop(index)
                                 self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
                                 self.events.remise()
-                                self.chossing_pos_x, self.chossing_pos_y = None, None
+                                self.chossing_pos_x, self.chossing_pos_y = None, None"""
+
+                    if self.hud.events.get_troop() != None:
+                        if self.examine_tile != None:
+                            pos = self.examine_tile
+                            pos_x = pos[0]
+                            pos_y = pos[1]
+
+                            if self.hud.events.get_troop() == 'archer':
+                                Archer(self.world[pos_x][pos_y], self, self.resource_manager)
+                                self.examine_tile = None
+                                self.hud.events.remise_troop()
+
+                            elif self.hud.events.get_troop() == 'infantryman':
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
+                                self.examine_tile = None
+                                self.hud.events.remise_troop()
+
+                        self.hud.events.remise_troop()
+
+                    if self.events.get_grid_pos_unit():
+                        new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                        self.hud.examined_unit.change_tile(new_unit_pos)
+                        print("moving", self.hud.examined_unit.game_name,"to", new_unit_pos)
+                        self.events.remise_moving_troop()
 
                     if self.events.update_destroy():
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
@@ -186,11 +199,14 @@ class World:
                                 self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
                                 self.events.remise()
                                 self.chossing_pos_x, self.chossing_pos_y = None, None
+
                     elif mouse_action[0] and (building is None):
                         self.chossing_pos_x = None
                         self.chossing_pos_y = None
                         self.examine_tile = None
                         self.hud.examined_tile = None
+
+
 
 
     # quand le prog est grandi on doit update plusieuse choses comme heal, shield ou attack point ici

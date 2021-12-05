@@ -7,6 +7,7 @@ class Event:
     def __init__(self,clock) -> None:
         self.destroy = False
         self.troop = None
+        self.changing_pos = False
         self.clock = clock
         self.timer = 0
         self.dt = clock.tick(30)/1000
@@ -58,4 +59,15 @@ class Event:
 
     def remise_troop(self):
         self.troop = None
+
+    def change_unit_pos(self):
+        self.changing_pos = True
+
+    def remise_moving_troop(self):
+        self.changing_pos = False
+
+    def get_grid_pos_unit(self):
+        return self.changing_pos
+
+
 
