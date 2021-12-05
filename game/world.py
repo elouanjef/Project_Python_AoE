@@ -202,9 +202,7 @@ class World:
         # draw coordinate lines
         for x in range(self.grid_length_x):
             for y in range(self.grid_length_y):
-                mini = self.world[x][y]["iso_poly_mini"]
-                mini = [(x + 200, y + 20) for x, y in mini]  # position x + ...., y  + ...
-                pg.draw.polygon(screen, BLUE, mini, 1)
+                
                 render_pos = self.world[x][y]["render_pos"]
                 # create the other world's object
                 tile = self.world[x][y]["tile"]
@@ -239,6 +237,20 @@ class World:
                                     for x, y in mask]
                             self.chossing_pos_x, self.chossing_pos_y = x, y
                             pg.draw.polygon(screen, GREEN, mask, 2)
+
+
+                #minimap here
+                render_pos_mini = self.world[x][y]["render_pos_mini"]
+                if tile == "tree":
+                    #screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, MARRON,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 2)
+                if tile == "rock":
+                    #screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, VIOLET,(render_pos_mini[0] + TILE_SIZE_MINI_MAP*51,render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP*7), 2)
+                
+                mini = self.world[x][y]["iso_poly_mini"]
+                mini = [(x + 200, y + 20) for x, y in mini]  # position x + ...., y  + ...
+                pg.draw.polygon(screen, BLUE, mini, 1)
 
 
         if self.temp_tile is not None:
@@ -308,12 +320,16 @@ class World:
         minx = min([x for x, y in iso_poly])
         miny = min([y for x, y in iso_poly])
 
+        minx_mini = min([x for x, y in iso_poly_mini])
+        miny_mini = min([y for x, y in iso_poly_mini])
+
+
         # create a random map
         # Choose a random position in map
         r = random.randint(1, 100)
 
         # make a group of tree --> a forest
-        perlin = 50 * noise.pnoise2(grid_x / self.perlin_scale, grid_y / self.perlin_scale)
+        perlin = 20 * noise.pnoise2(grid_x / self.perlin_scale, grid_y / self.perlin_scale)
 
         if (perlin >= 15) or (perlin <= -35):
             tile = "tree"
@@ -347,6 +363,7 @@ class World:
             "iso_poly": iso_poly,  # iso_poly map
             "iso_poly_mini": iso_poly_mini,  # isopoly minimap
             "render_pos": [minx, miny],
+            "render_pos_mini": [minx_mini, miny_mini],
             "tile": tile,
             "collision": False if tile == "" else True,
             # update the attribute here: heal, attack or shield
