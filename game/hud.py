@@ -4,7 +4,7 @@ import pygame as pg
 from .utils import draw_text
 from os import path
 from .button import *
-from game.units import Archer, Infantryman
+from game.units import Archer, Infantryman, Villager
 from game.buildings import *
 from resource import *
 
@@ -42,12 +42,8 @@ class Hud:
         self.choose = None
         self.selected_tile = None
         self.examined_tile = None
-
+        self.mining_hud = False
         self.examined_unit = None
-
-        self.archer_c = False
-        self.infantryman_c = False
-
 
     #afficher les batiments pour choisir et construire
     def create_build_hud(self):
@@ -123,7 +119,16 @@ class Hud:
                 if mouse_action[2]:
                     self.events.change_unit_pos()
 
-
+            if (self.examined_unit.game_name == 'Villager'):
+                img = villager
+                img_scale = self.scale_image(img, h=h * 0.70)
+                draw_text(screen, "Health: " + str(self.examined_unit.get_health()), 20, WHITE,
+                          (self.width * 0.35 + 300, self.height * 0.79 + 50))
+                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
+                          (self.width * 0.35 + 300, self.height * 0.79 + 20))
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+                if mouse_action[2]:
+                    self.events.change_unit_pos()
 
             if(self.examined_unit.game_name == 'Infantryman'):
                 img = infantryman
@@ -133,7 +138,7 @@ class Hud:
                           (self.width * 0.35 + 300, self.height * 0.79 + 20))
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 if mouse_action[2]:
-                    self.events.change_unit_pos()
+                   self.events.change_unit_pos()
 
         if self.choose is not None:
             w, h = self.select_rect.width, self.select_rect.height
@@ -176,12 +181,14 @@ class Hud:
 
                 button2 = Button(screen, (self.width * 0.6 - 70, self.height*0.9 + 60),'Villager', 15, 'white on black')
                 button2.button()
-                #mouse_pos = pg.mouse.get_pos()
-                #mouse_action = pg.mouse.get_pressed()
+                mouse_pos = pg.mouse.get_pos()
+                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
                     print('Villager created')
+                    self.events.create_troop('villager')
+                    self.events.get_troop()  # -> villager
 
 
                 button3 = Button(screen, (self.width * 0.6 - 90, self.height*0.9 + 60),'Z', 15, 'white on black')
@@ -293,6 +300,7 @@ class Hud:
         Archery = archery
         Archer = archer
         Infantryman = infantryman
+        Villager = villager
         #tree = pg.image.load(path.join(graphics_folder,"tree.png"))
         #rock = pg.image.load(path.join(graphics_folder,"rock.png"))
 

@@ -36,12 +36,13 @@ Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"tree.png"
 Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"rock.png")),(143,128))
 
 #buildings
-towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (200, 130))
-lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder,"lumbermill.png")), (200, 130))
-barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder,"barracks.png")), (200, 130))
-archery = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archery.png")), (200, 130))
+towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (143, 100))
+lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder,"lumbermill.png")), (143, 100))
+barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder,"barracks.png")), (143, 100))
+archery = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archery.png")), (143, 100))
 
 
 #units
 archer = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archer.png")), (30,40))
 infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder,"Barbarian.png")), (38,48))
+villager = pg.transform.scale(pg.image.load(path.join(graphics_folder,"villager.png")), (30,40))
