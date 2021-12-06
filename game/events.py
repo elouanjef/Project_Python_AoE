@@ -13,6 +13,7 @@ class Event:
         self.get_move_resource = False
         self.get_resource = ""
         self.dt = clock.tick(30)/1000
+        self.game_time = Game_time()
     #capture the events
     def events(self):
         for event in pg.event.get():
@@ -33,6 +34,7 @@ class Event:
 
                 if event.key == pg.K_RETURN:
                     print("Enter function here")
+
 
 
     def set_destroy(self):
@@ -83,5 +85,18 @@ class Event:
     def get_move_resource(self):
         return self.get_move_resource
 
+
+class Game_time:
+    def __init__(self):
+        self.hour = 0
+        self.minute = 0
+        self.second = 0
+    def update(self):
+        if (self.second >= 60):
+            self.minute += 1
+            self.second = 0
+        if (self.minute >= 60):
+            self.hour += 1
+            self.minute = 0 
 
 

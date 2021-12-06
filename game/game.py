@@ -42,14 +42,17 @@ class Game:
         self.camera = Camera(self.width, self.height)
         #print(self.world.world[25][25])
 
+        self.game_time = Game_time()
+
+
 
     # running
     def run(self):
         self.playing = True
         while self.playing:
-            self.clock.tick(
-                60)  # we can change fps here by increasing this number. ATTENTION: be careful the configuration of the computer.
+            tick = self.clock.tick(60)  # we can change fps here by increasing this number. ATTENTION: be careful the configuration of the computer.
             #self.events()
+            self.game_time.second += tick/1000
             self.update()
             self.draw()
             self.events.events()
@@ -74,13 +77,13 @@ class Game:
         for e in self.entities: e.update()
         self.hud.update()
         self.world.update(self.camera)
+        self.game_time.update()
 
     def draw(self):
         # his method is used to fill the display with black
         self.screen.fill(BLACK)
         self.world.draw(self.screen, self.camera)
         self.hud.draw(self.screen)
-
         draw_text(
             self.screen,  # print it on screen
             "fps={}".format(round(self.clock.get_fps())),  # get value
@@ -89,5 +92,14 @@ class Game:
             (900, 3)  # position of the text (x, y)
         )
 
+        draw_text(
+            self.screen,  # print it on screen
+            f"%02d : %02d"%(self.game_time.minute,self.game_time.second),
+            25,  # text's size
+            PURPLE,  # the text's colour
+            (1100, 3)  # position of the text (x, y)
+        )
+
         pg.display.flip()
+
 
