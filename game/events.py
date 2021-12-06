@@ -10,6 +10,8 @@ class Event:
         self.changing_pos = False
         self.clock = clock
         self.timer = 0
+        self.get_move_resource = False
+        self.get_resource = ""
         self.dt = clock.tick(30)/1000
     #capture the events
     def events(self):
@@ -71,6 +73,15 @@ class Event:
 
     def get_grid_pos_unit(self):
         return self.changing_pos
+
+    def move_to_resource(self):
+        self.get_move_resource = True
+
+    def remise_get_resource(self):
+        self.get_move_resource = False
+
+    def get_move_resource(self):
+        return self.get_move_resource
 
 
 

@@ -4,10 +4,11 @@ import random
 import noise
 from os import path
 from .buildings import TownCenter, LumberMill, Barracks, Archery
-from .units import Archer, Infantryman
+from .units import Archer, Infantryman, Villager
 import resource
 from .events import *
 from .map_resource_class import *
+import time
 
 
 class World:
@@ -51,7 +52,7 @@ class World:
         #choose tree, rock or gold
         self.choose = None
 
-
+        self.moving_to_resource = False
 
 
     # work in map
@@ -67,6 +68,7 @@ class World:
         if mouse_action[0]:
             self.examine_unit = None
             self.hud.examined_unit = None
+
 
 
         self.temp_tile = None
@@ -147,6 +149,11 @@ class World:
                         self.choose = None
                         self.hud.choose = None
 
+                    if mouse_action[2] and collision:
+                        self.choose = grid_pos
+                        self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
+                        self.moving_to_resource = True
+
                 
                     
                     """if mouse_action[2]:
@@ -178,13 +185,33 @@ class World:
                                 self.examine_tile = None
                                 self.hud.events.remise_troop()
 
+                            elif self.hud.events.get_troop() == 'villager':
+                                Villager(self.world[pos_x][pos_y], self, self.resource_manager)
+                                self.examine_tile = None
+                                self.hud.events.remise_troop()
+
                         self.hud.events.remise_troop()
 
                     if self.events.get_grid_pos_unit():
-                        new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                        self.hud.examined_unit.change_tile(new_unit_pos)
-                        print("moving", self.hud.examined_unit.game_name,"to", new_unit_pos)
-                        self.events.remise_moving_troop()
+                        if not collision:
+                            new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                            self.hud.examined_unit.change_tile(new_unit_pos)
+                            print("moving", self.hud.examined_unit.game_name,"to", new_unit_pos)
+                            self.events.remise_moving_troop()
+                            print(self.moving_to_resource)
+                        elif self.moving_to_resource and (self.hud.examined_unit.game_name == "Archer"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
+                            new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                            self.hud.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
+                            print("mining", self.hud.examined_unit.game_name, "to", new_unit_pos)
+                            #self.events.remise_moving_troop()
+                            print(self.hud.choose["tile"])
+
+                            time.sleep(1)
+                            self.hud.choose["class"].mine()    #là c'est juste quand on reste appuyé sur clic droit sur un rock ou un tree
+                            self.moving_to_resource = False #quand on reste appuyé ça enlève du rest aux rocks et tree toutes les secondes
+                                                            #il faut voir comment il faut faire pour que ça le fasse tout seul jusqu'à ce que le rock ou le tree n'ait plus d'HP
+
+
 
                     if self.events.update_destroy():
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
@@ -229,7 +256,8 @@ class World:
                     if self.choose is not None:
                         if (x == self.choose[0]) and (y == self.choose[1]):
                             mask = pg.mask.from_surface(self.tiles[tile]).outline()
-                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x, y + render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y) for x, y in mask]
+                            mask = [(x + render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
+                                     y + render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y) for x, y in mask]
                             pg.draw.polygon(screen, (255, 255, 255), mask, 3)
 
                 units = self.units[x][y]

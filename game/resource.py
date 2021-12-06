@@ -14,7 +14,8 @@ class ResourceManager:
             "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0},
             "Archery": { "wood": 125, "rock": 0, "gold": 0, "food": 0 },
             "Archer" : {"wood": 0, "rock": 0, "gold": 0, "food": 20},
-            "Infantryman" :{"wood": 0, "rock": 0, "gold": 0, "food": 30}
+            "Infantryman" :{"wood": 0, "rock": 0, "gold": 0, "food": 30},
+            "Villager":{"wood": 0, "rock": 0, "gold": 0, "food": 50}
         }
 
     def cost_to_resource(self, building):

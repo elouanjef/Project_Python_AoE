@@ -7,7 +7,8 @@ from .utils import draw_text
 from .camera import Camera
 from .hud import Hud
 from .resource import ResourceManager
-from .units import Archer, Infantryman
+from .units import Archer, Infantryman, Villager
+from .buildings import TownCenter
 from .events import *
 
 

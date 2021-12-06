@@ -6,7 +6,7 @@ from os import path
 from game.resource import *
 # from tqdm import tqdm
 
-import pathfinding.core.diagonal_movement
+from pathfinding.core.diagonal_movement import DiagonalMovement
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 import random
@@ -21,6 +21,7 @@ class Archer:
         self.image = image
         self.name = "Archer"
         self.game_name = "Archer"
+        self.attack = 5
         #self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
         self.resource_manager.cost_to_resource(self.name)
@@ -29,6 +30,68 @@ class Archer:
        # self.resource_manager = resource_manager
        # self.resource_manager.cost_to_resource(self.name)
         self.health = 35
+
+        self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.move_timer = pg.time.get_ticks()
+
+    def get_health(self):
+        return self.health
+
+    def change_tile(self, pos):
+        x = pos[0]
+        y = pos[1] - 1
+        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
+        self.world.units[x][y] = self
+        self.tile = self.world.world[x][y]
+
+    def create_path(self, new_tile):
+        searching_for_path = True
+        while searching_for_path:
+            x = new_tile[0]
+            y = new_tile[1]
+            dest_tile = self.world.world[x][y]
+            if not dest_tile["collision"]:
+                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
+                self.end = self.grid.node(x, y)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+                self.path_index = 0
+                self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                searching_for_path = False
+
+    def change_tile2(self, new_tile):
+        self.world.archer[self.tile["grid"][0][self.tile["grid"][1]]] = None
+        self.world.archer[new_tile[0]][new_tile[1]] = self
+        self.tile = self.world.world[new_tile[0][new_tile][1]]
+
+    def update(self):
+        now = pg.time.get_ticks()
+        """if now - self.move_timer > 1000:
+            new_pos = self.path[self.path_index]
+            self.change_tile2(new_pos)
+            self.path_index += 1
+            self.move_timer = now
+            if self.path_index == len(self.path) - 1:
+                self.create_path()"""
+        #on pourra mettre ici attaquer, perdre de la vie etc..
+
+class Villager:
+
+    def __init__(self, tile, world, resource_manager):
+        image = villager
+        self.world = world
+        self.world.entities.append(self)
+        self.tile = tile
+        self.image = image
+        self.name = "Villager"
+        self.game_name = "Villager"
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
+         #self.rect = self.image.get_rect(topleft=pos)
+        # [ WOOD , ROCK , GOLD , FOOD ]
+       # self.resource_manager = resource_manager
+       # self.resource_manager.cost_to_resource(self.name)
+        self.health = 20
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
@@ -46,7 +109,6 @@ class Archer:
 
     def update(self):
         now = pg.time.get_ticks()
-        #on pourra mettre ici attaquer, perdre de la vie etc..
 
 class Infantryman:
 

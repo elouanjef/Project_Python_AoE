@@ -24,7 +24,7 @@ class TownCenter:
 
     def update(self):
         if self.health < self.health_max:
-            self.health += 1
+            self.health += 100
 
 
 class Barracks:
@@ -63,7 +63,7 @@ class Archery:
 
     def update(self):
         if self.health < self.health_max:
-            self.health += 1
+            self.health += 15
 
 
 
