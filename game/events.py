@@ -6,12 +6,14 @@ import sys
 class Event:
     def __init__(self,clock) -> None:
         self.destroy = False
+        self.delete = False
         self.troop = None
         self.changing_pos = False
         self.clock = clock
         self.timer = 0
         self.get_move_resource = False
-        self.get_resource = ""
+        self.get_resource = False
+        self.resource_available = True
         self.dt = clock.tick(30)/1000
     #capture the events
     def events(self):
@@ -53,6 +55,16 @@ class Event:
                 self.timer += self.dt
         return self.destroy
 
+    def update_delete(self):
+        if (self.timer != 0):
+            if (self.timer > 0.5):
+                #print("too late")
+                self.timer = 0
+                self.delete = False
+            else:
+                self.timer += self.dt
+        return self.delete
+
     def create_troop(self, troop):
         self.troop = str(troop)
 
@@ -71,14 +83,10 @@ class Event:
     def get_grid_pos_unit(self):
         return self.changing_pos
 
-    def move_to_resource(self):
-        self.get_move_resource = True
+    def getting_resource(self):
+        self.get_resource = True
 
-    def remise_get_resource(self):
-        self.get_move_resource = False
 
-    def get_move_resource(self):
-        return self.get_move_resource
 
 
 

@@ -53,6 +53,9 @@ class World:
         self.choose = None
 
         self.moving_to_resource = False
+        self.mining = False
+        self.mined = None
+        self.mining_position = None
 
 
     # work in map
@@ -149,25 +152,10 @@ class World:
                         self.choose = None
                         self.hud.choose = None
 
-                    if mouse_action[2] and collision:
+                    if mouse_action[2] and collision and (self.hud.examined_unit is not None):
                         self.choose = grid_pos
                         self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
-                        self.moving_to_resource = True
-
-                
-                    
-                    """if mouse_action[2]:
-                        if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
-                            building = self.buildings[self.chossing_pos_x][self.chossing_pos_y]
-                            if building is not None:
-                                self.world[self.chossing_pos_x][self.chossing_pos_y]["collision"] = False  
-                                index = self.entities.index(building)
-                                self.examine_tile = None
-                                self.hud.examined_tile = None
-                                self.entities.pop(index)
-                                self.buildings[self.chossing_pos_x][self.chossing_pos_y] = None
-                                self.events.remise()
-                                self.chossing_pos_x, self.chossing_pos_y = None, None"""
+                        self.mining = True
 
                     if self.hud.events.get_troop() != None:
                         if self.examine_tile != None:
@@ -192,26 +180,46 @@ class World:
 
                         self.hud.events.remise_troop()
 
-                    if self.events.get_grid_pos_unit():
+
+                    if self.events.get_grid_pos_unit() and (self.hud.examined_unit is not None):
                         if not collision:
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             self.hud.examined_unit.change_tile(new_unit_pos)
                             print("moving", self.hud.examined_unit.game_name,"to", new_unit_pos)
                             self.events.remise_moving_troop()
-                            print(self.moving_to_resource)
-                        elif self.moving_to_resource and (self.hud.examined_unit.game_name == "Archer"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
+                            self.mining_position = None
+                            self.mining = False
+
+                        elif (self.hud.examined_unit.game_name == "Archer"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             self.hud.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
                             print("mining", self.hud.examined_unit.game_name, "to", new_unit_pos)
-                            #self.events.remise_moving_troop()
-                            print(self.hud.choose["tile"])
+                            self.events.remise_moving_troop()
+                            if self.mining_position is None:
+                                self.mining_position = new_unit_pos
 
-                            time.sleep(1)
-                            self.hud.choose["class"].mine()    #là c'est juste quand on reste appuyé sur clic droit sur un rock ou un tree
-                            self.moving_to_resource = False #quand on reste appuyé ça enlève du rest aux rocks et tree toutes les secondes
-                                                            #il faut voir comment il faut faire pour que ça le fasse tout seul jusqu'à ce que le rock ou le tree n'ait plus d'HP
+                            if self.hud.choose is not None:
+                                if (new_unit_pos == self.mining_position) and self.hud.choose["class"].available:
 
+                                    self.mining = True
+                                    self.mined = self.hud.choose
+                                    self.events.getting_resource()
+                                    self.moving_to_resource = True
+                                    self.mining_position = self.hud.choose["grid"]
+                                    print("mining pos:", self.mining_position)
 
+                                elif not self.hud.choose["class"].available:
+                                    self.moving_to_resource = False
+                                    self.mining = False
+                                    self.events.getting_resource()
+                                    print("couc")
+                                    self.mined = None
+                                    self.choose = None
+                                    self.hud.choose = None
+                                    self.mining_position = None
+
+                    if self.mining and self.moving_to_resource and self.events.getting_resource:
+                        self.mined["class"].mine()
 
                     if self.events.update_destroy():
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
@@ -237,6 +245,11 @@ class World:
 
 
     # quand le prog est grandi on doit update plusieuse choses comme heal, shield ou attack point ici
+    def is_next_to(self, pos1, pos2):
+        return ((pos1[0]-1 == pos2[0] and pos1[1] == pos2[1])
+                or (pos1[0]+1 == pos2[0] and pos1[1] == pos2[1])
+                or (pos1[0] == pos2[0] and pos1[1]-1 == pos2[1])
+                or (pos1[0] == pos2[0] and pos1[1]+1 == pos2[1]))
 
     def draw(self, screen, camera):
 
@@ -249,7 +262,7 @@ class World:
                 render_pos = self.world[x][y]["render_pos"]
                 # create the other world's object
                 tile = self.world[x][y]["tile"]
-                if tile != "":
+                if tile != "" and self.world[x][y]["class"].available:
                     screen.blit(self.tiles[tile],
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
@@ -395,13 +408,13 @@ class World:
 
         #We create the tree's object here
         if (tile == "tree"):
-            map_resource = Map_Tree()
+            map_resource = Map_Tree(self.resource_manager)
         #We create the rock's object here
         elif (tile == "rock"):
-            map_resource = Map_Rock()
+            map_resource = Map_Rock(self.resource_manager)
         #Tile's Object
         else:
-            map_resource = Map_Tree()
+            map_resource = Map_Tree(self.resource_manager)
         # this dict() store all kind of info of all elements in grid
         out = {
             "grid": [grid_x, grid_y],
