@@ -33,6 +33,9 @@ class Event:
                     self.destroy = True
                     self.timer = 0.0001
 
+                if event.key == pg.K_RETURN:
+                    print("Enter function here")
+
 
     def set_destroy(self):
         self.destroy = True
