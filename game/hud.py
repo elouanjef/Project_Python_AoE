@@ -124,9 +124,9 @@ class Hud:
                 img_scale = self.scale_image(img, h=h * 0.70)
                 draw_text(screen, "Health: " + str(self.examined_unit.get_health()), 20, WHITE,
                           (self.width * 0.35 + 300, self.height * 0.79 + 50))
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
                           (self.width * 0.35 + 300, self.height * 0.79 + 20))
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 if mouse_action[2]:
                     self.events.change_unit_pos()
 
@@ -175,7 +175,7 @@ class Hud:
                     button.button("black on blue")
                     self.events.set_destroy()
                     #self.events.update_destroy()
-                    print("Town center destroyed")
+                    #print("Town center destroyed")
                     
                     
 
@@ -186,7 +186,7 @@ class Hud:
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-                    print('Villager created')
+                    #print('Villager created')
                     self.events.create_troop('villager')
                     self.events.get_troop()  # -> villager
 
@@ -211,7 +211,7 @@ class Hud:
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
-                    print("Barracks destroyed")
+                    #print("Barracks destroyed")
 
                 #bouton pour détruire
 
@@ -224,7 +224,7 @@ class Hud:
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-                    print('Infantryman created')
+                    #print('Infantryman created')
                     self.events.create_troop('infantryman')
                     self.events.get_troop() #-> infantryman
 
@@ -238,7 +238,7 @@ class Hud:
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
-                    print("Archery destroyed")
+                    #print("Archery destroyed")
 
                 #bouton pour détruire
 
@@ -251,7 +251,7 @@ class Hud:
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
-                    print('Archer created')
+                    #print('Archer created')
                     self.events.create_troop('archer')
                     self.events.get_troop()  # -> archer
 
@@ -267,7 +267,7 @@ class Hud:
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
-                    print("Lumber mill destroyed")
+                    #print("Lumber mill destroyed")
 
         # icon for entity selecting
         for tile in self.tiles:

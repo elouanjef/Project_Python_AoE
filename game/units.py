@@ -80,35 +80,33 @@ class Villager:
     def __init__(self, tile, world, resource_manager):
         image = villager
         self.world = world
-        self.world.entities.append(self)
+        #        self.world.entities.append(self)
         self.tile = tile
         self.image = image
         self.name = "Villager"
         self.game_name = "Villager"
+        self.attack = 1
+        # self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
         self.resource_manager.cost_to_resource(self.name)
-         #self.rect = self.image.get_rect(topleft=pos)
+        # self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
-       # self.resource_manager = resource_manager
-       # self.resource_manager.cost_to_resource(self.name)
+        # self.resource_manager = resource_manager
+        # self.resource_manager.cost_to_resource(self.name)
         self.health = 20
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
-
 
     def get_health(self):
         return self.health
 
     def change_tile(self, pos):
         x = pos[0]
-        y = pos[1]-1
+        y = pos[1] - 1
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
-
-    def update(self):
-        now = pg.time.get_ticks()
 
 class Infantryman:
 
@@ -223,7 +221,7 @@ def militaire(nb, troop, type, res, t):
     return armee
 
 
-def villager(nb):
+def villager_test(nb):
     # test_resource(res)
     villageois = {}
     res = [0, 0, 0, 50]
