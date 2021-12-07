@@ -58,6 +58,8 @@ class World:
         self.mining_position = None
         self.past_mining_pos = None
 
+        self.list_mining = []
+
 
     # work in map
     def update(self, camera):
@@ -209,18 +211,32 @@ class World:
                                     self.mining_position = self.hud.choose["grid"]
                                     #print("mining pos:", self.mining_position)
 
+                                    self.list_mining.append(self.mined)
+
                                 elif not self.hud.choose["class"].available:
                                     self.moving_to_resource = False
                                     self.mining = False
                                     self.events.getting_resource()
+                                    if self.mined in self.list_mining:
+                                        self.list_mining.remove(self.mined)
                                     self.mined = None
                                     self.choose = None
                                     self.hud.choose = None
                                     self.mining_position = None
                                     self.hud.mining_hud = False
 
+
+
+                    # if self.mining and self.moving_to_resource and self.events.getting_resource:
+                    #     self.mined["class"].mine()
+                    
+
                     if self.mining and self.moving_to_resource and self.events.getting_resource:
-                        self.mined["class"].mine()
+                        for mined in self.list_mining:
+                            mined["class"].mine()
+
+
+
 
                     if self.events.update_destroy():
                         if (self.chossing_pos_x != None  and self.chossing_pos_y != None):
@@ -427,7 +443,6 @@ class World:
             "render_pos_mini": [minx_mini, miny_mini],
             "tile": tile,
             "collision": False if tile == "" else True,
-            # update the attribute here: heal, attack or shield
             "class": map_resource
         }
 

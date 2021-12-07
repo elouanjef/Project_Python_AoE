@@ -98,6 +98,8 @@ class Villager:
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
 
+        self.in_work = False
+
     def get_health(self):
         return self.health
 
