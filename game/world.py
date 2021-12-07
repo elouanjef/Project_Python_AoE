@@ -147,6 +147,7 @@ class World:
                     if mouse_action[0] and collision:
                         #print(f'{grid_pos}')
                         self.choose = grid_pos
+                        self.hud.mining_hud = False
                         self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
 
                     if mouse_action[0] and not collision:
@@ -157,6 +158,7 @@ class World:
                         self.choose = grid_pos
                         self.hud.choose = self.world[grid_pos[0]][grid_pos[1]]
                         self.mining = True
+                        self.hud.mining_hud = True
 
                     if self.hud.events.get_troop() != None:
                         if self.examine_tile != None:
@@ -215,8 +217,7 @@ class World:
                                     self.choose = None
                                     self.hud.choose = None
                                     self.mining_position = None
-
-
+                                    self.hud.mining_hud = False
 
                     if self.mining and self.moving_to_resource and self.events.getting_resource:
                         self.mined["class"].mine()

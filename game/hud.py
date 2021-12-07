@@ -140,7 +140,7 @@ class Hud:
                 if mouse_action[2]:
                    self.events.change_unit_pos()
 
-        if self.choose is not None:
+        if self.choose is not None and (not self.mining_hud):
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             if (self.choose["tile"] == 'tree'):
