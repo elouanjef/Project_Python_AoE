@@ -95,7 +95,7 @@ class Hud:
                 # tile["rect"] is defined in create_build_hud()
                 if mouse_action[0]:
                     self.selected_tile = tile
-
+    
     def draw(self, screen):
         # resource
         screen.blit(self.resources_surface, (0, 0))

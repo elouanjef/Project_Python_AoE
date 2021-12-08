@@ -60,6 +60,8 @@ class World:
 
         self.list_mining = []
 
+        self.list_troop = []
+
 
     # work in map
     def update(self, camera):
@@ -169,19 +171,28 @@ class World:
                             pos_y = pos[1]
 
                             if self.hud.events.get_troop() == 'archer':
+                                #archer = Archer(self.world[pos_x][pos_y], self, self.resource_manager)
+                                #archer.target = pos
                                 Archer(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.hud.events.remise_troop()
+                                #self.list_troop.append(archer)
 
                             elif self.hud.events.get_troop() == 'infantryman':
+                                #infantryman=Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
+                                #infantryman.target = pos
                                 Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.hud.events.remise_troop()
+                                #self.list_troop.append(infantryman)
 
                             elif self.hud.events.get_troop() == 'villager':
+                                #villager=Villager(self.world[pos_x][pos_y], self, self.resource_manager)
+                                #villager.target = pos
                                 Villager(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.hud.events.remise_troop()
+                                #self.list_troop.append(villager)
 
                         self.hud.events.remise_troop()
 
@@ -189,7 +200,8 @@ class World:
                     if self.events.get_grid_pos_unit() and (self.hud.examined_unit is not None):
                         if not collision:
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                            self.hud.examined_unit.change_tile(new_unit_pos)
+                            #self.hud.examined_unit.change_tile(new_unit_pos)
+                            self.hud.examined_unit.set_target(new_unit_pos)
                             #print("moving", self.hud.examined_unit.game_name,"to", new_unit_pos)
                             self.events.remise_moving_troop()
                             self.mining_position = None
@@ -197,7 +209,8 @@ class World:
 
                         elif (self.hud.examined_unit.game_name == "Villager"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                            self.hud.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
+                            #self.hud.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
+                            self.hud.examined_unit.set_target(new_unit_pos)
                             #print("mining", self.hud.examined_unit.game_name, "to", new_unit_pos)
                             self.events.remise_moving_troop()
 
@@ -257,6 +270,11 @@ class World:
                         self.chossing_pos_y = None
                         self.examine_tile = None
                         self.hud.examined_tile = None
+
+        for unit in self.list_troop:
+            
+            unit.update()
+            
 
 
 

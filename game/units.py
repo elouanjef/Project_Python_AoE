@@ -16,64 +16,75 @@ class Archer:
     def __init__(self, tile, world, resource_manager):
         image = archer
         self.world = world
-#        self.world.entities.append(self)
         self.tile = tile
         self.image = image
         self.name = "Archer"
         self.game_name = "Archer"
         self.attack = 5
-        #self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
         self.resource_manager.cost_to_resource(self.name)
-         #self.rect = self.image.get_rect(topleft=pos)
-        # [ WOOD , ROCK , GOLD , FOOD ]
-       # self.resource_manager = resource_manager
-       # self.resource_manager.cost_to_resource(self.name)
         self.health = 35
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.world.list_troop.append(self)
+        self.path_index = 0
         self.move_timer = pg.time.get_ticks()
+
+        self.target = None
+
+
+
 
     def get_health(self):
         return self.health
 
     def change_tile(self, pos):
-        x = pos[0]
-        y = pos[1] - 1
+        x = pos[0] 
+        y = pos[1] 
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
 
-    def create_path(self, new_tile):
+    def create_path(self,pos):
         searching_for_path = True
         while searching_for_path:
-            x = new_tile[0]
-            y = new_tile[1]
+            x = pos[0]
+            y = pos[1] - 1
             dest_tile = self.world.world[x][y]
+
             if not dest_tile["collision"]:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
-                self.end = self.grid.node(x, y)
+                self.end = self.grid.node(x,y)
                 finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
-                self.path_index = 0
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
-
-    def change_tile2(self, new_tile):
-        self.world.archer[self.tile["grid"][0][self.tile["grid"][1]]] = None
-        self.world.archer[new_tile[0]][new_tile[1]] = self
-        self.tile = self.world.world[new_tile[0][new_tile][1]]
-
+    def set_target(self, pos):
+        self.target = pos
     def update(self):
-        now = pg.time.get_ticks()
-        """if now - self.move_timer > 1000:
-            new_pos = self.path[self.path_index]
-            self.change_tile2(new_pos)
-            self.path_index += 1
-            self.move_timer = now
-            if self.path_index == len(self.path) - 1:
-                self.create_path()"""
-        #on pourra mettre ici attaquer, perdre de la vie etc..
+        if self.target != None:
+            self.create_path(self.target)
+            if self.path_index >= len(self.path):
+                self.path_index = 0
+                print(f'target is {self.target}')
+                self.target = None
+                print('reach')
+            else:
+                try:
+                    new_pos = self.path[self.path_index]
+                    self.change_tile(new_pos)
+                    self.path_index += 1
+                    print(self.path)
+                except IndexError:
+                    print("########")
+                    print(f'path_index {self.path_index}')
+                    print(f'path: {self.path}')
+                    print(f'len_path:  {len(self.path)}')
+                    print("########")
+        
+
+        
+
 
 class Villager:
 
@@ -99,6 +110,8 @@ class Villager:
         self.move_timer = pg.time.get_ticks()
 
         self.in_work = False
+
+        self.target = None
 
     def get_health(self):
         return self.health
@@ -131,6 +144,8 @@ class Infantryman:
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.move_timer = pg.time.get_ticks()
 
+        self.target = None
+
 
     def get_health(self):
         return self.health
@@ -158,9 +173,13 @@ class Cavalry:
         self.res = [0, 0, 80, 70]
         self.health = 150
 
+        self.target = None
+
     def update(self):
         if self.health != 0:
             self.health -= 1
+
+
 
 class Catapult:
 
@@ -175,6 +194,8 @@ class Catapult:
         self.range = 12
         self.res = [180, 0, 80, 0]
         self.health = 75
+
+        self.target = None
 
     def update(self):
         if self.health != 0:
@@ -334,12 +355,8 @@ def batiment(nom):
 
 """
 caserne(1, "archer")
-
 ecurie(1, 'uhlan')
-
 batiment('moulin')
-
 usine(1, 'canon_lourd')
-
 villager(3)
 """

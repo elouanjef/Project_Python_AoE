@@ -79,6 +79,7 @@ class Game:
         self.world.update(self.camera)
         self.game_time.update()
 
+
     def draw(self):
         # his method is used to fill the display with black
         self.screen.fill(BLACK)
