@@ -9,7 +9,7 @@ from game.resource import *
 from pathfinding.core.diagonal_movement import DiagonalMovement
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
-import random
+
 
 class Archer:
 
@@ -32,6 +32,8 @@ class Archer:
 
         self.target = None
 
+        self.previous_time = 0
+
 
 
 
@@ -44,6 +46,7 @@ class Archer:
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
+        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
     def create_path(self,pos):
         searching_for_path = True
@@ -56,32 +59,33 @@ class Archer:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
+
     def update(self):
-        if self.target != None:
-            self.create_path(self.target)
-            if self.path_index >= len(self.path):
-                self.path_index = 0
-                print(f'target is {self.target}')
-                self.target = None
-                print('reach')
-            else:
-                try:
-                    new_pos = self.path[self.path_index]
-                    self.change_tile(new_pos)
-                    self.path_index += 1
-                    print(self.path)
-                except IndexError:
-                    print("########")
-                    print(f'path_index {self.path_index}')
-                    print(f'path: {self.path}')
-                    print(f'len_path:  {len(self.path)}')
-                    print("########")
-        
+        self.previous_time = pg.time.get_ticks() - self.previous_time
+        if self.previous_time > 100:
+            if self.target != None:
+                self.create_path(self.target)
+                if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
+                    print(f'target is {self.target}')
+                    self.target = None
+                    print('reach')
+                else:
+                    try:
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            self.change_tile(new_pos)
+                            print(self.path)
+                    except IndexError:
+                        print("########")
+                        print(f'path_index {self.path_index}')
+                        print(f'path: {self.path}')
+                        print(f'len_path:  {len(self.path)}')
+                        print("########")
 
         
 
@@ -97,31 +101,67 @@ class Villager:
         self.name = "Villager"
         self.game_name = "Villager"
         self.attack = 1
-        # self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
         self.resource_manager.cost_to_resource(self.name)
-        # self.rect = self.image.get_rect(topleft=pos)
-        # [ WOOD , ROCK , GOLD , FOOD ]
-        # self.resource_manager = resource_manager
-        # self.resource_manager.cost_to_resource(self.name)
         self.health = 20
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.world.list_troop.append(self)
+        self.path_index = 0
         self.move_timer = pg.time.get_ticks()
-
         self.in_work = False
-
         self.target = None
+        self.previous_time = 0
 
     def get_health(self):
         return self.health
 
     def change_tile(self, pos):
-        x = pos[0]
-        y = pos[1] - 1
+        x = pos[0] 
+        y = pos[1] 
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
+        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
+
+    def create_path(self,pos):
+        searching_for_path = True
+        while searching_for_path:
+            x = pos[0]
+            y = pos[1] - 1
+            dest_tile = self.world.world[x][y]
+
+            if not dest_tile["collision"]:
+                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
+                self.end = self.grid.node(x,y)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                searching_for_path = False
+    def set_target(self, pos):
+        self.target = pos
+    
+    def update(self):
+        self.previous_time = pg.time.get_ticks() - self.previous_time
+        if self.previous_time > 100:
+            if self.target != None:
+                self.create_path(self.target)
+                if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
+                    print(f'target is {self.target}')
+                    self.target = None
+                    print('reach')
+                else:
+                    try:
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            self.change_tile(new_pos)
+                            print(self.path)
+                    except IndexError:
+                        print("########")
+                        print(f'path_index {self.path_index}')
+                        print(f'path: {self.path}')
+                        print(f'len_path:  {len(self.path)}')
+                        print("########")
 
 class Infantryman:
 
@@ -142,6 +182,8 @@ class Infantryman:
         self.health = 50
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.world.list_troop.append(self)
+        self.path_index = 0
         self.move_timer = pg.time.get_ticks()
 
         self.target = None
@@ -151,14 +193,51 @@ class Infantryman:
         return self.health
 
     def change_tile(self, pos):
-        x = pos[0]
-        y = pos[1]-1
+        x = pos[0] 
+        y = pos[1] 
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
+        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
+    def create_path(self,pos):
+        searching_for_path = True
+        while searching_for_path:
+            x = pos[0]
+            y = pos[1] - 1
+            dest_tile = self.world.world[x][y]
+
+            if not dest_tile["collision"]:
+                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
+                self.end = self.grid.node(x,y)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                searching_for_path = False
+    def set_target(self, pos):
+        self.target = pos
+    
     def update(self):
-        now = pg.time.get_ticks()
+        self.previous_time = pg.time.get_ticks() - self.previous_time
+        if self.previous_time > 100:
+            if self.target != None:
+                self.create_path(self.target)
+                if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
+                    print(f'target is {self.target}')
+                    self.target = None
+                    print('reach')
+                else:
+                    try:
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            self.change_tile(new_pos)
+                            print(self.path)
+                    except IndexError:
+                        print("########")
+                        print(f'path_index {self.path_index}')
+                        print(f'path: {self.path}')
+                        print(f'len_path:  {len(self.path)}')
+                        print("########")
 
 class Cavalry:
 
@@ -175,10 +254,52 @@ class Cavalry:
 
         self.target = None
 
-    def update(self):
-        if self.health != 0:
-            self.health -= 1
+    def change_tile(self, pos):
+        x = pos[0] 
+        y = pos[1] 
+        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
+        self.world.units[x][y] = self
+        self.tile = self.world.world[x][y]
+        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
+    def create_path(self,pos):
+        searching_for_path = True
+        while searching_for_path:
+            x = pos[0]
+            y = pos[1] - 1
+            dest_tile = self.world.world[x][y]
+
+            if not dest_tile["collision"]:
+                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
+                self.end = self.grid.node(x,y)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                searching_for_path = False
+    def set_target(self, pos):
+        self.target = pos
+    
+    def update(self):
+        self.previous_time = pg.time.get_ticks() - self.previous_time
+        if self.previous_time > 100:
+            if self.target != None:
+                self.create_path(self.target)
+                if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
+                    print(f'target is {self.target}')
+                    self.target = None
+                    print('reach')
+                else:
+                    try:
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            self.change_tile(new_pos)
+                            print(self.path)
+                    except IndexError:
+                        print("########")
+                        print(f'path_index {self.path_index}')
+                        print(f'path: {self.path}')
+                        print(f'len_path:  {len(self.path)}')
+                        print("########")
 
 
 class Catapult:
@@ -197,12 +318,52 @@ class Catapult:
 
         self.target = None
 
+    def change_tile(self, pos):
+        x = pos[0] 
+        y = pos[1] 
+        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
+        self.world.units[x][y] = self
+        self.tile = self.world.world[x][y]
+        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
+
+    def create_path(self,pos):
+        searching_for_path = True
+        while searching_for_path:
+            x = pos[0]
+            y = pos[1] - 1
+            dest_tile = self.world.world[x][y]
+
+            if not dest_tile["collision"]:
+                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
+                self.end = self.grid.node(x,y)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                searching_for_path = False
+    def set_target(self, pos):
+        self.target = pos
+    
     def update(self):
-        if self.health != 0:
-            self.health -= 1
-
-#Pour l'instant j'ai mis unit0?.png pour le sprite de chaque unité, il faudra renommer les sprites de cette manière.
-
+        self.previous_time = pg.time.get_ticks() - self.previous_time
+        if self.previous_time > 100:
+            if self.target != None:
+                self.create_path(self.target)
+                if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
+                    print(f'target is {self.target}')
+                    self.target = None
+                    print('reach')
+                else:
+                    try:
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            self.change_tile(new_pos)
+                            print(self.path)
+                    except IndexError:
+                        print("########")
+                        print(f'path_index {self.path_index}')
+                        print(f'path: {self.path}')
+                        print(f'len_path:  {len(self.path)}')
+                        print("########")
 
 
 
