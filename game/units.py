@@ -34,6 +34,8 @@ class Archer:
 
         self.previous_time = 0
 
+        self.velocity_inverse = 100  #(miniseconde par carré)
+
 
 
 
@@ -59,17 +61,19 @@ class Archer:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
 
     def update(self):
-        self.previous_time = pg.time.get_ticks() - self.previous_time
-        if self.previous_time > 100:
+        temps_temp = pg.time.get_ticks()
+        temps = temps_temp  - self.previous_time
+        if temps > self.velocity_inverse:
             if self.target != None:
                 self.create_path(self.target)
+                
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
                     print(f'target is {self.target}')
                     self.target = None
@@ -86,6 +90,10 @@ class Archer:
                         print(f'path: {self.path}')
                         print(f'len_path:  {len(self.path)}')
                         print("########")
+        if temps > self.velocity_inverse:
+            self.previous_time = temps_temp
+        print(f'temps:======{temps}')
+        print(f'temps_temp:======{temps_temp}')
 
         
 
@@ -113,6 +121,8 @@ class Villager:
         self.target = None
         self.previous_time = 0
 
+        self.velocity_inverse = 200
+
     def get_health(self):
         return self.health
 
@@ -135,17 +145,19 @@ class Villager:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
-    
+
     def update(self):
-        self.previous_time = pg.time.get_ticks() - self.previous_time
-        if self.previous_time > 100:
+        temps_temp = pg.time.get_ticks()
+        temps = temps_temp  - self.previous_time
+        if temps > self.velocity_inverse:
             if self.target != None:
                 self.create_path(self.target)
+                
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
                     print(f'target is {self.target}')
                     self.target = None
@@ -162,6 +174,10 @@ class Villager:
                         print(f'path: {self.path}')
                         print(f'len_path:  {len(self.path)}')
                         print("########")
+        if temps > self.velocity_inverse:
+            self.previous_time = temps_temp
+        print(f'temps:======{temps}')
+        print(f'temps_temp:======{temps_temp}')
 
 class Infantryman:
 
@@ -188,6 +204,8 @@ class Infantryman:
 
         self.target = None
 
+        self.velocity_inverse = 300
+
 
     def get_health(self):
         return self.health
@@ -211,17 +229,19 @@ class Infantryman:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
-    
+
     def update(self):
-        self.previous_time = pg.time.get_ticks() - self.previous_time
-        if self.previous_time > 100:
+        temps_temp = pg.time.get_ticks()
+        temps = temps_temp  - self.previous_time
+        if temps > self.velocity_inverse:
             if self.target != None:
                 self.create_path(self.target)
+                
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
                     print(f'target is {self.target}')
                     self.target = None
@@ -238,6 +258,10 @@ class Infantryman:
                         print(f'path: {self.path}')
                         print(f'len_path:  {len(self.path)}')
                         print("########")
+        if temps > self.velocity_inverse:
+            self.previous_time = temps_temp
+        print(f'temps:======{temps}')
+        print(f'temps_temp:======{temps_temp}')
 
 class Cavalry:
 
@@ -253,6 +277,9 @@ class Cavalry:
         self.health = 150
 
         self.target = None
+
+        self.velocity_inverse = 50
+
 
     def change_tile(self, pos):
         x = pos[0] 
@@ -273,17 +300,19 @@ class Cavalry:
                 self.grid = Grid(matrix=self.world.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x,y)
-                finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
+                finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
-    
+
     def update(self):
-        self.previous_time = pg.time.get_ticks() - self.previous_time
-        if self.previous_time > 100:
+        temps_temp = pg.time.get_ticks()
+        temps = temps_temp  - self.previous_time
+        if temps > self.velocity_inverse:
             if self.target != None:
                 self.create_path(self.target)
+                
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
                     print(f'target is {self.target}')
                     self.target = None
@@ -300,6 +329,10 @@ class Cavalry:
                         print(f'path: {self.path}')
                         print(f'len_path:  {len(self.path)}')
                         print("########")
+        if temps > self.velocity_inverse: 
+            self.previous_time = temps_temp
+        print(f'temps:======{temps}')
+        print(f'temps_temp:======{temps_temp}')
 
 
 class Catapult:
@@ -318,6 +351,8 @@ class Catapult:
 
         self.target = None
 
+        self.velocity_inverse = 200
+
     def change_tile(self, pos):
         x = pos[0] 
         y = pos[1] 
@@ -342,12 +377,14 @@ class Catapult:
                 searching_for_path = False
     def set_target(self, pos):
         self.target = pos
-    
+
     def update(self):
-        self.previous_time = pg.time.get_ticks() - self.previous_time
-        if self.previous_time > 100:
+        temps_temp = pg.time.get_ticks()
+        temps = temps_temp  - self.previous_time
+        if temps > self.velocity_inverse:
             if self.target != None:
                 self.create_path(self.target)
+                
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
                     print(f'target is {self.target}')
                     self.target = None
@@ -364,6 +401,10 @@ class Catapult:
                         print(f'path: {self.path}')
                         print(f'len_path:  {len(self.path)}')
                         print("########")
+        if temps > self.velocity_inverse:
+            self.previous_time = temps_temp
+        print(f'temps:======{temps}')
+        print(f'temps_temp:======{temps_temp}')
 
 
 
