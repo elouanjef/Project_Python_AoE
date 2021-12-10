@@ -1,5 +1,5 @@
 + menu                                                  ;zakaria
-+ algo A*                                               ;Cong Khai
++ algo A*                                               ;Cong Khai             DONE
 + sauvgarder                                            ;
 + gestion des unite/batiment                            ;Elouan                DONE
 + ajouter des personnages (one human + one I.A)         ;
