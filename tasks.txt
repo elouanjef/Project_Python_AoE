@@ -1,14 +1,32 @@
 + menu                                                  ;zakaria
 + algo A*                                               ;Cong Khai
-+ sauvgarder                                            ;Tan
-+ gestion des unite/batiment                            ;Elouan
-+ ajouter des personnages (one human + one I.A)         ;Tuan
-+ la methode de la mini                                 ;Tan
-+ collision                                             ;Hoai
-+ les themes                                            
++ sauvgarder                                            ;
++ gestion des unite/batiment                            ;Elouan                DONE
++ ajouter des personnages (one human + one I.A)         ;
++ la methode de la mini                                 ;Cong Khai             DONE
++ collision                                             ;Cong Khai             DONE
++ les themes/âges                                           
 + IA
-+ randomising the map in intervalls
-+ cheats commands                                       ;Tuan
-+ resource ()                                           ;Elouan
++ randomising the map in intervalls                                       DONE
++ cheats commands                                       ;
++ resource ()                                           ;Elouan           DONE
 + fog of war et map                                     ;Cong Khai
 + RTS
+
+
+
+E: SAVE AND LOAD       
+E: GRAPHICAL REPRESENTATION OF THE MAP  ✓
+E: GUI  ✓ ( à améliorer)
+E: DONE IN PYTHON 3 ✓
+E: Human vs AI match
+E: Starting resources ✓ 
+E: Cheats and AI commands (faire une barre de chat où on entre des commandes pour donner des ressources où rendre ses troupes invicibles par exemple)
+e: "antique" AoE1 units ✓ (juste à chercher les sprites)
+e: RTS  
+e: Procedural map generation  ✓
+e: Fog of war
+Replay games
+e: More than 2 players
+e: AI vs AI
+e: Ages
