@@ -6,7 +6,7 @@
 + la methode de la mini                                 ;Cong Khai             DONE
 + collision                                             ;Cong Khai             DONE
 + les themes/âges                                           
-+ IA
++ IA                                                    ;Cong Khai
 + randomising the map in intervalls                                       DONE
 + cheats commands                                       ;
 + resource ()                                           ;Elouan           DONE
