@@ -97,11 +97,20 @@ class Hud:
                     self.selected_tile = tile
     
     def draw(self, screen):
+
+        mouse_pos = pg.mouse.get_pos()
+        mouse_action = pg.mouse.get_pressed()
         # resource
         screen.blit(self.resources_surface, (0, 0))
         # build hud
         screen.blit(self.build_surface, (self.width * 0.84, self.height * 0.74))
         # select hud
+
+        button6 = Button(screen, (50, 200), '| |', 45, 'white on black')
+        button6.button()
+        if mouse_action[0] and button6.rect.collidepoint(mouse_pos):
+            print("coucou")
+
         if self.examined_unit is not None:
 
             mouse_pos = pg.mouse.get_pos()
