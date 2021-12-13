@@ -294,7 +294,7 @@ class Hud:
         # resource
         pos = self.width - 420  # resource info position
 
-        for resource, resource_value in self.resource_manager.resources.items():
+        for resource, resource_value in self.resource_manager.starting_resources.items():
             txt = resource + ": " + str(resource_value)
             draw_text(screen, txt, 25, WHITE, (pos, 0))
             pos += 100
