@@ -236,7 +236,7 @@ class Gui:
                     self.events.set_destroy()
                     # Code pour le bouton permettant de détruire la caserne
 
-                button2 = Button(screen, (self.width * 0.6 - 100, self.height * 0.9 + 60), 'Infantryman', 15,
+                button2 = Button(screen, (self.width * 0.6 - 100, self.height * 0.9 + 60), 'Barbare', 15,
                                  'white on black')
                 button2.button()
                 mouse_pos = pg.mouse.get_pos()
