@@ -30,13 +30,15 @@ white = (255, 255, 255)
 # define global variable
 clicked = False
 
+# récupérer taille fenetre
+x, y = screen.get_size()
 
 # add formulas instead of values
-New_Game = Button_m(screen, 420, 280, 'New Game')
-loaded_Games = Button_m(screen, 420, 340, 'Loaded Games')
-Settings = Button_m(screen, 420, 400, 'Settings')
-Credits = Button_m(screen, 420, 520, 'Credits')
-Quit = Button_m(screen, 420, 460, 'Quit')
+New_Game = Button_m(screen, x-420, 280, 'New Game')
+loaded_Games = Button_m(screen, x-420, 340, 'Loaded Games')
+Settings = Button_m(screen, x-420, 400, 'Settings')
+Credits = Button_m(screen, x-420, 520, 'Credits')
+Quit = Button_m(screen, x-420, 460, 'Quit')
 
 # Background 
 background = background_main_menu
@@ -55,7 +57,6 @@ while run:
 	screen.fill((255, 255, 255))
 	# Background Image
 	screen.blit(background, (0, 0))
-	screen.blit(font.render("Age of Cheap Empires", True, (249, 231, 159)), (435, 100))
 
 	if New_Game.check_button():
 		print('You pressed New Game')

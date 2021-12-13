@@ -27,7 +27,7 @@ class Button_m():
         self.clicked = False
         self.button_col = YELLOW_LIGHT
         self.hover_col = BEIGE
-        self.click_col = GREEN_DARK
+        self.click_col = GOLD
         self.text_col = BLACK
 
     def check_button(self):
