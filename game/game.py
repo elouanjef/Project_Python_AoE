@@ -44,7 +44,7 @@ class Game:
 
         self.game_time = Game_time()
 
-        self.AI = AI(self.game_time)
+        self.AI = AI(self.game_time, self.world, self.resource_manager)
 
 
 

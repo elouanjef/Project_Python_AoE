@@ -36,7 +36,8 @@ AI_action_file = path.join(AOE_folder,"game/AI_action.txt")
 #map's ressource
 Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"tree.png")),(143,128))
 Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"rock.png")),(143,128))
-Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"block.png")),(143,128))
+Gold_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"gold.png")),(100,100))
+Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"block.png")),(143,150))
 
 #buildings
 towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (143, 128))

@@ -153,6 +153,11 @@ class Hud:
                 img_scale = self.scale_image(img, h=h*0.9)
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 draw_text(screen, "Rest: " + str(self.choose["class"].get_rest()), 20, BLUE , (self.width * 0.35 + 300, self.height * 0.79 + 50))
+            if (self.choose["tile"] == 'gold'):
+                img = Gold_img
+                img_scale = self.scale_image(img, h=h*0.9)
+                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+                draw_text(screen, "Rest: " + str(self.choose["class"].get_rest()), 20, BLUE , (self.width * 0.35 + 300, self.height * 0.79 + 50))
             draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + 300, self.height * 0.79 + 10))
 
 
@@ -165,6 +170,7 @@ class Hud:
             # text in information box
             draw_text(screen, self.examined_tile.game_name, 40, WHITE, self.select_rect.topleft)
             draw_text(screen, "Health: {}".format(str(self.examined_tile.health)), 20, WHITE, self.select_rect.center)
+            draw_text(screen, "{} team".format(self.examined_tile.team), 20, pg.Color(self.examined_tile.team), (self.width * 0.35 + 290, self.height * 0.79))
 
             if self.examined_tile.name == "TownCenter":
                 button = Button(screen, (self.width * 0.6, self.height*0.9 + 60),'Destroy', 15, 'white on red')

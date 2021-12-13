@@ -110,19 +110,19 @@ class World:
                 # left-click to build
                 if mouse_action[0] and not collision:
                     if self.hud.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos, self.resource_manager)
+                        ent = TownCenter(render_pos, self.resource_manager, "Blue")
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "LumberMill":
-                        ent = LumberMill(render_pos, self.resource_manager)
+                        ent = LumberMill(render_pos, self.resource_manager, "Blue")
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "Barracks":
-                        ent = Barracks(render_pos, self.resource_manager)
+                        ent = Barracks(render_pos, self.resource_manager, "Blue")
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.hud.selected_tile["name"] == "Archery":
-                        ent = Archery(render_pos, self.resource_manager, self.world)
+                        ent = Archery(render_pos, self.resource_manager, self.world, "Blue")
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
@@ -441,6 +441,8 @@ class World:
             elif r == 2:
                 tile = "rock"
             # Normal block
+            elif r == 3:
+                tile = "gold"
             else:
                 tile = ""
 
@@ -452,6 +454,9 @@ class World:
         #We create the rock's object here
         elif (tile == "rock"):
             map_resource = Map_Rock(self.resource_manager)
+        #We create the gold's object here
+        elif (tile == "gold"):
+            map_resource = Map_Gold(self.resource_manager)
         #Tile's Object
         else:
             map_resource = Map_Tree(self.resource_manager)
@@ -500,6 +505,7 @@ class World:
         tree = Tree_img.convert_alpha()
         #rock = pg.image.load(path.join(graphics_folder, "rock.png")).convert_alpha()
         rock = Rock_img.convert_alpha()
+        gold = Gold_img.convert_alpha()
         building1 = towncenter.convert_alpha()
         building2 = lumbermill.convert_alpha()
         building3 = barracks.convert_alpha()
@@ -513,6 +519,7 @@ class World:
             "tree": tree,
             "rock": rock,
             "block": block,
+            "gold": gold,
             "troop": troop
         }
         return images

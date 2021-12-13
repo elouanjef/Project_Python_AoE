@@ -1,3 +1,6 @@
-00:00-TownCenter
-00:01-Barracks
-00:02-LumberMill
+00:01-TownCenter-(5,10)
+00:02-Barracks-(5,15)
+00:03-LumberMill-(10,11)
+00:04-TownCenter-(20,10)
+00:05-Barracks-(7,3)
+00:06-TownCenter-(1,1)

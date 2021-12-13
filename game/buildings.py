@@ -10,7 +10,7 @@ from os import path
 
 class TownCenter:
 
-    def __init__(self, pos, resource_manager):
+    def __init__(self, pos, resource_manager, team):
         image = towncenter
         self.image = image
         self.name = "TownCenter"
@@ -21,7 +21,7 @@ class TownCenter:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 1000
         self.health = 0
-        self.team = "Blue"
+        self.team = team
 
     def update(self):
         if self.health < self.health_max:
@@ -30,7 +30,7 @@ class TownCenter:
 
 class Barracks:
 
-    def __init__(self, pos, resource_manager):
+    def __init__(self, pos, resource_manager, team):
         image = barracks
         self.image = image
         self.name = "Barracks"
@@ -41,7 +41,7 @@ class Barracks:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 350
         self.health = 0
-        self.team = "Blue"
+        self.team = team
 
     def update(self):
         if self.health < self.health_max:
@@ -49,7 +49,7 @@ class Barracks:
 
 class Archery:
 
-    def __init__(self, pos, resource_manager, world):
+    def __init__(self, pos, resource_manager, world, team):
         image = archery
         self.image = image
         self.name = "Archery"
@@ -62,7 +62,7 @@ class Archery:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 350
         self.health = 0
-        self.team = "Blue"
+        self.team = team
 
     def update(self):
         if self.health < self.health_max:
@@ -72,7 +72,7 @@ class Archery:
 
 class LumberMill:
 
-    def __init__(self, pos, resource_manager):
+    def __init__(self, pos, resource_manager, team):
         image = lumbermill
         self.image = image
         self.name = "LumberMill"
@@ -83,7 +83,7 @@ class LumberMill:
         self.health_max = 500
         self.health = 0
         self.resource_cooldown = pg.time.get_ticks()
-        self.team = "Blue"
+        self.team = team
 
     def update(self):
         if self.health < self.health_max:
@@ -127,3 +127,22 @@ class Rock:
     def miner(self):
         self.the_rest -= 50
         return 50
+
+
+
+
+
+class Gold:
+    def __init__(self, pos, resource_manager):
+        image = Gold_img
+        self.image = image
+        self.name = "Gold"
+        self.game_name = "Gold"
+        self.rect = self.image.get_rect(topleft=pos)
+        self.resource_manager = resource_manager
+        self.resource_manager.cost_to_resource(self.name)
+        self.the_rest = 100
+        self.resource_cooldown = pg.time.get_ticks()
+    def miner(self):
+        self.the_rest -= 1
+        return 1
