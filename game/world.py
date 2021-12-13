@@ -310,7 +310,7 @@ class World:
                                      y + render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y)
                                     for x, y in mask]
                             self.choosing_pos_x, self.choosing_pos_y = x, y
-                            pg.draw.polygon(screen, GREEN, mask, 2)
+                            pg.draw.polygon(screen, self.buildings[x][y].team, mask, 2)
 
                 # minimap here
                 render_pos_mini = self.world[x][y]["render_pos_mini"]
@@ -324,12 +324,17 @@ class World:
                     pg.draw.circle(screen, VIOLET, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51, render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7),
                                    1)
+                elif tile == "Mine d'or":
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, YELLOW_LIGHT, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51, render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7),
+                                   1)
                 elif self.units[x][y - 1] is not None:
-                    pg.draw.circle(screen, WHITE, (
+                    pg.draw.circle(screen, self.units[x][y - 1].team, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51, render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7),
                                    1)
                 elif self.buildings[x][y] is not None:
-                    pg.draw.circle(screen, GREEN, (
+                    pg.draw.circle(screen, self.buildings[x][y].team, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51, render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7),
                                    1)
                 mini = self.world[x][y]["iso_poly_mini"]
