@@ -1,7 +1,7 @@
 import pygame as pg
 
 
-class Character():
+class Character:
 
     def __init__(self, speed, color):
         self.image = pg.Surface((10, 10))

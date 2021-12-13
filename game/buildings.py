@@ -14,7 +14,7 @@ class TownCenter:
         image = towncenter
         self.image = image
         self.name = "TownCenter"
-        self.game_name = "Town center"
+        self.game_name = "Forum"
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
@@ -34,7 +34,7 @@ class Barracks:
         image = barracks
         self.image = image
         self.name = "Barracks"
-        self.game_name = "Barracks"
+        self.game_name = "Caserne"
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
@@ -47,15 +47,15 @@ class Barracks:
         if self.health < self.health_max:
             self.health += 1
 
+
 class Archery:
 
-    def __init__(self, pos, resource_manager, world, team):
+    def __init__(self, pos, resource_manager, team):
         image = archery
         self.image = image
         self.name = "Archery"
-        self.game_name = "Archery"
+        self.game_name = "Camp de tir à l'arc"
         self.pos = pos
-        self.world = world
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
@@ -67,7 +67,6 @@ class Archery:
     def update(self):
         if self.health < self.health_max:
             self.health += 15
-
 
 
 class LumberMill:
@@ -91,58 +90,5 @@ class LumberMill:
         elif self.health == self.health_max:
             now = pg.time.get_ticks()
             if now - self.resource_cooldown > 2000:
-                self.resource_manager.resources["wood"] += 1
+                self.resource_manager.starting_resources["wood"] += 1
                 self.resource_cooldown = now
-
-
-
-class Tree:
-    def __init__(self, pos, resource_manager):
-        image = Tree_img
-        self.image = image
-        self.name = "Tree"
-        self.game_name = "Tree"
-        self.rect = self.image.get_rect(topleft=pos)
-        self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
-        self.the_rest = 500
-        self.resource_cooldown = pg.time.get_ticks()
-    def cupper(self):
-        self.the_rest -= 50
-        return 50
-
-
-
-class Rock:
-    def __init__(self, pos, resource_manager):
-        image = Rock_img
-        self.image = image
-        self.name = "Rock"
-        self.game_name = "Rock"
-        self.rect = self.image.get_rect(topleft=pos)
-        self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
-        self.the_rest = 500
-        self.resource_cooldown = pg.time.get_ticks()
-    def miner(self):
-        self.the_rest -= 50
-        return 50
-
-
-
-
-
-class Gold:
-    def __init__(self, pos, resource_manager):
-        image = Gold_img
-        self.image = image
-        self.name = "Gold"
-        self.game_name = "Gold"
-        self.rect = self.image.get_rect(topleft=pos)
-        self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
-        self.the_rest = 100
-        self.resource_cooldown = pg.time.get_ticks()
-    def miner(self):
-        self.the_rest -= 1
-        return 1

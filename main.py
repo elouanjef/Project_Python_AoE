@@ -9,33 +9,26 @@ def main():
     pg.init()
     pg.mixer.init()
 
-    #the command below does not work on my ubuntu
-    #screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
-
-    #this command works better, but it just shows a bigger window
-    #screen = pg.display.set_mode((pg.display.Info().current_w, pg.display.Info().current_h), pg.SCALED)
-
-    #problem solved!
+    # problem solved!
     screen = pg.display.set_mode((0, 0), pg.NOFRAME)
     pg.display.toggle_fullscreen()
 
-    #screen = pg.display.set_mode((1800, 1000))
-
     clock = pg.time.Clock()
 
-    #implement menus
+    # implement menus
 
-    #implement game
+    # implement game
     game = Game(screen, clock)
-
 
     while running:
 
-        #start menu goes here
+        # start menu goes here
 
         while playing:
             # game loop here
             game.run()
+
+
 
 if __name__ == '__main__':
     main()

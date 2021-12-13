@@ -4,7 +4,6 @@ from game.world import *
 from os import path
 
 
-
 class Map_Tree:
     def __init__(self, resource_manager):
         self.resource_manager = resource_manager
@@ -18,13 +17,15 @@ class Map_Tree:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.resources["wood"] += 1
+                self.resource_manager.starting_resources["wood"] += 1
 
             return 1
-        else: self.available = False
+        else:
+            self.available = False
 
     def get_rest(self):
         return self.the_rest
+
 
 class Map_Rock:
     def __init__(self, resource_manager):
@@ -39,7 +40,7 @@ class Map_Rock:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.resources["rock"] += 1
+                self.resource_manager.starting_resources["rock"] += 1
 
             return 1
         else:
@@ -62,7 +63,7 @@ class Map_Gold:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.resources["gold"] += 1
+                self.resource_manager.starting_resources["gold"] += 1
 
             return 1
         else:
@@ -72,11 +73,12 @@ class Map_Gold:
         return self.the_rest
 
 
-
 class Map_Tile:
     def __init__(self):
         self.the_rest = 0
+
     def _____(self):
         pass
+
     def get_rest(self):
         return self.the_rest

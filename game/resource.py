@@ -1,38 +1,37 @@
-from .hud import *
+from .gui import *
 
-class ResourceManager:
+
+class Resource:
     def __init__(self):
-        self.resources = {
-            "wood" : 5000,
-            "rock" : 500,
-            "gold" : 500,
-            "food" : 500
+        self.starting_resources = {
+            "wood": 5000,
+            "rock": 500,
+            "gold": 500,
+            "food": 500
         }
         self.costs = {
-            "TownCenter": { "wood": 450, "rock": 0, "gold": 0, "food": 0 },
-            "Barracks": { "wood": 125, "rock": 0, "gold": 0, "food": 0 },
+            "TownCenter": {"wood": 450, "rock": 0, "gold": 0, "food": 0},
+            "Barracks": {"wood": 125, "rock": 0, "gold": 0, "food": 0},
             "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0},
-            "Archery": { "wood": 125, "rock": 0, "gold": 0, "food": 0 },
-            "Archer" : {"wood": 0, "rock": 0, "gold": 0, "food": 20},
-            "Infantryman" :{"wood": 0, "rock": 0, "gold": 0, "food": 30},
-            "Villager":{"wood": 0, "rock": 0, "gold": 0, "food": 50}
+            "Archery": {"wood": 125, "rock": 0, "gold": 0, "food": 0},
+            "Archer": {"wood": 0, "rock": 0, "gold": 0, "food": 20},
+            "Infantryman": {"wood": 0, "rock": 0, "gold": 0, "food": 30},
+            "Villager": {"wood": 0, "rock": 0, "gold": 0, "food": 50}
         }
 
     def cost_to_resource(self, building):
         for resource, cost in self.costs[building].items():
-            self.resources[resource] -= cost
+            self.starting_resources[resource] -= cost
 
     def is_affordable(self, building):
         affordable = True
         for resource, cost in self.costs[building].items():
-            if cost > self.resources[resource]:
+            if cost > self.starting_resources[resource]:
                 affordable = False
         return affordable
 
 
-import time
-
-class Resource:
+"""class Resource:
     tree = False
     rock = False
     gold = False
@@ -54,10 +53,4 @@ def chop(villager):
     time.sleep(t)
     #destroy_entity(entity)  pourra être géré quand on saura comment gérer les entités sur la carte tels que les arbres ou les rochers etc...
 
-"""
-def mineR(villager):
-
-def mineG(villager):
-
-def food(villager):
 """
