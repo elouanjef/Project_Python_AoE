@@ -96,15 +96,15 @@ class Event:
 
 class Game_time:
     def __init__(self):
-        self.hour = 0
+        #self.hour = 0
         self.minute = 0
         self.second = 0
+    def get_time(self):
+        return self.minute,self.second
     def update(self):
         if (self.second >= 60):
             self.minute += 1
             self.second = 0
-        if (self.minute >= 60):
-            self.hour += 1
-            self.minute = 0 
-
-
+        # if (self.minute >= 60):
+        #     self.hour += 1
+        #     self.minute = 0 

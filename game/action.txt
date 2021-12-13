@@ -1,3 +1,0 @@
-00:00-TownCenter
-00:05-Barracks
-00:10-LumberMill

@@ -10,7 +10,7 @@ from .resource import ResourceManager
 from .units import Archer, Infantryman, Villager
 from .buildings import TownCenter
 from .events import *
-
+from .AI import *
 
 class Game:
 
@@ -44,6 +44,8 @@ class Game:
 
         self.game_time = Game_time()
 
+        self.AI = AI(self.game_time)
+
 
 
     # running
@@ -56,6 +58,7 @@ class Game:
             self.update()
             self.draw()
             self.events.events()
+            self.AI.action()
 
 
 

@@ -36,6 +36,8 @@ class Archer:
 
         self.velocity_inverse = 100  #(miniseconde par carré)
 
+        self.team = "Blue"  #blue team is the player's team
+
 
 
 
@@ -85,15 +87,16 @@ class Archer:
                             self.change_tile(new_pos)
                             print(self.path)
                     except IndexError:
-                        print("########")
-                        print(f'path_index {self.path_index}')
-                        print(f'path: {self.path}')
-                        print(f'len_path:  {len(self.path)}')
-                        print("########")
+                        #print("########")
+                        #print(f'path_index {self.path_index}')
+                        #print(f'path: {self.path}')
+                        #print(f'len_path:  {len(self.path)}')
+                        #print("########")
+                        pass
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
-        print(f'temps:======{temps}')
-        print(f'temps_temp:======{temps_temp}')
+        #print(f'temps:======{temps}')
+        #print(f'temps_temp:======{temps_temp}')
 
         
 
@@ -122,6 +125,8 @@ class Villager:
         self.previous_time = 0
 
         self.velocity_inverse = 200
+
+        self.team = "Blue"
 
     def get_health(self):
         return self.health
@@ -205,6 +210,9 @@ class Infantryman:
         self.target = None
 
         self.velocity_inverse = 300
+        self.previous_time = 0
+
+        self.team = "Blue"
 
 
     def get_health(self):
@@ -279,6 +287,9 @@ class Cavalry:
         self.target = None
 
         self.velocity_inverse = 50
+        self.previous_time = 0
+
+        self.team = "Blue"
 
 
     def change_tile(self, pos):
@@ -352,6 +363,9 @@ class Catapult:
         self.target = None
 
         self.velocity_inverse = 200
+        self.previous_time = 0
+
+        self.team = "Blue"
 
     def change_tile(self, pos):
         x = pos[0] 

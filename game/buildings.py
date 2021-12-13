@@ -21,6 +21,7 @@ class TownCenter:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 1000
         self.health = 0
+        self.team = "Blue"
 
     def update(self):
         if self.health < self.health_max:
@@ -40,6 +41,7 @@ class Barracks:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 350
         self.health = 0
+        self.team = "Blue"
 
     def update(self):
         if self.health < self.health_max:
@@ -60,6 +62,7 @@ class Archery:
         self.resource_manager.cost_to_resource(self.name)
         self.health_max = 350
         self.health = 0
+        self.team = "Blue"
 
     def update(self):
         if self.health < self.health_max:
@@ -80,6 +83,7 @@ class LumberMill:
         self.health_max = 500
         self.health = 0
         self.resource_cooldown = pg.time.get_ticks()
+        self.team = "Blue"
 
     def update(self):
         if self.health < self.health_max:

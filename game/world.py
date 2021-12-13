@@ -206,6 +206,7 @@ class World:
                             self.events.remise_moving_troop()
                             self.mining_position = None
                             self.mining = False
+            
 
                         elif (self.hud.examined_unit.game_name == "Villager"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
@@ -272,8 +273,8 @@ class World:
                         self.hud.examined_tile = None
 
         for unit in self.list_troop:
-            
-            unit.update()
+            if unit.target != None:
+                unit.update()
             
 
 
