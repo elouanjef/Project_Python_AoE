@@ -48,7 +48,7 @@ class Archer:
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
-        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
+        #print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
     def create_path(self,pos):
         searching_for_path = True
@@ -75,15 +75,15 @@ class Archer:
                 self.create_path(self.target)
                 
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
-                    print(f'target is {self.target}')
+                    #print(f'target is {self.target}')
                     self.target = None
-                    print('reach')
+                    #print('reach')
                 else:
                     try:
                         if len(self.path) > 1:
                             new_pos = self.path[1]
                             self.change_tile(new_pos)
-                            print(self.path)
+                            #print(self.path)
                     except IndexError:
                         print("########")
                         print(f'path_index {self.path_index}')
@@ -92,8 +92,8 @@ class Archer:
                         print("########")
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
-        print(f'temps:======{temps}')
-        print(f'temps_temp:======{temps_temp}')
+        #print(f'temps:======{temps}')
+        #print(f'temps_temp:======{temps_temp}')
 
         
 
@@ -132,7 +132,7 @@ class Villager:
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
-        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
+        #print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
     def create_path(self,pos):
         searching_for_path = True
@@ -148,6 +148,7 @@ class Villager:
                 finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
                 searching_for_path = False
+
     def set_target(self, pos):
         self.target = pos
 
@@ -159,15 +160,15 @@ class Villager:
                 self.create_path(self.target)
                 
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
-                    print(f'target is {self.target}')
+                    #print(f'target is {self.target}')
                     self.target = None
-                    print('reach')
+                    #print('reach')
                 else:
                     try:
                         if len(self.path) > 1:
                             new_pos = self.path[1]
                             self.change_tile(new_pos)
-                            print(self.path)
+                            #print(self.path)
                     except IndexError:
                         print("########")
                         print(f'path_index {self.path_index}')
@@ -176,8 +177,8 @@ class Villager:
                         print("########")
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
-        print(f'temps:======{temps}')
-        print(f'temps_temp:======{temps_temp}')
+        #print(f'temps:======{temps}')
+        #print(f'temps_temp:======{temps_temp}')
 
 class Infantryman:
 
@@ -203,6 +204,7 @@ class Infantryman:
         self.move_timer = pg.time.get_ticks()
 
         self.target = None
+        self.previous_time = 0
 
         self.velocity_inverse = 300
 
@@ -216,7 +218,7 @@ class Infantryman:
         self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
         self.world.units[x][y] = self
         self.tile = self.world.world[x][y]
-        print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
+        #print(f'pos = {self.tile["grid"][0]}___{self.tile["grid"][1]}')
 
     def create_path(self,pos):
         searching_for_path = True
@@ -243,15 +245,15 @@ class Infantryman:
                 self.create_path(self.target)
                 
                 if [self.tile["grid"][0],self.tile["grid"][1]] == self.path[-1] :
-                    print(f'target is {self.target}')
+                    #print(f'target is {self.target}')
                     self.target = None
-                    print('reach')
+                    #print('reach')
                 else:
                     try:
                         if len(self.path) > 1:
                             new_pos = self.path[1]
                             self.change_tile(new_pos)
-                            print(self.path)
+                            #print(self.path)
                     except IndexError:
                         print("########")
                         print(f'path_index {self.path_index}')
@@ -260,8 +262,8 @@ class Infantryman:
                         print("########")
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
-        print(f'temps:======{temps}')
-        print(f'temps_temp:======{temps_temp}')
+        #print(f'temps:======{temps}')
+        #print(f'temps_temp:======{temps_temp}')
 
 class Cavalry:
 
