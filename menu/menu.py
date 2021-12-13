@@ -1,7 +1,7 @@
 """the main Menu screen"""
 
 import pygame
-from button_menu import Button_m
+from menu.button_menu import Button_m
 from pygame import mixer
 from settings import *
 from main import main
