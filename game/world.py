@@ -211,6 +211,7 @@ class World:
                         elif (self.hud.examined_unit.game_name == "Villager"):  #je voulais mettre game_name = "Villager" mais je n'arrive pas à créer de villager
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             #self.hud.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
+                            new_unit_pos = (new_unit_pos[0]+1, new_unit_pos[1])
                             self.hud.examined_unit.set_target(new_unit_pos)
                             #print("mining", self.hud.examined_unit.game_name, "to", new_unit_pos)
                             self.events.remise_moving_troop()
@@ -219,7 +220,10 @@ class World:
                                 if self.hud.choose["class"].available:
 
                                     self.mining = True
+                                    if new_unit_pos != self.mining_position and (self.mining_position is not None):
+                                        self.list_mining.remove(self.mined)
                                     self.mined = self.hud.choose
+
                                     self.events.getting_resource()
                                     self.moving_to_resource = True
                                     self.mining_position = self.hud.choose["grid"]
@@ -491,7 +495,7 @@ class World:
 
     # load our blocks into the game
     def load_images(self):
-        block = pg.image.load(path.join(graphics_folder, "block.png")).convert_alpha()
+        block = Block_img.convert_alpha()
         # tree = pg.image.load(path.join(graphics_folder, "tree.png")).convert_alpha()
         tree = Tree_img.convert_alpha()
         #rock = pg.image.load(path.join(graphics_folder, "rock.png")).convert_alpha()

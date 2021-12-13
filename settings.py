@@ -36,12 +36,13 @@ AI_action_file = path.join(AOE_folder,"game/AI_action.txt")
 #map's ressource
 Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"tree.png")),(143,128))
 Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"rock.png")),(143,128))
+Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder,"block.png")),(143,128))
 
 #buildings
-towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (143, 100))
-lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder,"lumbermill.png")), (143, 100))
-barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder,"barracks.png")), (143, 100))
-archery = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archery.png")), (143, 100))
+towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder,"towncenter.png")), (143, 128))
+lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder,"lumbermill.png")), (143, 128))
+barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder,"barracks.png")), (143, 128))
+archery = pg.transform.scale(pg.image.load(path.join(graphics_folder,"archery.png")), (143, 128))
 
 
 #units
