@@ -1,4 +1,4 @@
-+ menu                                                  ;zakaria
++ menu                                                  ;zakaria	       (il reste à créer les autres sous-menus par exemple Options, Credits)
 + algo A*                                               ;Cong Khai             DONE
 + sauvgarder                                            ;
 + gestion des unite/batiment                            ;Elouan                DONE
