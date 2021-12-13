@@ -1,5 +1,11 @@
 """the class for all the botton used in the various menus"""
 
+import os, sys
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 from sys import _xoptions
 from typing import Text
 from settings import *
