@@ -23,10 +23,11 @@ BEIGE = (255, 253, 208)
 GREEN_DARK = (9, 48, 22)
 BLUE_SKY = (122, 215, 255)
 PINK = (255, 88, 150)
-
 PURPLE = (128, 0, 128)
 MINI_MAP_COLOUR = (64, 64, 64)
-GUI_COLOUR = (198, 155, 93, 175)
+GUI_COLOUR = (87,65,47,200)
+GUI_BORDER_COLOR = (88,41,0,255)
+#GUI_COLOUR = (198, 155, 93, 175)
 
 CONSTRUCTION = 1
 DESTROY = 0
@@ -41,7 +42,7 @@ AI_action_file = path.join(AOE_folder, "game/AI_action.txt")
 
 # map's ressource
 Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "tree.png")), (143, 128))
-Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "rock.png")), (143, 128))
+Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "rock2.png")), (100, 100))
 Gold_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "gold.png")), (100, 100))
 Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "block_aoe.png")), (143, 150))
 
@@ -50,11 +51,14 @@ towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder, "townce
 lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder, "lumbermill.png")), (143, 128))
 barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barracks.png")), (143, 128))
 archery = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archery.png")), (143, 128))
+towncenter_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "towncenter_icon.png")), (143, 128))
+barracks_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barracks_icon.png")), (143, 128))
+archery_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archery_icon.png")), (143, 128))
 
 # units
-archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer.png")), (30, 40))
-infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "Barbarian.png")), (38, 48))
-villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager.png")), (30, 40))
+archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer2.png")), (30, 40))
+infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barbarian2.png")), (38, 48))
+villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager2.png")), (30, 40))
 
 # menu
 menuf = path.dirname(__file__)  # Path of the Project_Python_AoE foler

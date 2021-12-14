@@ -93,7 +93,7 @@ class Game:
             self.screen,  # print it on screen
             f"%02d : %02d" % (self.game_time.minute, self.game_time.second),
             25,  # text's size
-            PURPLE,  # the text's colour
+            BLUE_SKY,  # the text's colour
             (1100, 3)  # position of the text (x, y)
         )
 

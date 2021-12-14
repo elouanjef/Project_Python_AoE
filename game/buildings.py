@@ -68,7 +68,7 @@ class Archery:
         if self.health < self.health_max:
             self.health += 15
 
-
+"""
 class LumberMill:
 
     def __init__(self, pos, resource_manager, team):
@@ -91,4 +91,4 @@ class LumberMill:
             now = pg.time.get_ticks()
             if now - self.resource_cooldown > 2000:
                 self.resource_manager.starting_resources["wood"] += 1
-                self.resource_cooldown = now
+                self.resource_cooldown = now"""

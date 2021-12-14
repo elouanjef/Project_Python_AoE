@@ -15,7 +15,7 @@ from main import *
 
 
 class Button_m():
-    def __init__ (self, screen, x, y, text):
+    def __init__(self, screen, x, y, text):
         self.screen = screen
         self.x = x
         self.y = y
@@ -47,7 +47,7 @@ class Button_m():
             else:
                 pygame.draw.rect(self.screen, self.hover_col, self.button_rect)
         else:
-                pygame.draw.rect(self.screen, self.button_col, self.button_rect)
+            pygame.draw.rect(self.screen, self.button_col, self.button_rect)
 
         text_img = self.font.render(self.text, True, self.text_col)
         text_len = text_img.get_width()

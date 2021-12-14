@@ -21,7 +21,7 @@ class AI:
 
     def read_file(self):
         action_line = self.f.readline()
-        if (action_line == ''):
+        if action_line == '':
             action_line = ' - -(0,0)'
         action_line = action_line.rsplit("\n")
         action = action_line[0].split("-")
@@ -53,10 +53,10 @@ class AI:
 
     def action(self):
         self.minute, self.second = self.game_time.get_time()
-        temps = ((self.minute) * 60 + self.second) - self.previous_time
+        temps = (self.minute * 60 + self.second) - self.previous_time
         self.time = "%02d:%02d" % (self.minute, self.second)
         if temps >= 1:
-            self.previous_time = (self.minute) * 60 + self.second
+            self.previous_time = self.minute * 60 + self.second
             action = self.read_file()
             # print(self.time)
             # print(f'action: {action} action[0]: {action[0]} action[1]: {action[1]}')
@@ -65,7 +65,7 @@ class AI:
             # print("------------------------------------------------")
             if self.time == action[0]:  # Nécessité d'utiliser une approximation car le timing est difficile à être précis
                 if action[1] in action_dict.keys():
-                    if action_dict.get(action[1]) < 3:  #construct
+                    if action_dict.get(action[1]) < 3:  # construct
                         act = self.function_list[action_dict.get(action[1])]
                         act(action[2][0],action[2][1])
                     elif action_dict.get(action[1]) == 3:
@@ -74,7 +74,7 @@ class AI:
                             act(action)
                         except IndexError:
                             print(action_dict.get(action[1]))
-                        #Villager(self.world.world[action[2][0]][action[2][1]], self.world, self.resource_manager)
+                        # Villager(self.world.world[action[2][0]][action[2][1]], self.world, self.resource_manager)
                 else:
                     pass 
                 for i in self.world.entities:

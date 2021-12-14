@@ -9,6 +9,7 @@ class Map_Tree:
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 400
+        self.the_rest_max = 400
         self.available = True
 
     def mine(self):
@@ -32,6 +33,7 @@ class Map_Rock:
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 1000
+        self.the_rest_max = 1000
         self.available = True
 
     def mine(self):
@@ -55,6 +57,7 @@ class Map_Gold:
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 100
+        self.the_rest_max = 100
         self.available = True
 
     def mine(self):
