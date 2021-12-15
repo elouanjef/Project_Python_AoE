@@ -55,7 +55,7 @@ class Game:
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
-            self.AI.action()  # Dis à l'AI de commencer à jouer
+#           self.AI.action()  # Dis à l'AI de commencer à jouer
 
     # capture the events
     def events(self):
@@ -81,12 +81,13 @@ class Game:
         self.screen.fill(BLACK)  # On dessine un background noir sur lequel on dessine tout le GUI et la map
         self.world.draw(self.screen, self.camera)
         self.gui.draw(self.screen)
+        self.world.draw_mini(self.screen, self.camera)
         draw_text(
             self.screen,  # print it on screen
-            "fps={}".format(round(self.clock.get_fps())),  # get value
+            "{} FPS".format(round(self.clock.get_fps())),  # get value
             25,  # text's size
             WHITE,  # the text's colour
-            (900, 3)  # position of the text (x, y)
+            (self.width * 0.005, 5)  # position of the text (x, y)
         )
 
         draw_text(
@@ -94,7 +95,7 @@ class Game:
             f"%02d : %02d" % (self.game_time.minute, self.game_time.second),
             25,  # text's size
             BLUE_SKY,  # the text's colour
-            (1100, 3)  # position of the text (x, y)
+            (self.width*0.475, 5)  # position of the text (x, y)
         )
 
         pg.display.flip()

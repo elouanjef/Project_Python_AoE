@@ -18,7 +18,7 @@ class TownCenter:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.name)
         self.health_max = 1000
         self.health = 0
         self.team = team
@@ -38,7 +38,7 @@ class Barracks:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.name)
         self.health_max = 350
         self.health = 0
         self.team = team
@@ -59,7 +59,7 @@ class Archery:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.name)
         self.health_max = 350
         self.health = 0
         self.team = team
@@ -78,7 +78,7 @@ class LumberMill:
         self.game_name = "Lumber mill"
         self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.name)
         self.health_max = 500
         self.health = 0
         self.resource_cooldown = pg.time.get_ticks()

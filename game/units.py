@@ -22,7 +22,7 @@ class Archer:
         self.game_name = "Archer"
         self.attack = 5
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.game_name)
         self.health = 35
         self.health_max = 35
 
@@ -114,7 +114,7 @@ class Villager:
         self.game_name = "Villageois"
         self.attack = 1
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.game_name)
         self.health = 20
         self.health_max = 20
 
@@ -198,11 +198,7 @@ class Infantryman:
         self.name = "Infantryman"
         self.game_name = "Barbare"
         self.resource_manager = resource_manager
-        self.resource_manager.cost_to_resource(self.name)
-         #self.rect = self.image.get_rect(topleft=pos)
-        # [ WOOD , ROCK , GOLD , FOOD ]
-       # self.resource_manager = resource_manager
-       # self.resource_manager.cost_to_resource(self.name)
+        self.resource_manager.buy(self.game_name)
         self.health = 50
         self.health_max = 50
 

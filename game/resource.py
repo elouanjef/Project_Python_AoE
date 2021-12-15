@@ -4,31 +4,34 @@ from .gui import *
 class Resource:
     def __init__(self):
         self.starting_resources = {
-            "wood": 5000,
-            "rock": 500,
-            "gold": 500,
-            "food": 500
+            "Wood": 500,
+            "Rock": 500,
+            "Gold": 500,
+            "Food": 45
         }
         self.costs = {
-            "TownCenter": {"wood": 450, "rock": 0, "gold": 0, "food": 0},
-            "Barracks": {"wood": 125, "rock": 0, "gold": 0, "food": 0},
-            "LumberMill": {"wood": 50, "rock": 0, "gold": 0, "food": 0},
-            "Archery": {"wood": 125, "rock": 0, "gold": 0, "food": 0},
-            "Archer": {"wood": 0, "rock": 0, "gold": 0, "food": 20},
-            "Infantryman": {"wood": 0, "rock": 0, "gold": 0, "food": 30},
-            "Villager": {"wood": 0, "rock": 0, "gold": 0, "food": 50}
+            "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},
+            "Barracks": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
+            "LumberMill": {"Wood": 50, "Rock": 0, "Gold": 0, "Food": 0},
+            "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
+            "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
+            "Barbare": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
+            "Villageois": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
         }
 
-    def cost_to_resource(self, building):
-        for resource, cost in self.costs[building].items():
-            self.starting_resources[resource] -= cost
 
-    def is_affordable(self, building):
+
+    def is_affordable(self, ent):
         affordable = True
-        for resource, cost in self.costs[building].items():
+        for resource, cost in self.costs[ent].items():
             if cost > self.starting_resources[resource]:
                 affordable = False
         return affordable
+
+    def buy(self, ent):
+        print(ent)
+        for resource, cost in self.costs[ent].items():
+            self.starting_resources[resource] -= cost
 
 
 """class Resource:

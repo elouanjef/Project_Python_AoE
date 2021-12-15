@@ -17,6 +17,7 @@ class Gui:
         self.height = height
         self.events = events
         self.gui_colour = GUI_COLOUR
+        self.minimap_gui = GUI_MINIMAP_COLOUR
         border_width = 4
 
         # resource gui
@@ -46,11 +47,13 @@ class Gui:
         # minimap gui
         self.minimap_surface = pg.Surface((width * 0.215, height * 0.25), pg.SRCALPHA)
         self.minimap_rect = self.minimap_surface.get_rect(topleft=(self.width * 0.024, self.height * 0.74))
-        self.minimap_surface.fill(self.gui_colour)
+        self.minimap_surface.fill(self.minimap_gui)
         pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,[0, 0, self.minimap_rect.right, border_width])  # top line
         pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,[0, self.minimap_rect.bottom * 0.25 - 1, self.minimap_rect.right, border_width])  # bottom line
         pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,  [0, 0, border_width, self.minimap_rect.bottom * 0.25])  # left line
         pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR, [self.minimap_rect.right *0.89-1, 0, border_width,self.minimap_rect.bottom * 0.25 + border_width])  # right line
+        draw_text(self.minimap_surface, "Minimap", 20, WHITE,
+                  (width * 0.092, 10))
 
         self.images = self.load_images()
         self.icon_images = self.load_icon_images()
@@ -123,7 +126,7 @@ class Gui:
         # minimap
         screen.blit(self.minimap_surface, (self.width * 0.024, self.height * 0.74))
         # bouton pause
-        button6 = Button(screen, (50, 200), '| |', 45, 'white on black')
+        button6 = Button(screen, (self.width * 0.01, self.height * 0.05), '| |', 45, 'white on black')
         button6.button()
         # resource
         screen.blit(self.resources_surface, (0, 0))
@@ -322,8 +325,8 @@ class Gui:
 
         for resource, resource_value in self.resource_manager.starting_resources.items():
             txt = resource + ": " + str(resource_value)
-            draw_text(screen, txt, 25, WHITE, (pos, 0))
-            pos += 100
+            draw_text(screen, txt, 25, WHITE, (pos, 5))
+            pos += 110
             """
         for resource in ["wood:{}".format(500), "stone:{}".format(250), "gold:{}".format(100),"food: {}".format(230)]:
             draw_text(screen, resource, 25, WHITE, (pos, 0))

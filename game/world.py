@@ -106,7 +106,7 @@ class World:
                 if mouse_action[0] and not collision:
                     if self.gui.selected_tile["name"] == "TownCenter":
                         ent = TownCenter(render_pos, self.resource_manager, "Blue")
-                        self.entities.append(ent) # On ajoute le bâtiment à la liste des bâtiments
+                        self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.gui.selected_tile["name"] == "Barracks":
                         ent = Barracks(render_pos, self.resource_manager, "Blue")
@@ -129,29 +129,33 @@ class World:
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
                     units = self.units[grid_pos[0]][grid_pos[1] - 1]
 
-                    if mouse_action[0] and (building is not None): # Si on a selectionné un bâtiment avec le clic gauche on affiche
+                    if mouse_action[0] and (
+                            building is not None):  # Si on a selectionné un bâtiment avec le clic gauche on affiche
                         self.examine_tile = grid_pos
                         self.gui.examined_tile = building
 
-                    if mouse_action[0] and (units is not None): # Si on a selectionné une troupe avec le clic gauche on affiche
+                    if mouse_action[0] and (
+                            units is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
                         self.examine_unit = grid_pos
                         self.gui.examined_unit = units
 
-                    if mouse_action[0] and collision: # Si on a selectionné une ressource avec le clic gauche on affiche
+                    if mouse_action[
+                        0] and collision:  # Si on a selectionné une ressource avec le clic gauche on affiche
                         self.choose = grid_pos
                         self.gui.mining_gui = False
                         self.gui.choose = self.world[grid_pos[0]][grid_pos[1]]
 
-                    if mouse_action[0] and not collision: # Si on clic gauche dans le vide on ferme tous les interfaces de sélection
+                    if mouse_action[
+                        0] and not collision:  # Si on clic gauche dans le vide on ferme tous les interfaces de sélection
                         self.choose = None
                         self.gui.choose = None
 
-                    if mouse_action[2] and collision and (self.gui.examined_unit is not None): # Si on a sélectionné
+                    if mouse_action[2] and collision and (self.gui.examined_unit is not None):  # Si on a sélectionné
                         # une troupe et qu'on clic droit quelque part sur une ressource
-                        self.choose = grid_pos   # on choisit la ressource correspondante
+                        self.choose = grid_pos  # on choisit la ressource correspondante
                         self.gui.choose = self.world[grid_pos[0]][grid_pos[1]]
-                        self.mining = True # on active le mode minage
-                        self.gui.mining_gui = True # et on active le gui de minage
+                        self.mining = True  # on active le mode minage
+                        self.gui.mining_gui = True  # et on active le gui de minage
 
                     if self.gui.events.get_troop() is not None:
                         if self.examine_tile is not None:
@@ -160,17 +164,17 @@ class World:
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
-                            if self.gui.events.get_troop() == 'archer':
+                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Barbare"):
                                 Archer(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'infantryman':
+                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Barbare"):
                                 Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'villager':
+                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Barbare"):
                                 Villager(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -263,6 +267,48 @@ class World:
                 unit.update()
 
     # quand le prog est grandi on doit update plusieurs choses comme heal, shield ou attack point ici
+    def draw_mini(self, screen, camera):
+
+        for x in range(self.grid_size_x):
+            for y in range(self.grid_size_y):
+                render_pos = self.world[x][y]["render_pos"]
+                tile = self.world[x][y]["tile"]
+                # minimap here
+                minimap_offset = [50, self.height * 0.77 - 20]
+                render_pos_mini = self.world[x][y]["render_pos_mini"]
+                if tile == "Arbre":
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, MARRON, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+                elif tile == "Carrière de pierre":
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, VIOLET, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+                elif tile == "Mine d'or":
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, YELLOW_LIGHT, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+                elif self.units[x][y - 1] is not None:
+                    # render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7
+                    pg.draw.circle(screen, self.units[x][y - 1].team, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+                elif self.buildings[x][y] is not None:
+                    pg.draw.circle(screen, self.buildings[x][y].team, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+                mini = self.world[x][y]["iso_poly_mini"]
+                mini = [(x + 200 + minimap_offset[0], y + 20 + minimap_offset[1]) for x, y in
+                        mini]  # position x + ...., y  + ...
+                pg.draw.polygon(screen, MINI_MAP_COLOUR, mini, 1)
 
     def draw(self, screen, camera):
 
@@ -309,36 +355,6 @@ class World:
                             pg.draw.polygon(screen, self.buildings[x][y].team, mask, 2)
 
 
-                # minimap here
-                minimap_offset = [50, self.height * 0.77 - 20]
-                render_pos_mini = self.world[x][y]["render_pos_mini"]
-                if tile == "Arbre":
-                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, MARRON, (
-                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0], render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
-                                   1)
-                elif tile == "Carrière de pierre":
-                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, VIOLET, (
-                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51+minimap_offset[0], render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7+ minimap_offset[1]),
-                                   1)
-                elif tile == "Mine d'or":
-                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, YELLOW_LIGHT, (
-                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 +minimap_offset[0], render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7+ minimap_offset[1]),
-                                   1)
-                elif self.units[x][y - 1] is not None:
-                    #render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7
-                    pg.draw.circle(screen, self.units[x][y - 1].team, (
-                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51+minimap_offset[0],render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
-                                   1)
-                elif self.buildings[x][y] is not None:
-                    pg.draw.circle(screen, self.buildings[x][y].team, (
-                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51+minimap_offset[0], render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7+ minimap_offset[1]),
-                                   1)
-                mini = self.world[x][y]["iso_poly_mini"]
-                mini = [(x + 200 + minimap_offset[0], y + 20 + minimap_offset[1]) for x, y in mini]  # position x + ...., y  + ...
-                pg.draw.polygon(screen, MINI_MAP_COLOUR, mini, 1)
 
         if self.temp_tile is not None:
             iso_poly = self.temp_tile["iso_poly"]
@@ -487,12 +503,12 @@ class World:
         rock = Rock_img.convert_alpha()
         gold = Gold_img.convert_alpha()  # C'est ici que l'on va lier les entités du jeu à des images (sauf pour les troupes)
         building1 = towncenter.convert_alpha()
-        #building2 = lumbermill.convert_alpha()
+        # building2 = lumbermill.convert_alpha()
         building3 = barracks.convert_alpha()
         building4 = archery.convert_alpha()
         images = {
             "building1": building1,
-            #"building2": building2,
+            # "building2": building2,
             "building3": building3,
             "building4": building4,
             "Arbre": Arbre,
