@@ -55,20 +55,7 @@ class Game:
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
-#           self.AI.action()  # Dis à l'AI de commencer à jouer
-
-    # capture the events
-    def events(self):
-        for event in pg.event.get():
-            # Exit the game by closing the window
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            # Exit game by pressing echap
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.quit()
-                    sys.exit()
+            self.AI.action_json()  # Dis à l'AI de commencer à jouer
 
     def update(self):
         self.camera.update()

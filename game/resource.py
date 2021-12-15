@@ -9,6 +9,22 @@ class Resource:
             "Gold": 500,
             "Food": 45
         }
+        self.starting_resources_AI = {
+            "Wood": 2000,
+            "Rock": 500,
+            "Gold": 500,
+            "Food": 500
+        }
+        # self.costs = {
+        #     "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},
+        #     "Barracks": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
+        #     "LumberMill": {"Wood": 50, "Rock": 0, "Gold": 0, "Food": 0},
+        #     "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
+        #     "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
+        #     "Barbare": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
+        #     "Villageois": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
+        # }
+
         self.costs = {
             "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},
             "Barracks": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
@@ -16,8 +32,9 @@ class Resource:
             "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
             "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
             "Barbare": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
-            "Villageois": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
+            "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
         }
+
 
 
 
@@ -29,10 +46,16 @@ class Resource:
         return affordable
 
     def buy(self, ent):
-        print(ent)
-        for resource, cost in self.costs[ent].items():
-            self.starting_resources[resource] -= cost
-
+        #print(ent.name)
+        if ent.team == "Blue":
+            for resource, cost in self.costs[ent.name].items():
+                self.starting_resources[resource] -= cost
+        elif ent.team == "Red":
+            for resource, cost in self.costs[ent.name].items():
+                if self.starting_resources_AI[resource] > cost:
+                    self.starting_resources_AI[resource] -= cost
+                else:
+                    print("not enough ressource!!!!")
 
 """class Resource:
     tree = False

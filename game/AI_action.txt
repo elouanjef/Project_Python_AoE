@@ -1,5 +1,0 @@
-00:01-TownCenter-(5,10)
-00:02-Villager-(6,10)
-00:03-Villager-(5,10)
-00:04-Barracks-(5,15)
-00:05-Archery-(7,3)

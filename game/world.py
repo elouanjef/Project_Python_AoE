@@ -165,17 +165,17 @@ class World:
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
                             if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Barbare"):
-                                Archer(self.world[pos_x][pos_y], self, self.resource_manager)
+                                Archer(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Barbare"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Barbare"):
-                                Villager(self.world[pos_x][pos_y], self, self.resource_manager)
+                                Villager(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 

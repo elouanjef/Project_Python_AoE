@@ -13,16 +13,19 @@ from pathfinding.finder.a_star import AStarFinder
 #bug of map edges
 class Archer:
 
-    def __init__(self, tile, world, resource_manager):
+    def __init__(self, tile, world, resource_manager, team):
         image = archer
         self.world = world
         self.tile = tile
         self.image = image
+        self.team = team  #blue team is the player's team
         self.name = "Archer"
         self.game_name = "Archer"
         self.attack = 5
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.game_name)
+
+        self.resource_manager.buy(self)
+
         self.health = 35
         self.health_max = 35
 
@@ -37,7 +40,7 @@ class Archer:
 
         self.velocity_inverse = 100  #(miniseconde par carré)
 
-        self.team = "Blue"  #blue team is the player's team
+        
 
 
 
@@ -104,17 +107,18 @@ class Archer:
 
 class Villager:
 
-    def __init__(self, tile, world, resource_manager):
+    def __init__(self, tile, world, resource_manager,team):
         image = villager
         self.world = world
         #        self.world.entities.append(self)
         self.tile = tile
         self.image = image
+        self.team = team
         self.name = "Villager"
         self.game_name = "Villageois"
         self.attack = 1
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.game_name)
+        self.resource_manager.buy(self)
         self.health = 20
         self.health_max = 20
 
@@ -128,7 +132,6 @@ class Villager:
 
         self.velocity_inverse = 200
 
-        self.team = "Blue"
 
     def get_health(self):
         return self.health
@@ -189,16 +192,17 @@ class Villager:
 
 class Infantryman:
 
-    def __init__(self, tile, world, resource_manager):
+    def __init__(self, tile, world, resource_manager,team):
         image = infantryman
         self.world = world
+        self.team = team
         self.world.entities.append(self)
         self.tile = tile
         self.image = image
         self.name = "Infantryman"
         self.game_name = "Barbare"
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.game_name)
+        self.resource_manager.buy(self)
         self.health = 50
         self.health_max = 50
 
@@ -213,7 +217,7 @@ class Infantryman:
         self.velocity_inverse = 300
         self.previous_time = 0
 
-        self.team = "Blue"
+        
 
 
     def get_health(self):
@@ -274,7 +278,7 @@ class Infantryman:
 
 class Cavalry:
 
-    def __init__(self, pos):
+    def __init__(self, pos,team):
         image = pg.image.load(path.join(graphics_folder, "unit04.png"))
         self.image = image
         self.name = "Cavalry"
@@ -290,7 +294,7 @@ class Cavalry:
         self.velocity_inverse = 50
         self.previous_time = 0
 
-        self.team = "Blue"
+        self.team = team
 
 
     def change_tile(self, pos):
@@ -349,7 +353,7 @@ class Cavalry:
 
 class Catapult:
 
-    def __init__(self, pos):
+    def __init__(self, pos,team):
         image = pg.image.load(path.join(graphics_folder, "unit05.png"))
         self.image = image
         self.name = "Catapult"
@@ -366,7 +370,7 @@ class Catapult:
         self.velocity_inverse = 200
         self.previous_time = 0
 
-        self.team = "Blue"
+        self.team = team
 
     def change_tile(self, pos):
         x = pos[0] 
