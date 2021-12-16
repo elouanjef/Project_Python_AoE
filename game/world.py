@@ -170,7 +170,7 @@ class World:
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Barbare"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager)
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 

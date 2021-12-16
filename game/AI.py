@@ -1,6 +1,7 @@
 from .events import *
 from settings import *
 from .buildings import *
+import json
 
 action_dict = {
     "TownCenter": 0,
@@ -16,12 +17,13 @@ class AI:
         self.world = world
         self.resource_manager = resource_manager
         self.previous_time = 0
-        self.f = open(AI_action_file, "r")
+        with open(AI_action_JSONfile) as f:
+            self.data = json.load(f)
         self.function_list = [self.AI_construct_Towcenter, self.AI_construct_Barracks, self.AI_construct_Archery,self.create_villager]
 
     def read_file(self):
         action_line = self.f.readline()
-        if action_line == '':
+        if (action_line == ''):
             action_line = ' - -(0,0)'
         action_line = action_line.rsplit("\n")
         action = action_line[0].split("-")
@@ -48,34 +50,47 @@ class AI:
         self.world.entities.append(ent)
         self.world.buildings[x][y] = ent
 
-    def create_villager(self,action):
-        Villager(self.world.world[action[2][0]][action[2][1]], self.world, self.resource_manager)
+    def create_villager(self,pos):
+        Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red")
 
-    def action(self):
+    def action_json(self):
         self.minute, self.second = self.game_time.get_time()
-        temps = (self.minute * 60 + self.second) - self.previous_time
+        temps = ((self.minute) * 60 + self.second) - self.previous_time
         self.time = "%02d:%02d" % (self.minute, self.second)
         if temps >= 1:
-            self.previous_time = self.minute * 60 + self.second
-            action = self.read_file()
-            # print(self.time)
-            # print(f'action: {action} action[0]: {action[0]} action[1]: {action[1]}')
-            # print(self.time == action[0])
-            # print(type(self.time))
-            # print("------------------------------------------------")
-            if self.time == action[0]:  # Nécessité d'utiliser une approximation car le timing est difficile à être précis
-                if action[1] in action_dict.keys():
-                    if action_dict.get(action[1]) < 3:  # construct
-                        act = self.function_list[action_dict.get(action[1])]
-                        act(action[2][0],action[2][1])
-                    elif action_dict.get(action[1]) == 3:
-                        try:
-                            act = self.function_list[action_dict.get(action[1])]
-                            act(action)
-                        except IndexError:
-                            print(action_dict.get(action[1]))
-                        # Villager(self.world.world[action[2][0]][action[2][1]], self.world, self.resource_manager)
-                else:
-                    pass 
-                for i in self.world.entities:
-                    print(f'{i.game_name}')
+            self.previous_time = (self.minute) * 60 + self.second
+            #print(f"{self.time}")
+            # if self.time in self.data.keys():
+            #     for i in self.data.values():
+            #         for j in i:
+            #             action_l = list(j.keys())
+            #             action= action_l[0]
+            #             pos_l = list(j.values())
+            #             pos = pos_l[0].split(",")
+            #             pos[0], pos[1] = int(pos[0]), int(pos[1])
+            #             print(f'pos   {pos}')
+
+            #             if action_dict.get(action) < 3:  #construct
+            #                 act = self.function_list[action_dict.get(action)]
+            #                 act(pos[0], pos[1])
+            #             elif action_dict.get(action) == 3:
+            #                 act = self.function_list[action_dict.get(action)]
+            #                 act(pos)
+            if self.time in self.data.keys():
+                i = self.data[self.time]
+                #print(i)
+                for j in i:
+                    action_l = list(j.keys())
+                    action= action_l[0]
+                    pos_l = list(j.values())
+                    pos = pos_l[0].split(",")
+                    pos[0], pos[1] = int(pos[0]), int(pos[1])
+
+                    if action_dict.get(action) < 3:  #construct
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos[0], pos[1])
+                    elif action_dict.get(action) == 3:
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos)
+
+                   

@@ -18,10 +18,10 @@ class TownCenter:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.name)
         self.health_max = 1000
         self.health = 0
         self.team = team
+        self.resource_manager.buy(self)
 
     def update(self):
         if self.health < self.health_max:
@@ -38,10 +38,10 @@ class Barracks:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.name)
         self.health_max = 350
         self.health = 0
         self.team = team
+        self.resource_manager.buy(self)
 
     def update(self):
         if self.health < self.health_max:
@@ -59,36 +59,11 @@ class Archery:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.resource_manager.buy(self.name)
         self.health_max = 350
         self.health = 0
         self.team = team
+        self.resource_manager.buy(self)
 
     def update(self):
         if self.health < self.health_max:
             self.health += 15
-
-"""
-class LumberMill:
-
-    def __init__(self, pos, resource_manager, team):
-        image = lumbermill
-        self.image = image
-        self.name = "LumberMill"
-        self.game_name = "Lumber mill"
-        self.rect = self.image.get_rect(topleft=pos)
-        self.resource_manager = resource_manager
-        self.resource_manager.buy(self.name)
-        self.health_max = 500
-        self.health = 0
-        self.resource_cooldown = pg.time.get_ticks()
-        self.team = team
-
-    def update(self):
-        if self.health < self.health_max:
-            self.health += 1
-        elif self.health == self.health_max:
-            now = pg.time.get_ticks()
-            if now - self.resource_cooldown > 2000:
-                self.resource_manager.starting_resources["wood"] += 1
-                self.resource_cooldown = now"""

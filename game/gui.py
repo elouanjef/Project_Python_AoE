@@ -154,6 +154,8 @@ class Gui:
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
                           (self.width * 0.35 + 250, self.height * 0.79 + 20))
+                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
+                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
                 if mouse_action[2]:
                     self.events.change_unit_pos()
 
@@ -167,6 +169,8 @@ class Gui:
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
                           (self.width * 0.35 + 250, self.height * 0.79 + 20))
+                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
+                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
                 if mouse_action[2]:
                     self.events.change_unit_pos()
 
@@ -179,6 +183,8 @@ class Gui:
                           (self.width * 0.35 + 250, self.height * 0.79 + 50))
                 draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
                           (self.width * 0.35 + 250, self.height * 0.79 + 20))
+                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
+                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
                 if mouse_action[2]:
                     self.events.change_unit_pos()
