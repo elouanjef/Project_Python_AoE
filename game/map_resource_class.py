@@ -18,7 +18,7 @@ class Map_Tree:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.starting_resources["wood"] += 1
+                self.resource_manager.starting_resources["Wood"] += 1
 
             return 1
         else:
@@ -42,7 +42,7 @@ class Map_Rock:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.starting_resources["rock"] += 1
+                self.resource_manager.starting_resources["Rock"] += 1
 
             return 1
         else:
@@ -66,7 +66,7 @@ class Map_Gold:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.starting_resources["gold"] += 1
+                self.resource_manager.starting_resources["Gold"] += 1
 
             return 1
         else:

@@ -4,10 +4,10 @@ from .gui import *
 class Resource:
     def __init__(self):
         self.starting_resources = {
-            "Wood": 500,
+            "Wood": 2000,
             "Rock": 500,
             "Gold": 500,
-            "Food": 45
+            "Food": 500
         }
         self.costs = {
             "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},
@@ -29,7 +29,7 @@ class Resource:
         return affordable
 
     def buy(self, ent):
-        print(ent)
+        # print(ent)
         for resource, cost in self.costs[ent].items():
             self.starting_resources[resource] -= cost
 

@@ -164,7 +164,7 @@ class World:
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
-                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Barbare"):
+                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Archer"):
                                 Archer(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -174,7 +174,7 @@ class World:
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Barbare"):
+                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Villageois"):
                                 Villager(self.world[pos_x][pos_y], self, self.resource_manager)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -182,9 +182,11 @@ class World:
                         self.gui.events.remise_troop()
 
                     if self.events.get_grid_pos_unit() and (self.gui.examined_unit is not None):
+                        new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                        new_unit_pos_world = self.grid_to_world(new_unit_pos[0],new_unit_pos[1])
                         # si on clic droit autre part que sur une ressource:
-                        if not collision:
-                            new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                        if not (collision and new_unit_pos_world["collision"]):
+                            print("je ne veux pas aller là")
                             # self.gui.examined_unit.change_tile(new_unit_pos)
                             self.gui.examined_unit.set_target(new_unit_pos)
                             # print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
@@ -192,9 +194,11 @@ class World:
                             self.mining_position = None
                             self.mining = False
 
+                        elif new_unit_pos_world["collision"] and self.gui.examined_unit.name == "Archer":
+                            print("j'attaque")
+
                         # si on clic droit sur une ressource pour la miner avec un villageois:
-                        elif self.gui.examined_unit.name == "Villager":
-                            new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                        elif self.gui.examined_unit.name == "Villager" and collision:
                             # self.gui.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
                             new_unit_pos = (new_unit_pos[0] + 1, new_unit_pos[1])
                             self.gui.examined_unit.set_target(new_unit_pos)

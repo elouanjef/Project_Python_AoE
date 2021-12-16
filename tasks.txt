@@ -17,7 +17,7 @@
 
 E: SAVE AND LOAD       
 E: GRAPHICAL REPRESENTATION OF THE MAP  ✓
-E: GUI  ✓ ( à améliorer)
+E: GUI  ✓
 E: DONE IN PYTHON 3 ✓
 E: Human vs AI match
 E: Starting resources ✓ 
