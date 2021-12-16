@@ -158,25 +158,24 @@ class World:
                         self.gui.mining_gui = True  # et on active le gui de minage
 
                     if self.gui.events.get_troop() is not None:
-                        if self.examine_tile is not None:
+                        if (self.examine_tile and self.gui.examined_tile) is not None:
                             pos = self.examine_tile
-                            print(pos)
                             pos_x = pos[0]
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
                             if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Archer"):
-                                Archer(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
+                                Archer(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Infantryman"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, "Blue") #Il faudrait
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Villager"):
-                                Villager(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
+                                Villager(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 

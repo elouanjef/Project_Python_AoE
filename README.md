@@ -14,5 +14,4 @@
 * Un menu faisant intermédiaire entre le lancement du jeu et de la partie avec des boutons et une musique intégrée 
 * Une AI prenant un fichier .json en guise de guide pour réaliser des actions
 * La différenciation d'équipes
->la suite à venir
 ######Projet réalisé avec  Pygame 2.1.0 (SDL 2.0.16, Python 3.9.9)
