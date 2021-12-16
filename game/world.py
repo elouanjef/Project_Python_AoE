@@ -50,7 +50,7 @@ class World:
         # choose Arbre, rock or gold
         self.choose = None
 
-        self.moving_to_resource = False
+        # self.moving_to_resource = False
         self.mining = False
         self.mined = None
         self.mining_position = None
@@ -154,28 +154,29 @@ class World:
                         # une troupe et qu'on clic droit quelque part sur une ressource
                         self.choose = grid_pos  # on choisit la ressource correspondante
                         self.gui.choose = self.world[grid_pos[0]][grid_pos[1]]
-                        self.mining = True  # on active le mode minage
+                        # self.mining = True  # on active le mode minage
                         self.gui.mining_gui = True  # et on active le gui de minage
 
                     if self.gui.events.get_troop() is not None:
                         if self.examine_tile is not None:
                             pos = self.examine_tile
+                            print(pos)
                             pos_x = pos[0]
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
                             if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Archer"):
-                                Archer(self.world[pos_x][pos_y], self, self.resource_manager)
+                                Archer(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Barbare"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
+                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Infantryman"):
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, "Blue") #Il faudrait
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Villageois"):
-                                Villager(self.world[pos_x][pos_y], self, self.resource_manager)
+                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Villager"):
+                                Villager(self.world[pos_x][pos_y], self, self.resource_manager, "Blue")
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
@@ -185,8 +186,7 @@ class World:
                         new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                         new_unit_pos_world = self.grid_to_world(new_unit_pos[0],new_unit_pos[1])
                         # si on clic droit autre part que sur une ressource:
-                        if not (collision and new_unit_pos_world["collision"]):
-                            print("je ne veux pas aller là")
+                        if not collision : #and new_unit_pos_world["collision"])
                             # self.gui.examined_unit.change_tile(new_unit_pos)
                             self.gui.examined_unit.set_target(new_unit_pos)
                             # print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
@@ -208,7 +208,6 @@ class World:
                             if self.gui.choose is not None:
                                 # et qu'elle dispose toujours de ressources
                                 if self.gui.choose["class"].available:
-
                                     self.mining = True
                                     # condition permettant de changer de ressource minée sans que la précédente soit toujours minée
                                     if new_unit_pos != self.mining_position and (self.mining_position is not None):
@@ -216,14 +215,14 @@ class World:
                                     self.mined = self.gui.choose
 
                                     self.events.getting_resource()
-                                    self.moving_to_resource = True
-                                    self.mining_position = self.gui.choose["grid"]
+                                    # self.moving_to_resource = True
+                                    self.mining_position = self.gui.choose
                                     # print("mining pos:", self.mining_position)
 
                                     self.list_mining.append(self.mined)
 
                                 elif not self.gui.choose["class"].available:
-                                    self.moving_to_resource = False
+                                    # self.moving_to_resource = False
                                     self.mining = False
                                     self.events.getting_resource()
                                     # condition permettant de vider la variable contenant l'objet ressource miné précédemment (peut être None)
@@ -238,7 +237,7 @@ class World:
                     # if self.mining and self.moving_to_resource and self.events.getting_resource:
                     #     self.mined["class"].mine()
 
-                    if self.mining and self.moving_to_resource and self.events.getting_resource:
+                    if self.mining and self.events.getting_resource:
                         for mined in self.list_mining:
                             mined["class"].mine()
                             # on mine la ressource tant que self.mining = True
@@ -292,7 +291,7 @@ class World:
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
                                    1)
-                elif tile == "Mine d'or":
+                elif tile == "Or":
                     # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
                     pg.draw.circle(screen, YELLOW_LIGHT, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
@@ -444,7 +443,7 @@ class World:
             # Mettre des rochers OU des mines d'or aléatoirement à un taux de 0.8%
             if r <= 4:
                 if random.randint(1, 2) == 1:
-                    tile = "Mine d'or"
+                    tile = "Or"
                 else:
                     tile = "Carrière de pierre"
 
@@ -462,7 +461,7 @@ class World:
         elif tile == "Carrière de pierre":
             map_resource = Map_Rock(self.resource_manager)
         # We create the gold's object here
-        elif tile == "Mine d'or":
+        elif tile == "Or":
             map_resource = Map_Gold(self.resource_manager)
         # Tile's Object
         else:
@@ -518,7 +517,7 @@ class World:
             "Arbre": Arbre,
             "Carrière de pierre": rock,
             "block": block,
-            "Mine d'or": gold
+            "Or": gold
         }
         return images
 

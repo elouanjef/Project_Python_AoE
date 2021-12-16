@@ -208,7 +208,7 @@ class Gui:
                 rest_max = self.choose["class"].the_rest_max
                 draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
                           (self.width * 0.35 + 250, self.height * 0.79 + 50))
-            if self.choose["tile"] == "Mine d'or":
+            if self.choose["tile"] == "Or":
                 img = Gold_img
                 img_scale = self.scale_image(img, h=h * 0.9)
                 screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))

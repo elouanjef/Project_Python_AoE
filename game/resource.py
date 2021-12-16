@@ -31,7 +31,7 @@ class Resource:
             "LumberMill": {"Wood": 50, "Rock": 0, "Gold": 0, "Food": 0},
             "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
             "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
-            "Barbare": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
+            "Infantryman": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
             "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
         }
 
