@@ -17,6 +17,9 @@ class AI:
         self.world = world
         self.resource_manager = resource_manager
         self.previous_time = 0
+        self.created_tc = False
+        self.created_bar = False
+        self.created_arc = False
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towcenter, self.AI_construct_Barracks, self.AI_construct_Archery,self.create_villager]
@@ -34,24 +37,36 @@ class AI:
 
     def AI_construct_Towcenter(self, x, y):
         #print(f'construct a Towncenter at ({x},{y})')
-        ent = TownCenter((x, y), self.resource_manager, "Red")
-        self.world.entities.append(ent)
-        self.world.buildings[x][y] = ent
+        if not self.world.world[x][y]["collision"]:
+            ent = TownCenter((x, y), self.resource_manager, "Red")
+            self.world.entities.append(ent)
+            self.world.buildings[x][y] = ent
+            self.created_tc = True
+        # else: print("peux pas construire")
 
     def AI_construct_Barracks(self, x, y):
         #print(f'construct a Barrack at ({x},{y})')
-        ent = Barracks((x, y), self.resource_manager, "Red")
-        self.world.entities.append(ent)
-        self.world.buildings[x][y] = ent
+        if not self.world.world[x][y]["collision"]:
+            ent = Barracks((x, y), self.resource_manager, "Red")
+            self.world.entities.append(ent)
+            self.world.buildings[x][y] = ent
+            self.created_bar = True
+        # else: print("peux pas construire")
+
 
     def AI_construct_Archery(self, x, y):
         #print(f'construct an Archery at ({x},{y})')
-        ent = Archery((x, y), self.resource_manager, "Red")
-        self.world.entities.append(ent)
-        self.world.buildings[x][y] = ent
+        if not self.world.world[x][y]["collision"]:
+            ent = Archery((x, y), self.resource_manager, "Red")
+            self.world.entities.append(ent)
+            self.world.buildings[x][y] = ent
+            self.created_arc = True
+        # else: print("peux pas construire")
+
 
     def create_villager(self,pos):
-        Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red")
+        if self.created_tc:
+            Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red")
 
     def action_json(self):
         self.minute, self.second = self.game_time.get_time()
