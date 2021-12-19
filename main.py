@@ -10,8 +10,10 @@ def main():
     pg.mixer.init()
 
     # problem solved!
-    screen = pg.display.set_mode((0, 0), pg.NOFRAME)
-    pg.display.toggle_fullscreen()
+    #screen = pg.display.set_mode((0, 0), pg.NOFRAME)
+    #pg.display.toggle_fullscreen()
+
+    screen = pg.display.set_mode((1500, 950))
 
     clock = pg.time.Clock()
 

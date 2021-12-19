@@ -40,11 +40,6 @@ class Archer:
 
         self.velocity_inverse = 100  #(miniseconde par carré)
 
-        
-
-
-
-
     def get_health(self):
         return self.health
 

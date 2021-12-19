@@ -301,12 +301,12 @@ class World:
                     pg.draw.circle(screen, self.units[x][y - 1].team, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
-                                   1)
+                                   2)
                 elif self.buildings[x][y] is not None:
                     pg.draw.circle(screen, self.buildings[x][y].team, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
-                                   1)
+                                   2)
                 mini = self.world[x][y]["iso_poly_mini"]
                 mini = [(x + 200 + minimap_offset[0], y + 20 + minimap_offset[1]) for x, y in
                         mini]  # position x + ...., y  + ...
@@ -420,6 +420,7 @@ class World:
             (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
         ]
 
+    
         iso_poly = [self.cart_to_iso(x, y) for x, y in rect]
         iso_poly_mini = [self.cart_to_iso(x, y) for x, y in rect_mini_map]
 
