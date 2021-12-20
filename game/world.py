@@ -164,18 +164,24 @@ class World:
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
-                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable("Archer"):
-                                Archer(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
+                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable(
+                                    "Archer"):
+                                Archer(self.world[pos_x][pos_y], self, self.resource_manager,
+                                       self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable("Infantryman"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
+                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable(
+                                    "Infantryman"):
+                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager,
+                                            self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable("Villager"):
-                                Villager(self.world[pos_x][pos_y], self, self.resource_manager, self.gui.examined_tile.team)
+                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable(
+                                    "Villager"):
+                                Villager(self.world[pos_x][pos_y], self, self.resource_manager,
+                                         self.gui.examined_tile.team)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
@@ -183,9 +189,9 @@ class World:
 
                     if self.events.get_grid_pos_unit() and (self.gui.examined_unit is not None):
                         new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                        new_unit_pos_world = self.grid_to_world(new_unit_pos[0],new_unit_pos[1])
+                        new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
                         # si on clic droit autre part que sur une ressource:
-                        if not collision : #and new_unit_pos_world["collision"])
+                        if not collision:  # and new_unit_pos_world["collision"])
                             # self.gui.examined_unit.change_tile(new_unit_pos)
                             self.gui.examined_unit.set_target(new_unit_pos)
                             # print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
@@ -239,7 +245,7 @@ class World:
                     if self.mining and self.events.getting_resource:
                         for mined in self.list_mining:
                             mined["class"].mine()
-                            #pass
+                            # pass
                             # on mine la ressource tant que self.mining = True
 
                     if self.events.update_destroy():
@@ -272,7 +278,6 @@ class World:
 
         for entity in self.entities:
             self.gui.health_bar(entity.image, entity)
-
 
     # quand le prog est grandi on doit update plusieurs choses comme heal, shield ou attack point ici
     def draw_mini(self, screen, camera):
@@ -362,8 +367,6 @@ class World:
                             self.choosing_pos_x, self.choosing_pos_y = x, y
                             pg.draw.polygon(screen, self.buildings[x][y].team, mask, 2)
 
-
-
         if self.temp_tile is not None:
             iso_poly = self.temp_tile["iso_poly"]
             iso_poly = [(x + self.grass_tiles.get_width() / 2 + camera.scroll.x, y + camera.scroll.y) for x, y in
@@ -426,7 +429,6 @@ class World:
             (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
         ]
 
-    
         iso_poly = [self.cart_to_iso(x, y) for x, y in rect]
         iso_poly_mini = [self.cart_to_iso(x, y) for x, y in rect_mini_map]
 

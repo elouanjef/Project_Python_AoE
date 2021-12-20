@@ -137,106 +137,71 @@ class Gui:
         if mouse_action[0] and button6.rect.collidepoint(mouse_pos):
             print("pause")
 
-        if self.examined_unit is not None:
+        if self.examined_unit is not None and (self.examined_unit.game_name in ("Archer", "Villageois", "Barbare")):
 
-            mouse_pos = pg.mouse.get_pos()
-            mouse_action = pg.mouse.get_pressed()
-
-            w, h = self.select_rect.width, self.select_rect.height
-            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             if self.examined_unit.game_name == 'Archer':
                 img = archer
-                img_scale = self.scale_image(img, h=h * 0.70)
-                health = format(str(self.examined_unit.health))
-                health_max = format(str(self.examined_unit.health_max))
-                draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 20))
-                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
-                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
-                if mouse_action[2]:
-                    self.events.change_unit_pos()
 
             if self.examined_unit.game_name == 'Villageois':
                 img = villager
-                img_scale = self.scale_image(img, h=h * 0.70)
-                health = format(str(self.examined_unit.health))
-                health_max = format(str(self.examined_unit.health_max))
-                draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 20))
-                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
-                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
-                if mouse_action[2]:
-                    self.events.change_unit_pos()
 
             if self.examined_unit.game_name == 'Barbare':
                 img = infantryman
-                img_scale = self.scale_image(img, h=h * 0.70)
-                health = format(str(self.examined_unit.health))
-                health_max = format(str(self.examined_unit.health_max))
-                draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
-                draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 20))
-                draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
-                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-                if mouse_action[2]:
-                    self.events.change_unit_pos()
 
-        if self.choose is not None and (not self.mining_gui):
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+            img_scale = self.scale_image(img, h=h * 0.70)
+            health = format(str(self.examined_unit.health))
+            health_max = format(str(self.examined_unit.health_max))
+            draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE,
+                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.05))
+            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.01))
+            draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
+                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height * 0.02))
+            draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
+                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height*0.006))
+
+            if mouse_action[2]:
+                self.events.change_unit_pos()
+
+        if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in ("Arbre", "Carrière de pierre", "Or"):
+
             if self.choose["tile"] == 'Arbre':
                 img = Tree_img
-                img_scale = self.scale_image(img, h=h * 0.9)
-                rest = self.choose["class"].the_rest
-                rest_max = self.choose["class"].the_rest_max
-                draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
+
             if self.choose["tile"] == 'Carrière de pierre':
                 img = Rock_img
-                img_scale = self.scale_image(img, h=h * 0.9)
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-                rest = self.choose["class"].the_rest
-                rest_max = self.choose["class"].the_rest_max
-                draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
+
             if self.choose["tile"] == "Or":
                 img = Gold_img
-                img_scale = self.scale_image(img, h=h * 0.9)
-                screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 10))
-                rest = self.choose["class"].the_rest
-                rest_max = self.choose["class"].the_rest_max
-                draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
-                          (self.width * 0.35 + 250, self.height * 0.79 + 50))
-            draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + 250, self.height * 0.79 + 10))
+
+            w, h = self.select_rect.width, self.select_rect.height
+            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+            img_scale = self.scale_image(img, h=h * 0.9)
+            rest = self.choose["class"].the_rest
+            rest_max = self.choose["class"].the_rest_max
+            draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
+                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.05))
+            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.01))
+            draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.01))
 
         if self.examined_tile is not None:
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img = self.examined_tile.image.copy()
             img_scale = self.scale_image(img, h=h * 0.7)
-            screen.blit(img_scale, (self.width * 0.35 + 10, self.height * 0.79 + 40))
+            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.04))
             # text in information box
             health = format(str(self.examined_tile.health))
             health_max = format(str(self.examined_tile.health_max))
             draw_text(screen, self.examined_tile.game_name, 40, WHITE, (self.select_rect.topleft[0]+45, self.select_rect.topleft[1]+6))
             draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE, self.select_rect.center)
             draw_text(screen, "{} team".format(self.examined_tile.team), 20, pg.Color(self.examined_tile.team),
-                      (self.width * 0.35 + 510, self.height * 0.79 + 6))
+                      (self.width * 0.35 + self.width*0.25, self.height * 0.79 + self.height*0.006))
 
             if self.examined_tile.name == "TownCenter":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
-                mouse_action = pg.mouse.get_pressed()
-                mouse_pos = pg.mouse.get_pos()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
@@ -245,8 +210,6 @@ class Gui:
                 button2 = Button(screen, (self.width * 0.6 - 150, self.height * 0.95), 'Villageois', 20,
                                  'white on black')
                 button2.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
@@ -266,8 +229,6 @@ class Gui:
             if self.examined_tile.name == "Barracks":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
@@ -276,8 +237,6 @@ class Gui:
                 button2 = Button(screen, (self.width * 0.6 - 150, self.height * 0.95), 'Barbare', 20,
                                  'white on black')
                 button2.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
@@ -289,8 +248,6 @@ class Gui:
             if self.examined_tile.name == "Archery":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
                     button.button("black on blue")
                     self.events.set_destroy()
@@ -299,8 +256,6 @@ class Gui:
                 button2 = Button(screen, (self.width * 0.6 - 150, self.height * 0.95), 'Archer', 20,
                                  'white on black')
                 button2.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
                     button2.button("black on green")
                     self.events.remise()
@@ -308,16 +263,6 @@ class Gui:
                     self.events.create_troop('archer')
                     self.events.get_troop()
                     # Code pour le bouton permettant de créer un archer
-
-                """if self.examined_tile.name == "LumberMill":
-                button = Button(screen, (self.width * 0.6, self.height * 0.9 + 60), 'Détruire', 15, 'white on red')
-                button.button()
-                mouse_pos = pg.mouse.get_pos()
-                mouse_action = pg.mouse.get_pressed()
-                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
-                    button.button("black on blue")
-                    self.events.set_destroy()
-                    # Code pour le bouton permettant de détruire le moulin"""
 
         # icon for entity selecting
         for tile in self.tiles:
@@ -333,11 +278,7 @@ class Gui:
             txt = resource + ": " + str(resource_value)
             draw_text(screen, txt, 25, WHITE, (pos, 5))
             pos += 110
-            """
-        for resource in ["wood:{}".format(500), "stone:{}".format(250), "gold:{}".format(100),"food: {}".format(230)]:
-            draw_text(screen, resource, 25, WHITE, (pos, 0))
-            pos += 100
-            """
+
     def load_icon_images(self):
         TownCenter = towncenter_icon
         Barracks = barracks_icon
@@ -405,4 +346,5 @@ class Gui:
         for i in range(4):
             pg.draw.rect(sprite, (255,255,255), (-i,-i,entity.health_bar_length,5), 1)
         pg.draw.rect(sprite, (0, 255, 0), (0, 0 , entity.health / entity.health_ratio, 5))
+        return sprite
 
