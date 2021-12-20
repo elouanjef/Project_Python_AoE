@@ -28,6 +28,8 @@ class Archer:
 
         self.health = 35
         self.health_max = 35
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.world.list_troop.append(self)
@@ -40,8 +42,11 @@ class Archer:
 
         self.velocity_inverse = 100  #(miniseconde par carré)
 
-    def get_health(self):
-        return self.health
+    def get_health(self, type):
+        if type == 'current':
+            return self.health
+        elif type == 'max':
+            return self.health_max
 
     def change_tile(self, pos):
         x = pos[0] 
@@ -116,6 +121,8 @@ class Villager:
         self.resource_manager.buy(self)
         self.health = 20
         self.health_max = 20
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.world.list_troop.append(self)
@@ -200,6 +207,8 @@ class Infantryman:
         self.resource_manager.buy(self)
         self.health = 50
         self.health_max = 50
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
         self.world.list_troop.append(self)

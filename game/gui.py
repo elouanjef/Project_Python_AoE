@@ -400,3 +400,9 @@ class Gui:
             image = pg.transform.scale(image, (int(w), int(h)))
 
         return image
+
+    def health_bar(self, sprite, entity):
+        for i in range(4):
+            pg.draw.rect(sprite, (255,255,255), (-i,-i,entity.health_bar_length,5), 1)
+        pg.draw.rect(sprite, (0, 255, 0), (0, 0 , entity.health / entity.health_ratio, 5))
+

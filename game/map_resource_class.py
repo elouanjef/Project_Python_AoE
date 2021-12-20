@@ -6,10 +6,15 @@ from os import path
 
 class Map_Tree:
     def __init__(self, resource_manager):
+        self.game_name = "Arbre"
+        image = Tree_img
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 400
         self.the_rest_max = 400
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.the_rest_max/self.health_bar_length
+
         self.available = True
 
     def mine(self):
@@ -30,10 +35,14 @@ class Map_Tree:
 
 class Map_Rock:
     def __init__(self, resource_manager):
+        self.game_name = "Carrière de pierre"
+        image = Rock_img
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 1000
         self.the_rest_max = 1000
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.the_rest_max/self.health_bar_length
         self.available = True
 
     def mine(self):
@@ -54,10 +63,14 @@ class Map_Rock:
 
 class Map_Gold:
     def __init__(self, resource_manager):
+        self.game_name = "Or"
+        image = Gold_img
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
         self.the_rest = 100
         self.the_rest_max = 100
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.the_rest_max/self.health_bar_length
         self.available = True
 
     def mine(self):

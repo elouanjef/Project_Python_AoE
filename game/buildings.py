@@ -20,6 +20,8 @@ class TownCenter:
         self.resource_manager = resource_manager
         self.health_max = 1000
         self.health = 0
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
         self.team = team
         self.resource_manager.buy(self)
 
@@ -40,6 +42,8 @@ class Barracks:
         self.resource_manager = resource_manager
         self.health_max = 350
         self.health = 0
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
         self.team = team
         self.resource_manager.buy(self)
 
@@ -61,6 +65,8 @@ class Archery:
         self.resource_manager = resource_manager
         self.health_max = 350
         self.health = 0
+        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_ratio = self.health_max/self.health_bar_length
         self.team = team
         self.resource_manager.buy(self)
 

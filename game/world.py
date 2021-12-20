@@ -266,8 +266,13 @@ class World:
                         self.gui.examined_tile = None
 
         for unit in self.list_troop:
+            self.gui.health_bar(unit.image, unit)
             if unit.target is not None:
                 unit.update()
+
+        for entity in self.entities:
+            self.gui.health_bar(entity.image, entity)
+
 
     # quand le prog est grandi on doit update plusieurs choses comme heal, shield ou attack point ici
     def draw_mini(self, screen, camera):
