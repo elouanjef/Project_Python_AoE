@@ -45,9 +45,10 @@ graphics_folder = path.join(AOE_folder, "assets/graphics")  # Path for graphics
 AI_action_JSONfile = path.join(AOE_folder, "game/AI_action.json")
 
 # map's ressource
-Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "tree.png")), (143, 128))
+Tree_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "tree.png")), (125, 105))
 Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "rock2.png")), (100, 100))
 Gold_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "gold.png")), (100, 100))
+Bush_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "bush.png")), (80, 80))
 Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "block_aoe.png")), (143, 150))
 
 # buildings

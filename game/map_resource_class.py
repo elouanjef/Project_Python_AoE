@@ -19,7 +19,7 @@ class MapResource:
             if now - self.resource_cooldown > 2000:
                 self.the_rest -= 1
                 self.resource_cooldown = now
-                self.resource_manager.starting_resources["Wood"] += 1
+                self.resource_manager.starting_resources[self.resource_type] += 1
 
             return 1
         else:
@@ -34,21 +34,31 @@ class Map_Tree(MapResource):
     image = Tree_img
     the_rest = 400
     the_rest_max = 400
+    resource_type = "Wood"
 
 
 class Map_Rock(MapResource):
-    game_name = "Arbre"
+    game_name = "Carrière de pierre"
     image = Tree_img
     the_rest = 5000
     the_rest_max = 5000
+    resource_type = "Rock"
 
 
 class Map_Gold(MapResource):
-    game_name = "Arbre"
+    game_name = "Or"
     image = Tree_img
     the_rest = 250
     the_rest_max = 250
+    resource_type = "Gold"
 
+
+class Map_Bush(MapResource):
+    game_name = "Buisson"
+    image = Bush_img
+    the_rest = 250
+    the_rest_max = 250
+    resource_type = "Food"
 
 class Map_Tile:
     def __init__(self):

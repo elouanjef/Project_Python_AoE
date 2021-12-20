@@ -2,6 +2,7 @@ import pygame as pg
 from settings import *
 import random
 import noise
+import numpy as np
 from os import path
 from .buildings import TownCenter, Barracks, Archery
 from .units import Archer, Infantryman, Villager
@@ -291,7 +292,7 @@ class World:
                 render_pos_mini = self.world[x][y]["render_pos_mini"]
                 if tile == "Arbre":
                     # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
-                    pg.draw.circle(screen, MARRON, (
+                    pg.draw.circle(screen, GREEN, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
                                    1)
@@ -307,6 +308,14 @@ class World:
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
                                    1)
+
+                elif tile == "Buisson":
+                # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    pg.draw.circle(screen, PINK, (
+                        render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
+                        render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
+                                   1)
+
                 elif self.units[x][y - 1] is not None:
                     # render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7
                     pg.draw.circle(screen, self.units[x][y - 1].team, (
@@ -447,14 +456,17 @@ class World:
 
         if (perlin >= 15) or (perlin <= -35):
             tile = "Arbre"
+
         else:
             # Mettre des rochers OU des mines d'or aléatoirement à un taux de 0.8%
             if r <= 4:
-                if random.randint(1, 2) == 1:
+                r2 = random.randint(1, 2)
+                if r2 == 1:
                     tile = "Or"
-                else:
+                elif r2 == 2:
                     tile = "Carrière de pierre"
-
+            elif 5 <= r <= 15:
+                tile = "Buisson"
             # Un arbre isolé sera placé ici à un taux de 10%
             elif r <= 50:
                 tile = "Arbre"
@@ -471,6 +483,9 @@ class World:
         # We create the gold's object here
         elif tile == "Or":
             map_resource = Map_Gold(self.resource_manager)
+        # We create the bush's object here
+        elif tile == "Buisson":
+            map_resource = Map_Bush(self.resource_manager)
         # Tile's Object
         else:
             map_resource = Map_Tree(self.resource_manager)
@@ -513,6 +528,7 @@ class World:
         Arbre = Tree_img.convert_alpha()
         rock = Rock_img.convert_alpha()
         gold = Gold_img.convert_alpha()  # C'est ici que l'on va lier les entités du jeu à des images (sauf pour les troupes)
+        bush = Bush_img.convert_alpha()
         building1 = towncenter.convert_alpha()
         # building2 = lumbermill.convert_alpha()
         building3 = barracks.convert_alpha()
@@ -525,7 +541,8 @@ class World:
             "Arbre": Arbre,
             "Carrière de pierre": rock,
             "block": block,
-            "Or": gold
+            "Or": gold,
+            "Buisson": bush
         }
         return images
 

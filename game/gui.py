@@ -164,7 +164,7 @@ class Gui:
             if mouse_action[2]:
                 self.events.change_unit_pos()
 
-        if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in ("Arbre", "Carrière de pierre", "Or"):
+        if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in ("Arbre", "Carrière de pierre", "Or", "Buisson"):
 
             if self.choose["tile"] == 'Arbre':
                 img = Tree_img
@@ -174,6 +174,9 @@ class Gui:
 
             if self.choose["tile"] == "Or":
                 img = Gold_img
+
+            if self.choose["tile"] == "Buisson":
+                img = Bush_img
 
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
