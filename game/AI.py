@@ -1,4 +1,6 @@
 from typing import DefaultDict
+
+from pygame.mixer import find_channel
 from .events import *
 from settings import *
 from .buildings import *
@@ -27,7 +29,7 @@ class AI:
         self.AI_batiment = []
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
-        self.function_list = [self.AI_construct_Towcenter, self.AI_construct_Barracks, self.AI_construct_Archery,self.create_villager,self.get_ressource]
+        self.function_list = [self.AI_construct_Towcenter, self.AI_construct_Barracks, self.AI_construct_Archery,self.create_villager,self.get_resource]
 
     def read_file(self):
         action_line = self.f.readline()
@@ -99,9 +101,9 @@ class AI:
                         act = self.function_list[action_dict.get(action)]
                         act(pos)
                     elif action_dict.get(action) == 4:
-                        self.get_ressource()
+                        self.get_resource()
 
-    def find_resoucre(self):
+    def find_resource(self):
         vill_dict = DefaultDict(list)
         vill_list = []  #wood,rock,gold
         i = 0
@@ -109,36 +111,26 @@ class AI:
             #print(type(villager))
             #self.world.units[self.tile["grid"][0]][self.tile["grid"][1]]
             #print(f'x:{villager.tile["grid"][0]} y:{villager.tile["grid"][1]}')
-            print(min(self.get_distance(villager, "Arbre")))
-            print(min(self.get_distance(villager, "Carrière de pierre")))
-            print(min(self.get_distance(villager, "Or")))
-            vill_list.append(min(self.get_distance(villager, "Arbre")))
-            vill_list.append(min(self.get_distance(villager, "Carrière de pierre")))
-            vill_list.append(min(self.get_distance(villager, "Or")))
+            # print(self.get_distance(villager, "Arbre"))
+            # print(self.get_distance(villager, "Carrière de pierre"))
+            # print(self.get_distance(villager, "Or"))
+            vill_list.append(self.get_distance(villager, "Arbre"))
+            vill_list.append(self.get_distance(villager, "Carrière de pierre"))
+            vill_list.append(self.get_distance(villager, "Or"))
             vill_dict[str(i)] =  vill_list
             vill_list = []
             i += 1
-        print(vill_dict)
         return vill_dict
+        # {'index of villager in self.AI_villager': [tree_pos, rock_pos, gold_pos])} a dictionary
+        #tree_pos = (x,y,distance to villager) a tuple
+        # vill_dict['index_of_villager'][0:tree/1:rock/2:gold][0:x/1:y/2:distance]
 
-    def get_ressource(self):
-        vill_dict = DefaultDict(list) #key_of_thid_dict = index_of_villager_in_self.villager()
-        vill_list = []  #wood,rock,gold
-        i = 0
-        for villager in self.AI_villager:
-            #print(type(villager))
-            #self.world.units[self.tile["grid"][0]][self.tile["grid"][1]]
-            #print(f'x:{villager.tile["grid"][0]} y:{villager.tile["grid"][1]}')
-            print(min(self.get_distance(villager, "Arbre")))
-            print(min(self.get_distance(villager, "Carrière de pierre")))
-            print(min(self.get_distance(villager, "Or")))
-            vill_list.append(min(self.get_distance(villager, "Arbre")))
-            vill_list.append(min(self.get_distance(villager, "Carrière de pierre")))
-            vill_list.append(min(self.get_distance(villager, "Or")))
-            vill_dict[str(i)] =  vill_list
-            vill_list = []
-            i += 1
-        print(vill_dict)
+    def get_resource(self):
+        dict_resource = self.find_resource()
+        if (dict_resource == {}): return
+        self.AI_villager[0].set_target((dict_resource['0'][0][0] + 1, dict_resource['0'][0][1]))  # + 1 because of mining_position
+        print(dict_resource) 
+        print((dict_resource['1'][0][0], dict_resource['1'][0][1]))
 
 
     def get_distance(self, villager, type_resource):
@@ -148,8 +140,14 @@ class AI:
             for y in range(self.world.grid_size_y):
                 if self.world.world[x][y]["tile"] == type_resource:
                     l = ((villager.tile["grid"][0] - x)**2 + (villager.tile["grid"][1] - y)**2)**(1/2)
-                    distance_list.append(l)
-        return distance_list
+                    distance_list.append((x,y,l))
+        temp_list = []
+        for i in  distance_list:
+            temp_list.append(i[2])  #the same pos index of distance_list
+        dictance_min = min(temp_list)
+        return distance_list[temp_list.index(dictance_min)]
+
+
     def choose_village(self):
         pass
 

@@ -239,6 +239,7 @@ class World:
                     if self.mining and self.events.getting_resource:
                         for mined in self.list_mining:
                             mined["class"].mine()
+                            #pass
                             # on mine la ressource tant que self.mining = True
 
                     if self.events.update_destroy():
