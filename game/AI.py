@@ -79,6 +79,8 @@ class AI:
             self.AI_villager.append(Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red"))
 
 
+
+    #action of AI
     def action_json(self):
         self.minute, self.second = self.game_time.get_time()
         temps = ((self.minute) * 60 + self.second) - self.previous_time
@@ -101,7 +103,12 @@ class AI:
                         act = self.function_list[action_dict.get(action)]
                         act(pos)
                     elif action_dict.get(action) == 4:
-                        self.get_resource()
+                        self.get_resource("Arbre")
+                        self.get_resource("Or")
+                        self.get_resource("Carrière de pierre")
+
+
+
 
     def find_resource(self):
         vill_dict = DefaultDict(list)
@@ -125,12 +132,53 @@ class AI:
         #tree_pos = (x,y,distance to villager) a tuple
         # vill_dict['index_of_villager'][0:tree/1:rock/2:gold][0:x/1:y/2:distance]
 
-    def get_resource(self):
+    def get_resource(self, resource):
         dict_resource = self.find_resource()
         if (dict_resource == {}): return
-        self.AI_villager[0].set_target((dict_resource['0'][0][0] + 1, dict_resource['0'][0][1]))  # + 1 because of mining_position
-        print(dict_resource) 
-        print((dict_resource['1'][0][0], dict_resource['1'][0][1]))
+
+        if (resource == "Arbre"):
+            min_dictance = 100  #out_of_map
+            villa_pos = (-1,-1, -1)  #(x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue   #if he/she is working, skip 
+                if(dict_resource[i][0][2] < min_dictance):
+                    min_dictance = dict_resource[i][0][2]
+                    villa_pos = (dict_resource[i][0][0],dict_resource[i][0][1], i)
+            if (villa_pos == (-1,-1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0]+1][villa_pos[1]]["collision"]: return
+            self.AI_villager[int(villa_pos[2])].set_target((villa_pos[0]+1,villa_pos[1]))  # + 1 because of mining_position
+            self.AI_villager[int(villa_pos[2])].in_work = True                              #the villager is working
+            print(f'{villa_pos}  Arbre')
+
+        if (resource == "Carrière de pierre"):
+            min_dictance = 100  #out_of_map
+            villa_pos = (-1,-1, -1)  #(x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue
+                if(dict_resource[i][1][2] < min_dictance):
+                    min_dictance = dict_resource[i][1][2]
+                    villa_pos = (dict_resource[i][1][0],dict_resource[i][1][1], i)
+            if (villa_pos == (-1,-1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0]+1][villa_pos[1]]["collision"]: return
+            self.AI_villager[int(villa_pos[2])].set_target((villa_pos[0]+1,villa_pos[1]))  # + 1 because of mining_position
+            self.AI_villager[int(villa_pos[2])].in_work = True
+            print(f'{villa_pos} Rock')
+
+        if (resource == "Or"):
+            min_dictance = 100  #out_of_map
+            villa_pos = (-1,-1, -1)  #(x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue
+                if(dict_resource[i][2][2] < min_dictance):
+                    min_dictance = dict_resource[i][2][2]
+                    villa_pos = (dict_resource[i][2][0],dict_resource[i][2][1], i)
+            if (villa_pos == (-1,-1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0]+1][villa_pos[1]]["collision"]: return
+            self.AI_villager[int(villa_pos[2])].set_target((villa_pos[0]+1,villa_pos[1]))  # + 1 because of mining_position
+            self.AI_villager[int(villa_pos[2])].in_work = True
+            print(f'{villa_pos}  Gold')
+        #print(dict_resource) 
+        #print((dict_resource['1'][0][0], dict_resource['1'][0][1]))
 
 
     def get_distance(self, villager, type_resource):
