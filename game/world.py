@@ -63,6 +63,8 @@ class World:
 
         self.list_troop = []
 
+        self.build_blue_tc(STARTING_POS)
+
     # work in map
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
@@ -275,12 +277,9 @@ class World:
                         self.gui.examined_tile = None
 
         for unit in self.list_troop:
-            self.gui.health_bar(unit.image, unit)
+            unit.health_bar()
             if unit.target is not None:
                 unit.update()
-
-        for entity in self.entities:
-            self.gui.health_bar(entity.image, entity)
 
     # quand le prog est grandi on doit update plusieurs choses comme heal, shield ou attack point ici
     def draw_mini(self, screen, camera):
@@ -320,7 +319,7 @@ class World:
 
                 elif self.units[x][y - 1] is not None:
                     # render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7
-                    pg.draw.circle(screen, self.units[x][y - 1].team, (
+                    pg.draw.circle(screen, self.units[x][y-1].team, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
                                    2)
@@ -358,9 +357,10 @@ class World:
 
                 units = self.units[x][y]
                 if units is not None:
-                    screen.blit(units.image,
+
+                    screen.blit(units.health_bar(),
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                 render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
+                                 render_pos[1] - (units.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
 
                 building = self.buildings[x][y]
                 if building is not None:
@@ -368,6 +368,11 @@ class World:
                     screen.blit(building.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
+
+                    if self.examine_tile == (x,y) or (building.health < building.health_max):
+                        screen.blit(building.health_bar(),
+                                    (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                                     render_pos[1] - (building.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
 
                     if self.examine_tile is not None:
                         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
@@ -462,7 +467,9 @@ class World:
 
         else:
             # Mettre des rochers OU des mines d'or aléatoirement à un taux de 0.8%
-            if r <= 4:
+            if (grid_x, grid_y) == STARTING_POS:
+                tile = ''
+            elif r <= 4:
                 r2 = random.randint(1, 2)
                 if r2 == 1:
                     tile = "Or"
@@ -489,9 +496,12 @@ class World:
         # We create the bush's object here
         elif tile == "Buisson":
             map_resource = Map_Bush(self.resource_manager)
+
+
+
         # Tile's Object
         else:
-            map_resource = Map_Tree(self.resource_manager)
+            map_resource = None
         # this dict() store all kind of info of all elements in grid
         out = {
             "grid": [grid_x, grid_y],
@@ -505,6 +515,7 @@ class World:
             "collision": False if tile == "" else True,
             "class": map_resource
         }
+
 
         return out
 
@@ -561,3 +572,8 @@ class World:
             return True
         else:
             return False
+
+    def build_blue_tc(self, starting_pos):
+        ent = TownCenter(starting_pos, self.resource_manager, "Blue")
+        self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
+        self.buildings[starting_pos[0]][starting_pos[1]] = ent

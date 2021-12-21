@@ -139,15 +139,7 @@ class Gui:
 
         if self.examined_unit is not None and (self.examined_unit.game_name in ("Archer", "Villageois", "Barbare")):
 
-            if self.examined_unit.game_name == 'Archer':
-                img = archer
-
-            if self.examined_unit.game_name == 'Villageois':
-                img = villager
-
-            if self.examined_unit.game_name == 'Barbare':
-                img = infantryman
-
+            img = self.examined_unit.image
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img_scale = self.scale_image(img, h=h * 0.70)
@@ -166,18 +158,7 @@ class Gui:
 
         if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in ("Arbre", "Carrière de pierre", "Or", "Buisson"):
 
-            if self.choose["tile"] == 'Arbre':
-                img = Tree_img
-
-            if self.choose["tile"] == 'Carrière de pierre':
-                img = Rock_img
-
-            if self.choose["tile"] == "Or":
-                img = Gold_img
-
-            if self.choose["tile"] == "Buisson":
-                img = Bush_img
-
+            img = self.choose["class"].image
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img_scale = self.scale_image(img, h=h * 0.9)
@@ -189,9 +170,10 @@ class Gui:
             draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.01))
 
         if self.examined_tile is not None:
+
+            img = self.examined_tile.image
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
-            img = self.examined_tile.image.copy()
             img_scale = self.scale_image(img, h=h * 0.7)
             screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.04))
             # text in information box
@@ -301,7 +283,6 @@ class Gui:
         # Rock_image = Rock_img
         # Tree_image = Tree_img
         TownCenter = towncenter
-        #LumberMill = lumbermill
         Barracks = barracks
         Archery = archery
         Archer = archer
@@ -345,9 +326,5 @@ class Gui:
 
         return image
 
-    def health_bar(self, sprite, entity):
-        for i in range(4):
-            pg.draw.rect(sprite, (255,255,255), (-i,-i,entity.health_bar_length,5), 1)
-        pg.draw.rect(sprite, (0, 255, 0), (0, 0 , entity.health / entity.health_ratio, 5))
-        return sprite
+
 

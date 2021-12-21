@@ -55,7 +55,7 @@ class Game:
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
-            # self.AI.action_json()  # Dis à l'AI de commencer à jouer
+            self.AI.action_json()  # Dis à l'AI de commencer à jouer
 
     def update(self):
         self.camera.update()

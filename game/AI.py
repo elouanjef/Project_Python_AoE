@@ -106,7 +106,7 @@ class AI:
                         self.get_resource("Carrière de pierre")
 
     def find_resource(self):
-        vill_dict = DefaultDict[list]
+        vill_dict = DefaultDict(list)
         vill_list = []  # wood,rock,gold
         i = 0
         for villager in self.AI_villager:

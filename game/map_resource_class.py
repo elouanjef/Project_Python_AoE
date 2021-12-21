@@ -8,8 +8,6 @@ class MapResource:
     def __init__(self, resource_manager):
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
-        self.health_bar_length = HEALTH_BAR_LENGTH
-        self.health_ratio = self.the_rest_max / self.health_bar_length
 
         self.available = True
 
@@ -39,7 +37,7 @@ class Map_Tree(MapResource):
 
 class Map_Rock(MapResource):
     game_name = "Carrière de pierre"
-    image = Tree_img
+    image = Rock_img
     the_rest = 5000
     the_rest_max = 5000
     resource_type = "Rock"
@@ -47,7 +45,7 @@ class Map_Rock(MapResource):
 
 class Map_Gold(MapResource):
     game_name = "Or"
-    image = Tree_img
+    image = Gold_img
     the_rest = 250
     the_rest_max = 250
     resource_type = "Gold"

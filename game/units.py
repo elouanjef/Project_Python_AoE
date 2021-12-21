@@ -18,13 +18,14 @@ class Unit:
         self.tile = tile
         self.team = team  # blue team is the player's team
         self.attack = 5
+        self.alive = True
         self.resource_manager = resource_manager
 
         self.resource_manager.buy(self)
 
         self.health = 35
         self.health_max = 35
-        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_bar_length = HEALTH_BAR_LENGTH_UNIT
         self.health_ratio = self.health_max / self.health_bar_length
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
@@ -41,6 +42,13 @@ class Unit:
             return self.health
         elif type == 'max':
             return self.health_max
+
+    def die(self):
+        self.alive = False
+        index = self.world.list_troop.index(self)
+        self.world.list_troop.pop(index)
+        self.world.gui.examined_unit = None
+        self.world.examine_unit = None
 
     def change_tile(self, pos):
         x = pos[0]
@@ -86,8 +94,17 @@ class Unit:
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
 
+    def health_bar(self):
+        for i in range(4):
+            # pg.draw.rect(sprite, BLACK, (1+i, 1+i,entity.health_bar_length, 5), 4)
+            pg.draw.rect(self.bar_image, BLACK, (-i, -i, self.health_bar_length, 5), 5)
+
+        pg.draw.rect(self.bar_image, GREEN, (1, 1, (self.health / self.health_ratio) - 9, 5))
+        return self.bar_image
+
 
 class Archer(Unit):
+    bar_image = archer.copy()
     image = archer
     name = "Archer"
     game_name = "Archer"
@@ -98,6 +115,7 @@ class Archer(Unit):
 
 
 class Villager(Unit):
+    bar_image = villager.copy()
     image = villager
     name = "Villager"
     game_name = "Villageois"
@@ -105,9 +123,11 @@ class Villager(Unit):
     health_max = 20
     attack = 1
     velocity_inverse = 200
+    in_work = False
 
 
 class Infantryman(Unit):
+    bar_image = infantryman.copy()
     image = infantryman
     name = "Infantryman"
     game_name = "Barbare"

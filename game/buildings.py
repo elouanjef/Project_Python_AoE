@@ -12,7 +12,7 @@ class Building:
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
-        self.health_bar_length = HEALTH_BAR_LENGTH
+        self.health_bar_length = HEALTH_BAR_LENGTH_BUILDING
         self.health_ratio = self.health_max / self.health_bar_length
         self.team = team
         self.resource_manager.buy(self)
@@ -21,8 +21,17 @@ class Building:
         if self.health < self.health_max:
             self.health += 2
 
+    def health_bar(self):
+        for i in range(4):
+            # pg.draw.rect(sprite, BLACK, (1+i, 1+i,entity.health_bar_length, 5), 4)
+            pg.draw.rect(self.bar_image, BLACK, (-i, -i, self.health_bar_length, 5), 5)
+
+        pg.draw.rect(self.bar_image, GREEN, (1, 1, (self.health / self.health_ratio) - 9, 5))
+        return self.bar_image
+
 
 class TownCenter(Building):
+    bar_image = towncenter.copy()
     image = towncenter
     name = "TownCenter"
     game_name = "Forum"
@@ -31,6 +40,7 @@ class TownCenter(Building):
 
 
 class Barracks(Building):
+    bar_image = barracks.copy()
     image = barracks
     name = "Barracks"
     game_name = "Caserne"
@@ -39,6 +49,7 @@ class Barracks(Building):
 
 
 class Archery(Building):
+    bar_image = archery.copy()
     image = archery
     name = "Archery"
     game_name = "Camp de tir à l'arc"
