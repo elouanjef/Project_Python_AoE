@@ -61,7 +61,7 @@ class Unit:
         searching_for_path = True
         while searching_for_path:
             x = pos[0]
-            y = pos[1] - 1
+            y = pos[1]
             dest_tile = self.world.world[x][y]
 
             if not dest_tile["collision"]:

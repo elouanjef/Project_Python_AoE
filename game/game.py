@@ -34,13 +34,8 @@ class Game:
         self.gui = Gui(self.resource_manager, self.width, self.height, self.events)
 
         # create the world with 50 by 50 grid
-        self.world = World(self.resource_manager, self.entities, self.gui, 50, 50, self.width, self.height, self.events)
-        # Archer(self.world.world[25][25], self.world, self.resource_manager)
-        # Infantryman(self.world.world[26][26], self.world, self.resource_manager)
-        # create_unit(Archer)
-        # camera3
+        self.world = World(self.resource_manager, self.entities, self.gui, MAP_SIZE, MAP_SIZE, self.width, self.height, self.events)
         self.camera = Camera(self.width, self.height)
-        # print(self.world.world[25][25])
 
         self.game_time = Game_time()
 

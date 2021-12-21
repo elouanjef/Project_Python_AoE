@@ -3,7 +3,8 @@ import pygame as pg
 
 TILE_SIZE = 64
 TILE_SIZE_MINI_MAP = 4
-STARTING_POS = (45,40)
+MAP_SIZE = 50
+STARTING_POS = (int(0.8 * MAP_SIZE), int(0.1*MAP_SIZE))
 
 # Buttons
 HEIGHT_BUTTON = 50
@@ -52,6 +53,7 @@ Rock_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "rock2.pn
 Gold_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "gold.png")), (100, 100))
 Bush_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "bush.png")), (80, 80))
 Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "block_aoe.png")), (143, 150))
+Water_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "water.png")), (125, TILE_SIZE))
 
 # buildings
 towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder, "towncenter.png")), (143, 128))
