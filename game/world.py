@@ -27,6 +27,8 @@ class World:
         self.resource = resource
 
         self.perlin_scale = self.grid_size_x / 2
+        self.octave = random.randint(1,20)
+        self.modifier = random.randint(10,85)
 
         self.choosing_pos_x = None
         self.choosing_pos_y = None
@@ -450,11 +452,12 @@ class World:
         # create a random map
         # Choose a random position in map
         r = random.randint(1, 500)
-
         # Faire une forêt
-        perlin = 25 * noise.pnoise2(grid_x / self.perlin_scale, grid_y / self.perlin_scale)
+        for o in range(10):
+            perlin = self.modifier * noise.pnoise2(grid_x / self.perlin_scale, grid_y / self.perlin_scale, octaves=o + 1)
 
-        if (perlin >= 15) or (perlin <= -35):
+
+        if perlin < -2.25:
             tile = "Arbre"
 
         else:
