@@ -20,15 +20,17 @@ class Game:
         self.screen = screen
         self.clock = clock
         self.width, self.height = self.screen.get_size()
+        self.real_game = False
+
 
         # event
         self.events = Event(clock)
 
-        # resource
-        self.resource_manager = Resource()
-
         # entities
         self.entities = []
+
+        # resource
+        self.resource_manager = Resource()
 
         # gui
         self.gui = Gui(self.resource_manager, self.width, self.height, self.events)
@@ -41,6 +43,7 @@ class Game:
 
         self.AI = AI(self.game_time, self.world, self.resource_manager)
 
+
     # running
     def run(self):
         self.playing = True
@@ -50,7 +53,13 @@ class Game:
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
-            self.AI.action_json()  # Dis à l'AI de commencer à jouer
+            if not self.real_game:
+                # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
+                self.start_real_game()
+                self.real_game = True
+
+            else: self.AI.action_json()  # Dis à l'AI de commencer à jouer
+
 
     def update(self):
         self.camera.update()
@@ -81,3 +90,8 @@ class Game:
         )
 
         pg.display.flip()
+
+    def start_real_game(self):
+        self.world.build_blue_camp(STARTING_POS)
+        self.real_game = True
+

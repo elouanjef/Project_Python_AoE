@@ -8,14 +8,15 @@ from os import path
 # from units import *
 
 class Building:
-    def __init__(self, pos, resource_manager, team):
+    def __init__(self, pos, resource_manager, team, beginning):
         self.rect = self.image.get_rect(topleft=pos)
         # [ WOOD , ROCK , GOLD , FOOD ]
         self.resource_manager = resource_manager
         self.health_bar_length = HEALTH_BAR_LENGTH_BUILDING
         self.health_ratio = self.health_max / self.health_bar_length
         self.team = team
-        self.resource_manager.buy(self)
+        if not beginning:
+            self.resource_manager.buy(self)
 
     def update(self):
         if self.health < self.health_max:

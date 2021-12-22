@@ -30,32 +30,32 @@ class MapResource:
 class Map_Tree(MapResource):
     game_name = "Arbre"
     image = Tree_img
-    the_rest = 400
-    the_rest_max = 400
+    the_rest = 100
+    the_rest_max = 100
     resource_type = "Wood"
 
 
 class Map_Rock(MapResource):
     game_name = "Carrière de pierre"
     image = Rock_img
-    the_rest = 5000
-    the_rest_max = 5000
+    the_rest = 350
+    the_rest_max = 350
     resource_type = "Rock"
 
 
 class Map_Gold(MapResource):
     game_name = "Or"
     image = Gold_img
-    the_rest = 250
-    the_rest_max = 250
+    the_rest = 800
+    the_rest_max = 800
     resource_type = "Gold"
 
 
 class Map_Bush(MapResource):
     game_name = "Buisson"
     image = Bush_img
-    the_rest = 250
-    the_rest_max = 250
+    the_rest = 150
+    the_rest_max = 150
     resource_type = "Food"
 
 class Map_Tile:

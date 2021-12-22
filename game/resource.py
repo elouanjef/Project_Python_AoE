@@ -1,19 +1,21 @@
 from .gui import *
+from settings import *
 
 
 class Resource:
     def __init__(self):
+
         self.starting_resources = {
-            "Wood": 2000,
-            "Rock": 500,
-            "Gold": 500,
-            "Food": 500
+            "Wood": STARTING_RESOURCES[0],
+            "Rock": STARTING_RESOURCES[1],
+            "Gold": STARTING_RESOURCES[2],
+            "Food": STARTING_RESOURCES[3]
         }
         self.starting_resources_AI = {
-            "Wood": 2000,
-            "Rock": 500,
-            "Gold": 500,
-            "Food": 500
+            "Wood": STARTING_RESOURCES[0],
+            "Rock": STARTING_RESOURCES[1],
+            "Gold": STARTING_RESOURCES[2],
+            "Food": STARTING_RESOURCES[3]
         }
         self.costs = {
             "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},
@@ -42,4 +44,4 @@ class Resource:
                 if self.starting_resources_AI[resource] > cost:
                     self.starting_resources_AI[resource] -= cost
                 else:
-                    print("not enough ressource!!!!")
+                    print("not enough resources!!!!")

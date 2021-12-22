@@ -46,7 +46,7 @@ class AI:
     def AI_construct_Towncenter(self, x, y):
         # print(f'construct a Towncenter at ({x},{y})')
         if not self.world.world[x][y]["collision"]:
-            ent = TownCenter((x, y), self.resource_manager, "Red")
+            ent = TownCenter((x, y), self.resource_manager, "Red", False)
             self.world.entities.append(ent)
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
@@ -56,7 +56,7 @@ class AI:
     def AI_construct_Barracks(self, x, y):
         # print(f'construct a Barrack at ({x},{y})')
         if not self.world.world[x][y]["collision"]:
-            ent = Barracks((x, y), self.resource_manager, "Red")
+            ent = Barracks((x, y), self.resource_manager, "Red", False)
             self.world.entities.append(ent)
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
@@ -66,7 +66,7 @@ class AI:
     def AI_construct_Archery(self, x, y):
         # print(f'construct an Archery at ({x},{y})')
         if not self.world.world[x][y]["collision"]:
-            ent = Archery((x, y), self.resource_manager, "Red")
+            ent = Archery((x, y), self.resource_manager, "Red", False)
             self.world.entities.append(ent)
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
@@ -76,7 +76,7 @@ class AI:
     def create_villager(self, pos):
         if self.created_tc:
             self.AI_villager.append(
-                Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red"))
+                Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red", False))
 
     # action of AI
     def action_json(self):

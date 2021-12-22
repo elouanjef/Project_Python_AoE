@@ -13,15 +13,15 @@ from pathfinding.finder.a_star import AStarFinder
 
 class Unit:
 
-    def __init__(self, tile, world, resource_manager, team):
+    def __init__(self, tile, world, resource_manager, team, beginning):
         self.world = world
         self.tile = tile
         self.team = team  # blue team is the player's team
         self.attack = 5
         self.alive = True
         self.resource_manager = resource_manager
-
-        self.resource_manager.buy(self)
+        if not beginning:
+            self.resource_manager.buy(self)
 
         self.health = 35
         self.health_max = 35
@@ -61,7 +61,7 @@ class Unit:
         searching_for_path = True
         while searching_for_path:
             x = pos[0]
-            y = pos[1]
+            y = pos[1] - 1
             dest_tile = self.world.world[x][y]
 
             if not dest_tile["collision"]:

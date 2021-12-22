@@ -6,7 +6,6 @@ import numpy as np
 from os import path
 from .buildings import TownCenter, Barracks, Archery
 from .units import Archer, Infantryman, Villager
-import resource
 from .events import *
 from .map_resource_class import *
 
@@ -24,7 +23,7 @@ class World:
         self.width = width
         self.height = height
 
-        self.resource = resource
+        self.starting_resources = STARTING_RESOURCES
 
         self.perlin_scale = self.grid_size_x / 2
         self.octave = random.randint(1,20)
@@ -64,11 +63,6 @@ class World:
         self.list_mining = []
 
         self.list_troop = []
-
-        self.build_blue_tc(STARTING_POS)
-        # print(self.is_neighbor((25,30),(26, 30)))
-        # print(self.get_grid_array())
-        # print(self.neighbor_list(self.get_grid_array(), (25,25)))
 
         self.replace_water()
 
@@ -117,15 +111,15 @@ class World:
                 # ce bloc de code sert à construire un bâtiment à un endroit où il n'y a pas de collision
                 if mouse_action[0] and not collision:
                     if self.gui.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos, self.resource_manager, "Blue")
+                        ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
                         self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.gui.selected_tile["name"] == "Barracks":
-                        ent = Barracks(render_pos, self.resource_manager, "Blue")
+                        ent = Barracks(render_pos, self.resource_manager, "Blue", False)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     elif self.gui.selected_tile["name"] == "Archery":
-                        ent = Archery(render_pos, self.resource_manager, "Blue")
+                        ent = Archery(render_pos, self.resource_manager, "Blue", False)
                         self.entities.append(ent)
                         self.buildings[grid_pos[0]][grid_pos[1]] = ent
                     self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
@@ -178,22 +172,25 @@ class World:
                             # troupe concernée
                             if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable(
                                     "Archer"):
-                                Archer(self.world[pos_x][pos_y], self, self.resource_manager,
-                                       self.gui.examined_tile.team)
+                                a = Archer(self.world[pos_x][pos_y], self, self.resource_manager,
+                                       self.gui.examined_tile.team, False)
+                                self.list_troop.append(a)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable(
                                     "Infantryman"):
-                                Infantryman(self.world[pos_x][pos_y], self, self.resource_manager,
-                                            self.gui.examined_tile.team)
+                                i = Infantryman(self.world[pos_x][pos_y], self, self.resource_manager,
+                                            self.gui.examined_tile.team, False)
+                                self.list_troop.append(i)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                             elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable(
                                     "Villager"):
-                                Villager(self.world[pos_x][pos_y], self, self.resource_manager,
-                                         self.gui.examined_tile.team)
+                                v = Villager(self.world[pos_x][pos_y], self, self.resource_manager,
+                                         self.gui.examined_tile.team, False)
+                                self.list_troop.append(v)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
@@ -206,7 +203,7 @@ class World:
                         if not collision:  # and new_unit_pos_world["collision"])
                             # self.gui.examined_unit.change_tile(new_unit_pos)
                             self.gui.examined_unit.set_target((new_unit_pos[0], new_unit_pos[1]))
-                            # print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
+                            print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
                             self.events.remise_moving_troop()
                             self.mining_position = None
                             self.mining = False
@@ -373,7 +370,6 @@ class World:
     def replace_water(self):
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
-                print(self.changed_tiles)
                 change_tile = False
                 tile = self.world[x][y]["tile"]
                 if tile == 'Eau' and not (self.world[x][y] in self.changed_tiles):
@@ -632,9 +628,19 @@ class World:
         else:
             return False
 
-    def build_blue_tc(self, starting_pos):
+    def build_blue_camp(self, starting_pos):
         if not (self.grid_to_world(starting_pos[0], starting_pos[1]))["collision"]:
-            ent = TownCenter(starting_pos, self.resource_manager, "Blue")
+            ent = TownCenter(starting_pos, self.resource_manager, "Blue", True)
             self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
             self.buildings[starting_pos[0]][starting_pos[1]] = ent
+            villager_list = self.neighbor_list(self.get_grid_array(), (starting_pos[0], starting_pos[1]-1))
+            for villager in villager_list:
+                index = villager_list.index(villager)
+                pos_villager = villager_list[index]
+                v = Villager(self.grid_to_world(pos_villager[0], pos_villager[1]), self, self.resource_manager,
+                        "Blue", True)
+                self.list_troop.append(v)
+
         else: print("je ne peux pas construire le tc ici")
+
+
