@@ -11,7 +11,8 @@ action_dict = {
     "Barracks": 1,
     "Archery": 2,
     "Villager": 3,
-    "get_resource": 4
+    "get_resource": 4,
+    "Archer": 5
 }
 
 
@@ -30,7 +31,7 @@ class AI:
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
-                              self.create_villager, self.get_resource]
+                              self.create_villager, self.get_resource, self.create_Archer]
 
     def read_file(self):
         action_line = self.f.readline()
@@ -77,36 +78,6 @@ class AI:
         if self.created_tc:
             self.AI_villager.append(
                 Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red", False))
-
-    # action of AI
-    def action_json(self):
-        self.minute, self.second = self.game_time.get_time()
-        temps = ((self.minute) * 60 + self.second) - self.previous_time
-        self.time = "%02d:%02d" % (self.minute, self.second)
-        if temps >= 1:
-            print(self.world.resource_manager.starting_resources_AI)
-            #il faut clicker sur resource encpre une fois pour mining
-            #for sur il'll try to fix it
-            self.previous_time = (self.minute) * 60 + self.second
-            if self.time in self.data.keys():
-                i = self.data[self.time]
-                for j in i:
-                    action_l = list(j.keys())
-                    action = action_l[0]
-                    pos_l = list(j.values())
-                    pos = pos_l[0].split(",")
-                    pos[0], pos[1] = int(pos[0]), int(pos[1])
-
-                    if action_dict.get(action) < 3:  # construct
-                        act = self.function_list[action_dict.get(action)]
-                        act(pos[0], pos[1])
-                    elif action_dict.get(action) == 3:
-                        act = self.function_list[action_dict.get(action)]
-                        act(pos)
-                    elif action_dict.get(action) == 4:
-                        self.get_resource("Arbre")
-                        self.get_resource("Or")
-                        self.get_resource("Carrière de pierre")
 
     def find_resource(self):
         vill_dict = DefaultDict(list)
@@ -206,3 +177,45 @@ class AI:
 
     def choose_village(self):
         pass
+
+    def create_Archer(self, x, y):
+        print("it works!!!")
+        print(f"pos as:  {x}___{y}")
+
+#_____________________________________________________________________________________________________________________________________________________________
+    # action of AI
+    def action_json(self):
+        self.minute, self.second = self.game_time.get_time()
+        temps = ((self.minute) * 60 + self.second) - self.previous_time
+        self.time = "%02d:%02d" % (self.minute, self.second)
+        if temps >= 1:
+
+            #print(self.world.resource_manager.starting_resources_AI)   #checking resource of AI
+            
+            
+            #il faut clicker sur resource encpre une fois pour mining
+            #for sur il'll try to fix it
+            self.previous_time = (self.minute) * 60 + self.second
+            if self.time in self.data.keys():
+                i = self.data[self.time]
+                for j in i:
+                    action_l = list(j.keys())
+                    action = action_l[0]
+                    pos_l = list(j.values())
+                    pos = pos_l[0].split(",")
+                    pos[0], pos[1] = int(pos[0]), int(pos[1])
+
+                    if action_dict.get(action) < 3:  # construct
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos[0], pos[1])
+                    elif action_dict.get(action) == 3:
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos)
+                    elif action_dict.get(action) == 4:
+                        self.get_resource("Arbre")
+                        self.get_resource("Or")
+                        self.get_resource("Carrière de pierre")
+                    else:
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos[0], pos[1])
+#_____________________________________________________________________________________________________________________________________________________________                

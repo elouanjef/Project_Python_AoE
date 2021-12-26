@@ -12,10 +12,10 @@ class Resource:
             "Food": STARTING_RESOURCES[3]
         }
         self.starting_resources_AI = {
-            "Wood": STARTING_RESOURCES[0],
-            "Rock": STARTING_RESOURCES[1],
-            "Gold": STARTING_RESOURCES[2],
-            "Food": STARTING_RESOURCES[3]
+            "Wood": STARTING_RESOURCES_AI[0],
+            "Rock": STARTING_RESOURCES_AI[1],
+            "Gold": STARTING_RESOURCES_AI[2],
+            "Food": STARTING_RESOURCES_AI[3]
         }
         self.costs = {
             "TownCenter": {"Wood": 450, "Rock": 0, "Gold": 0, "Food": 0},

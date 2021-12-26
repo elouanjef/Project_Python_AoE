@@ -2,7 +2,6 @@ import pygame as pg
 from settings import *
 import random
 import noise
-import numpy as np
 from os import path
 from .buildings import TownCenter, Barracks, Archery
 from .units import Archer, Infantryman, Villager
