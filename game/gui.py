@@ -184,7 +184,7 @@ class Gui:
             draw_text(screen, "{} team".format(self.examined_tile.team), 20, pg.Color(self.examined_tile.team),
                       (self.width * 0.35 + self.width*0.25, self.height * 0.79 + self.height*0.006))
 
-            if self.examined_tile.name == "TownCenter":
+            if self.examined_tile.name == "TownCenter" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
@@ -211,7 +211,7 @@ class Gui:
                     button3.button("black on green")
                     print('clicked2')"""
 
-            if self.examined_tile.name == "Barracks":
+            if self.examined_tile.name == "Barracks" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
@@ -230,7 +230,7 @@ class Gui:
                     self.events.get_troop()
                     # Code pour le bouton permettant de créer un barbare
 
-            if self.examined_tile.name == "Archery":
+            if self.examined_tile.name == "Archery" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
                 button.button()
                 if mouse_action[0] and button.rect.collidepoint(mouse_pos):
