@@ -29,6 +29,9 @@ class Unit:
         self.health_ratio = self.health_max / self.health_bar_length
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+
+
+
         self.world.list_troop.append(self)
         self.path_index = 0
         self.move_timer = pg.time.get_ticks()
@@ -53,15 +56,26 @@ class Unit:
     def change_tile(self, pos):
         x = pos[0]
         y = pos[1]
-        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
-        self.world.units[x][y] = self
-        self.tile = self.world.world[x][y]
+        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None   
+        if self.world.units[x][y] is None:
+            self.world.units[x][y] = self
+            self.tile = self.world.world[x][y]
+            return True
+        else:
+            self.world.units[x][y+1] = self
+            self.tile = self.world.world[x][y+1]
+            return False
+        
 
     def create_path(self, pos):
         searching_for_path = True
         while searching_for_path:
             x = pos[0]
             y = pos[1] - 1
+            if (self.world.world[x][y]["collision"]):
+                return
+            if (self.world.units[x][y] is not None):
+                return
             dest_tile = self.world.world[x][y]
 
 
@@ -82,16 +96,20 @@ class Unit:
         if temps > self.velocity_inverse:
             if self.target is not None:
                 self.create_path(self.target)
-
-                if [self.tile["grid"][0], self.tile["grid"][1]] == self.path[-1]:
-                    self.target = None
-                else:
-                    try:
-                        if len(self.path) > 1:
-                            new_pos = self.path[1]
-                            self.change_tile(new_pos)
-                    except IndexError:
-                        pass
+                try:
+                    if [self.tile["grid"][0], self.tile["grid"][1]] == self.path[-1]:
+                        self.target = None
+                    else:
+                        try:
+                            if len(self.path) > 1:
+                                new_pos = self.path[1]
+                                if (not self.change_tile(new_pos)):
+                                    new_pos = self.path[2]
+                                    self.change_tile(new_pos)
+                        except IndexError:
+                            pass
+                except AttributeError:
+                    pass
         if temps > self.velocity_inverse:
             self.previous_time = temps_temp
 
