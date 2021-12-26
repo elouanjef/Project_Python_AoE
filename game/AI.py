@@ -12,7 +12,8 @@ action_dict = {
     "Archery": 2,
     "Villager": 3,
     "get_resource": 4,
-    "Archer": 5
+    "Archer": 5,
+    "Infantryman": 6
 }
 
 
@@ -31,24 +32,25 @@ class AI:
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
-                              self.create_villager, self.get_resource, self.create_Archer]
-        self.scan_map()
+                              self.create_villager, self.get_resource, self.create_Archer, self.create_Infantryman]
+        self.carte = self.scan_map()
 
 
     #we can use this function to save and load game :)))
     def scan_map(self):
-        self.carte = DefaultDict(list)
+        carte = DefaultDict(list)
         for x in range(self.world.grid_size_x):
             for y in range(self.world.grid_size_y):
                 if (self.world.world[x][y]["tile"] == ""):
                     continue
-                self.carte['%02d,%02d' % (x,y)] = self.world.world[x][y]["tile"]
+                carte['%02d,%02d' % (x,y)] = self.world.world[x][y]["tile"]
+        return carte
 
-        # Serializing json 
-        json_object = json.dumps(self.carte, indent = 4)       
-        # Writing to sample.json
-        with open("sample.json", "w") as outfile:
-            outfile.write(json_object)
+        # # Serializing json 
+        # json_object = json.dumps(self.carte, indent = 4)       
+        # # Writing to sample.json
+        # with open("sample.json", "w") as outfile:
+        #     outfile.write(json_object)
         
 
     def read_file(self):
@@ -138,6 +140,10 @@ class AI:
                 print("change Arbre 2")
                 self.get_new_resource("Arbre",2)
                 # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Arbre 3")
+                self.get_new_resource("Arbre",3)
+                # )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
             else:
                 self.AI_villager[int(villa_pos[2])].set_target(
                     (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
@@ -166,6 +172,14 @@ class AI:
                 print("change Pierre 2")
                 self.get_new_resource("Carrière de pierre",2)
                 # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Pierre 3")
+                self.get_new_resource("Carrière de pierre",3)
+                # )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+                # # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Pierre 4")
+                self.get_new_resource("Carrière de pierre",4)
+                # )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
@@ -193,6 +207,14 @@ class AI:
                 # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
                 print("change Or 2")
                 self.get_new_resource("Or",2)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Or 3")
+                self.get_new_resource("Or",3)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Or 4")
+                self.get_new_resource("Or",4)
                 # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
@@ -314,18 +336,25 @@ class AI:
                 self.world.mining = True
         
             
-
-
-        
-
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def choose_village(self):
         pass
 
-    def create_Archer(self, x, y):
-        print("it works!!!")
-        print(f"pos as:  {x}___{y}")
+    def create_Archer(self):
+        for i in self.world.entities:
+            if i.name == "Archery" and i.team == "Red":
+                a = Archer(self.world.world[i.pos[0]][i.pos[1]+1], self.world, self.world.resource_manager,
+                                       "Red", False)
+                self.world.list_troop.append(a)
+
+    def create_Infantryman(self):
+        for i in self.world.entities:
+            if i.name == "Barracks" and i.team == "Red":
+                a = Infantryman(self.world.world[i.pos[0]][i.pos[1]+1], self.world, self.world.resource_manager,
+                                       "Red", False)
+                self.world.list_troop.append(a)
+
 
 #_____________________________________________________________________________________________________________________________________________________________
     # action of AI
@@ -364,7 +393,8 @@ class AI:
                         self.get_resource("Carrière de pierre")
                     else:
                         act = self.function_list[action_dict.get(action)]
-                        act(pos[0], pos[1])
+                        act()
+                        print(action_dict.get(action))
 
                     
 #_____________________________________________________________________________________________________________________________________________________________                

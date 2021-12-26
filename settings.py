@@ -78,4 +78,4 @@ data_image = path.join(menuf, "menu/data/bg_imgs")  # Path for graphic
 data_son = path.join(menuf, "menu/data/sounds")  # Path for graphic
 
 background_main_menu = pg.transform.scale(pg.image.load(path.join(data_image, "backgroundaoe4.png")), (1920, 1080))
-music_menu = path.join(data_son, "theme.mp3")
+music_menu = path.join(data_son, "theme.wav")

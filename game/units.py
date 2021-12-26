@@ -61,10 +61,10 @@ class Unit:
             self.world.units[x][y] = self
             self.tile = self.world.world[x][y]
             return True
-        else:
-            self.world.units[x][y+1] = self
-            self.tile = self.world.world[x][y+1]
-            return False
+        # else:
+        #     self.world.units[x][y+1] = self
+        #     self.tile = self.world.world[x][y+1]
+        #     return False
         
 
     def create_path(self, pos):

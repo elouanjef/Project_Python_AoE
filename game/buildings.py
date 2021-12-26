@@ -15,6 +15,7 @@ class Building:
         self.health_bar_length = HEALTH_BAR_LENGTH_BUILDING
         self.health_ratio = self.health_max / self.health_bar_length
         self.team = team
+        self.pos = pos
         if not beginning:
             self.resource_manager.buy(self)
 
