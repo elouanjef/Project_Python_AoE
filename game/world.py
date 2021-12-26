@@ -195,7 +195,7 @@ class World:
 
                         self.gui.events.remise_troop()
 
-                    if self.events.get_grid_pos_unit() and (self.gui.examined_unit is not None):
+                    if self.events.get_grid_pos_unit() and (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
                         new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                         new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
                         # si on clic droit autre part que sur une ressource:

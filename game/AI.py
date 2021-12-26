@@ -32,6 +32,24 @@ class AI:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
                               self.create_villager, self.get_resource, self.create_Archer]
+        self.scan_map()
+
+
+    #we can use this function to save and load game :)))
+    def scan_map(self):
+        self.carte = DefaultDict(list)
+        for x in range(self.world.grid_size_x):
+            for y in range(self.world.grid_size_y):
+                if (self.world.world[x][y]["tile"] == ""):
+                    continue
+                self.carte['%02d,%02d' % (x,y)] = self.world.world[x][y]["tile"]
+
+        # Serializing json 
+        json_object = json.dumps(self.carte, indent = 4)       
+        # Writing to sample.json
+        with open("sample.json", "w") as outfile:
+            outfile.write(json_object)
+        
 
     def read_file(self):
         action_line = self.f.readline()

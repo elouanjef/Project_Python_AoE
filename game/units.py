@@ -59,15 +59,9 @@ class Unit:
 
     def create_path(self, pos):
         searching_for_path = True
-        # print('pos ',pos)
         while searching_for_path:
             x = pos[0]
             y = pos[1] - 1
-            # if not self.world.world[x][y]['collision']:
-            #     searching_for_path = False
-            #     self.set_target((self.tile['grid'][0],self.tile['grid'][1]))
-            #     self.path = []
-            #     return
             dest_tile = self.world.world[x][y]
 
 
@@ -77,7 +71,6 @@ class Unit:
                 self.end = self.grid.node(x, y)
                 finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
-                # print(self.path)
                 searching_for_path = False
 
     def set_target(self, pos):
@@ -104,7 +97,6 @@ class Unit:
 
     def health_bar(self):
         for i in range(4):
-            # pg.draw.rect(sprite, BLACK, (1+i, 1+i,entity.health_bar_length, 5), 4)
             pg.draw.rect(self.bar_image, BLACK, (-i, -i, self.health_bar_length, 5), 5)
 
         pg.draw.rect(self.bar_image, GREEN, (1, 1, (self.health / self.health_ratio) - 9, 5))
