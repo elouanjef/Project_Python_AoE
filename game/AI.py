@@ -78,7 +78,7 @@ class AI:
         if self.created_tc:
             self.AI_villager.append(
                 Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red", False))
-
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     def find_resource(self):
         vill_dict = DefaultDict(list)
         vill_list = []  # wood,rock,gold
@@ -111,14 +111,23 @@ class AI:
                     min_dictance = dict_resource[i][0][2]
                     villa_pos = (dict_resource[i][0][0], dict_resource[i][0][1], i)
             if (villa_pos == (-1, -1, -1)): return
-            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: return
-            self.AI_villager[int(villa_pos[2])].set_target(
-                (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
-            self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
-            self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
-            self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
-            self.world.events.getting_resource() 
-            self.world.mining = True
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]:
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Arbre 1")
+                self.get_new_resource("Arbre",1)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Arbre 2")
+                self.get_new_resource("Arbre",2)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+            else:
+                self.AI_villager[int(villa_pos[2])].set_target(
+                    (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+                self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+                self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+                self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+                self.world.events.getting_resource() 
+                self.world.mining = True
 
 
         if (resource == "Carrière de pierre"):
@@ -130,7 +139,15 @@ class AI:
                     min_dictance = dict_resource[i][1][2]
                     villa_pos = (dict_resource[i][1][0], dict_resource[i][1][1], i)
             if (villa_pos == (-1, -1, -1)): return
-            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]:
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Pierre 1")
+                self.get_new_resource("Carrière de pierre",1)
+                # )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+                # # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Pierre 2")
+                self.get_new_resource("Carrière de pierre",2)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
@@ -150,7 +167,15 @@ class AI:
                     min_dictance = dict_resource[i][2][2]
                     villa_pos = (dict_resource[i][2][0], dict_resource[i][2][1], i)
             if (villa_pos == (-1, -1, -1)): return
-            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]:
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Or 1")
+                self.get_new_resource("Or",1)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Or 2")
+                self.get_new_resource("Or",2)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
@@ -174,6 +199,108 @@ class AI:
             temp_list.append(i[2])  # the same pos index of distance_list
         dictance_min = min(temp_list)
         return distance_list[temp_list.index(dictance_min)]
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    def get_new_distance(self, villager, type_resource):
+
+        distance_list = []
+        for x in range(self.world.grid_size_x):
+            for y in range(self.world.grid_size_y):
+                if self.world.world[x][y]["tile"] == type_resource:
+                    l = ((villager.tile["grid"][0] - x) ** 2 + (villager.tile["grid"][1] - y) ** 2) ** (1 / 2)
+                    distance_list.append((l, x, y))   #we do it for comparing two tuple. I must show a sorted list
+        return sorted(distance_list)
+
+    def find_new_resource(self):
+        vill_dict = DefaultDict(list)
+        vill_list = []  
+        i = 0
+        for villager in self.AI_villager:
+            vill_list.append(self.get_new_distance(villager, "Arbre"))
+            vill_list.append(self.get_new_distance(villager, "Carrière de pierre"))
+            vill_list.append(self.get_new_distance(villager, "Or"))
+            vill_dict[str(i)] = vill_list
+            vill_list = []
+            i += 1
+        return vill_dict
+            
+
+    def get_new_resource(self, resource, i_th_time):
+        dict_resource = self.find_new_resource()
+        if (dict_resource == {}): return
+        # # Serializing json 
+        # json_object = json.dumps(dict_resource, indent = len(dict_resource.keys()))
+        
+        # # Writing to sample.json
+        # with open("sample.json", "w") as outfile:
+        #     outfile.write(json_object)
+        if (resource == "Arbre"):
+            min_dictance = 100  # out_of_map
+            villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue  # if he/she is working, skip
+                if (dict_resource[i][0][i_th_time][0] < min_dictance):
+                    min_dictance = dict_resource[i][0][i_th_time][0]
+                    villa_pos = (dict_resource[i][0][i_th_time][1], dict_resource[i][0][i_th_time][2], i)
+            if (villa_pos == (-1, -1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: 
+                return
+            else:
+                
+                self.AI_villager[int(villa_pos[2])].set_target(
+                    (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+                self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+                self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+                self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+                self.world.events.getting_resource() 
+                self.world.mining = True
+        if (resource == "Carrière de pierre"):
+            min_dictance = 100  # out_of_map
+            villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue  # if he/she is working, skip
+                if (dict_resource[i][1][i_th_time][0] < min_dictance):
+                    min_dictance = dict_resource[i][1][i_th_time][0]
+                    villa_pos = (dict_resource[i][1][i_th_time][1], dict_resource[i][1][i_th_time][2], i)
+            if (villa_pos == (-1, -1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: 
+                return
+            else:
+                
+                self.AI_villager[int(villa_pos[2])].set_target(
+                    (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+                self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+                self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+                self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+                self.world.events.getting_resource() 
+                self.world.mining = True
+        if (resource == "Or"):
+            min_dictance = 100  # out_of_map
+            villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue  # if he/she is working, skip
+                if (dict_resource[i][2][i_th_time][0] < min_dictance):
+                    min_dictance = dict_resource[i][2][i_th_time][0]
+                    villa_pos = (dict_resource[i][2][i_th_time][1], dict_resource[i][2][i_th_time][2], i)
+            if (villa_pos == (-1, -1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: 
+                return
+            else:
+                self.AI_villager[int(villa_pos[2])].set_target(
+                    (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+                self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+                self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+                self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+                self.world.events.getting_resource() 
+                self.world.mining = True
+        
+            
+
+
+        
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def choose_village(self):
         pass
@@ -211,6 +338,8 @@ class AI:
                     elif action_dict.get(action) == 3:
                         act = self.function_list[action_dict.get(action)]
                         act(pos)
+                    # elif action_dict.get(action) == 4:
+                    #     self.get_new_resource("Or",2)
                     elif action_dict.get(action) == 4:
                         self.get_resource("Arbre")
                         self.get_resource("Or")
@@ -218,4 +347,6 @@ class AI:
                     else:
                         act = self.function_list[action_dict.get(action)]
                         act(pos[0], pos[1])
+
+                    
 #_____________________________________________________________________________________________________________________________________________________________                
