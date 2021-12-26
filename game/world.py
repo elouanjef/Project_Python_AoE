@@ -227,7 +227,7 @@ class World:
                                     if new_unit_pos != self.mining_position and (self.mining_position is not None):
                                         self.list_mining.remove(self.mined)
                                     self.mined = self.gui.choose
-
+                                    self.mined["mining_team"] = "Blue"
                                     self.events.getting_resource()
                                     # self.moving_to_resource = True
                                     self.mining_position = self.gui.choose
@@ -253,7 +253,7 @@ class World:
 
                     if self.mining and self.events.getting_resource:
                         for mined in self.list_mining:
-                            mined["class"].mine()
+                            mined["class"].mine(mined["mining_team"])
                             # pass
                             # on mine la ressource tant que self.mining = True
 
@@ -555,6 +555,8 @@ class World:
         # Tile's Object
         else:
             map_resource = None
+
+        mining_team = ""
         # this dict() store all kind of info of all elements in grid
         out = {
             "grid": [grid_x, grid_y],
@@ -566,7 +568,8 @@ class World:
             "render_pos_mini": [minx_mini, miny_mini],
             "tile": tile,
             "collision": False if tile == "" else True,
-            "class": map_resource
+            "class": map_resource,
+            "mining_team": mining_team
         }
 
 

@@ -145,7 +145,10 @@ class AI:
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
             self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
-            print(f'{villa_pos}  Arbre')
+            self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+            self.world.events.getting_resource() 
+            self.world.mining = True
+
 
         if (resource == "Carrière de pierre"):
             min_dictance = 100  # out_of_map
@@ -161,7 +164,11 @@ class AI:
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
             self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
-            print(f'{villa_pos} Rock')
+            self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+            self.world.events.getting_resource() 
+            self.world.mining = True
+
+
 
         if (resource == "Or"):
             min_dictance = 100  # out_of_map
@@ -177,10 +184,10 @@ class AI:
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
             self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+            self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
             self.world.events.getting_resource() 
             self.world.mining = True
-            print(self.world.world[villa_pos[0]][villa_pos[1]])
-            print(f'{villa_pos}  Gold')
+
 
 
     def get_distance(self, villager, type_resource):

@@ -11,13 +11,20 @@ class MapResource:
 
         self.available = True
 
-    def mine(self):
+    def mine(self, team = ""):
         if self.the_rest > 0 and self.available:
             now = pg.time.get_ticks()
             if now - self.resource_cooldown > 2000:
-                self.the_rest -= 1
-                self.resource_cooldown = now
-                self.resource_manager.starting_resources[self.resource_type] += 1
+                if team == "Blue":
+                    self.the_rest -= 1
+                    self.resource_cooldown = now
+                    self.resource_manager.starting_resources[self.resource_type] += 1
+                elif team == "Red":
+                    self.the_rest -= 1
+                    self.resource_cooldown = now
+                    self.resource_manager.starting_resources_AI[self.resource_type] += 1
+                else:
+                    pass
 
             return 1
         else:
