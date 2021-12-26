@@ -84,6 +84,9 @@ class AI:
         temps = ((self.minute) * 60 + self.second) - self.previous_time
         self.time = "%02d:%02d" % (self.minute, self.second)
         if temps >= 1:
+            print(self.world.resource_manager.starting_resources_AI)
+            #il faut clicker sur resource encpre une fois pour mining
+            #for sur il'll try to fix it
             self.previous_time = (self.minute) * 60 + self.second
             if self.time in self.data.keys():
                 i = self.data[self.time]
@@ -123,9 +126,6 @@ class AI:
             vill_list = []
             i += 1
         return vill_dict
-        # {'index of villager in self.AI_villager': [tree_pos, rock_pos, gold_pos])} a dictionary
-        # tree_pos = (x,y,distance to villager) a tuple
-        # vill_dict['index_of_villager'][0:tree/1:rock/2:gold][0:x/1:y/2:distance]
 
     def get_resource(self, resource):
         dict_resource = self.find_resource()
@@ -144,6 +144,7 @@ class AI:
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+            self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
             print(f'{villa_pos}  Arbre')
 
         if (resource == "Carrière de pierre"):
@@ -159,6 +160,7 @@ class AI:
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
+            self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
             print(f'{villa_pos} Rock')
 
         if (resource == "Or"):
@@ -174,9 +176,12 @@ class AI:
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
+            self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+            self.world.events.getting_resource() 
+            self.world.mining = True
+            print(self.world.world[villa_pos[0]][villa_pos[1]])
             print(f'{villa_pos}  Gold')
-        # print(dict_resource)
-        # print((dict_resource['1'][0][0], dict_resource['1'][0][1]))
+
 
     def get_distance(self, villager, type_resource):
 

@@ -59,10 +59,17 @@ class Unit:
 
     def create_path(self, pos):
         searching_for_path = True
+        # print('pos ',pos)
         while searching_for_path:
             x = pos[0]
             y = pos[1] - 1
+            # if not self.world.world[x][y]['collision']:
+            #     searching_for_path = False
+            #     self.set_target((self.tile['grid'][0],self.tile['grid'][1]))
+            #     self.path = []
+            #     return
             dest_tile = self.world.world[x][y]
+
 
             if not dest_tile["collision"]:
                 self.grid = Grid(matrix=self.world.collision_matrix)
@@ -70,6 +77,7 @@ class Unit:
                 self.end = self.grid.node(x, y)
                 finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
                 self.path, runs = finder.find_path(self.start, self.end, self.grid)
+                # print(self.path)
                 searching_for_path = False
 
     def set_target(self, pos):
