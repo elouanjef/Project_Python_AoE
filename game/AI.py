@@ -10,10 +10,10 @@ action_dict = {
     "TownCenter": 0,
     "Barracks": 1,
     "Archery": 2,
-    "Villager": 3,
-    "get_resource": 4,
-    "Archer": 5,
-    "Infantryman": 6
+    "Archer": 3,
+    "Infantryman": 4,
+    "Villager": 5,
+    "get_resource": 6
 }
 
 
@@ -32,7 +32,7 @@ class AI:
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
-                              self.create_villager, self.get_resource, self.create_Archer, self.create_Infantryman]
+                              self.create_Archer,self.create_Infantryman, self.create_villager, self.get_resource]
         self.carte = self.scan_map()
 
 
@@ -341,19 +341,22 @@ class AI:
     def choose_village(self):
         pass
 
-    def create_Archer(self):
+    # create an Archer for each Archery
+    def create_Archer(self,x,y):
         for i in self.world.entities:
             if i.name == "Archery" and i.team == "Red":
                 a = Archer(self.world.world[i.pos[0]][i.pos[1]+1], self.world, self.world.resource_manager,
                                        "Red", False)
                 self.world.list_troop.append(a)
-
-    def create_Infantryman(self):
+                a.set_target((x,y))
+    # Create an Infrantryman for each Barracks
+    def create_Infantryman(self,x,y):
         for i in self.world.entities:
             if i.name == "Barracks" and i.team == "Red":
                 a = Infantryman(self.world.world[i.pos[0]][i.pos[1]+1], self.world, self.world.resource_manager,
                                        "Red", False)
                 self.world.list_troop.append(a)
+                a.set_target((x,y))
 
 
 #_____________________________________________________________________________________________________________________________________________________________
@@ -379,22 +382,18 @@ class AI:
                     pos = pos_l[0].split(",")
                     pos[0], pos[1] = int(pos[0]), int(pos[1])
 
-                    if action_dict.get(action) < 3:  # construct
+                    if action_dict.get(action) < 5:  # construct
                         act = self.function_list[action_dict.get(action)]
                         act(pos[0], pos[1])
-                    elif action_dict.get(action) == 3:
+                    elif action_dict.get(action) == 5:
                         act = self.function_list[action_dict.get(action)]
                         act(pos)
-                    # elif action_dict.get(action) == 4:
-                    #     self.get_new_resource("Or",2)
-                    elif action_dict.get(action) == 4:
+                    elif action_dict.get(action) == 6:
                         self.get_resource("Arbre")
                         self.get_resource("Or")
                         self.get_resource("Carrière de pierre")
                     else:
-                        act = self.function_list[action_dict.get(action)]
-                        act()
-                        print(action_dict.get(action))
+                        print("U should update ur action")
 
                     
 #_____________________________________________________________________________________________________________________________________________________________                
