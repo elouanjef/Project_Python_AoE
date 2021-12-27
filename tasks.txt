@@ -8,11 +8,12 @@
 + collision                                             ;Cong Khai             DONE
 + les themes/âges                                           
 + IA                                                    ;Cong Khai
-+ randomising the map in intervalls                                       DONE
++ randomising the map in intervalls                                            DONE
 + cheats commands                                       ;TUAN
-+ resource ()                                           ;Elouan           DONE
-+ fog of war et map                                     ;Cong Khai
-+ RTS                                                   ;Elouan et Cong Khai          (il manque une file d'attente pour une séquence d'action)
++ resource ()                                           ;Elouan                DONE
++ fog of war                                            ; 
++ map                                                   ;Cong Khai
++ RTS                                                   ;Elouan et Cong Khai   DONE       (il manque une file d'attente pour une séquence d'action)
 
 
 
@@ -24,7 +25,7 @@ E: Human vs AI match
 E: Starting resources ✓ 
 E: Cheats and AI commands (faire une barre de chat où on entre des commandes pour donner des ressources où rendre ses troupes invicibles par exemple)
 e: "antique" AoE1 units ✓ (juste à chercher les sprites)
-e: RTS  
+e: RTS  ✓
 e: Procedural map generation  ✓
 e: Fog of war
 Replay games
