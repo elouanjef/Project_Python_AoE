@@ -71,7 +71,10 @@ class Unit:
         searching_for_path = True
         while searching_for_path:
             x = pos[0]
-            y = pos[1] - 1
+            if pos[1] == 0:
+                y = 0
+            else:
+                y = pos[1] - 1
             if (self.world.world[x][y]["collision"]):
                 return
             if (self.world.units[x][y] is not None):

@@ -132,7 +132,10 @@ class World:
                 if grid_pos[0] < self.grid_size_x and grid_pos[1] < self.grid_size_y:
                     collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
-                    units = self.units[grid_pos[0]][grid_pos[1] - 1]
+                    if grid_pos[1] > 0:
+                        units = self.units[grid_pos[0]][grid_pos[1] - 1]
+                    else:
+                        units = self.units[grid_pos[0]][grid_pos[1]]
 
                     if mouse_action[0] and (
                             building is not None):  # Si on a selectionné un bâtiment avec le clic gauche on affiche
