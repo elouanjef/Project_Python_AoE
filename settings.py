@@ -79,3 +79,8 @@ data_son = path.join(menuf, "menu/data/sounds")  # Path for graphic
 
 background_main_menu = pg.transform.scale(pg.image.load(path.join(data_image, "backgroundaoe4.png")), (1920, 1080))
 music_menu = path.join(data_son, "theme.wav")
+
+#save game
+save_map = path.join(AOE_folder, "Save_game/save_map.json")
+save_entities = path.join(AOE_folder, "Save_game/save_entities.json")
+save_units = path.join(AOE_folder, "Save_game/save_units.json")

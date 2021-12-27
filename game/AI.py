@@ -33,25 +33,6 @@ class AI:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
                               self.create_Archer,self.create_Infantryman, self.create_villager, self.get_resource]
-        self.carte = self.scan_map()
-
-
-    #we can use this function to save and load game :)))
-    def scan_map(self):
-        carte = DefaultDict(list)
-        for x in range(self.world.grid_size_x):
-            for y in range(self.world.grid_size_y):
-                if (self.world.world[x][y]["tile"] == ""):
-                    continue
-                carte['%02d,%02d' % (x,y)] = self.world.world[x][y]["tile"]
-        return carte
-
-        # # Serializing json 
-        # json_object = json.dumps(self.carte, indent = 4)       
-        # # Writing to sample.json
-        # with open("sample.json", "w") as outfile:
-        #     outfile.write(json_object)
-        
 
     def read_file(self):
         action_line = self.f.readline()
@@ -113,6 +94,7 @@ class AI:
             vill_list.append(self.get_distance(villager, "Arbre"))
             vill_list.append(self.get_distance(villager, "Carrière de pierre"))
             vill_list.append(self.get_distance(villager, "Or"))
+            vill_list.append(self.get_distance(villager, "Buisson"))
             vill_dict[str(i)] = vill_list
             vill_list = []
             i += 1
@@ -225,6 +207,42 @@ class AI:
             self.world.mining = True
 
 
+        if (resource == "Buisson"):
+            print("Buisson")
+            min_dictance = 100  # out_of_map
+            villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue
+                if (dict_resource[i][3][2] < min_dictance):
+                    min_dictance = dict_resource[i][3][2]
+                    villa_pos = (dict_resource[i][3][0], dict_resource[i][3][1], i)
+            if (villa_pos == (-1, -1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]:
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Buisson 1")
+                self.get_new_resource("Buisson",1)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Buisson 2")
+                self.get_new_resource("Buisson",2)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Buisson 3")
+                self.get_new_resource("Buisson",3)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+                print("change Buisson 4")
+                self.get_new_resource("Buisson",4)
+                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
+            self.AI_villager[int(villa_pos[2])].set_target(
+                (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+            self.AI_villager[int(villa_pos[2])].in_work = True
+            self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+            self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+            self.world.events.getting_resource() 
+            self.world.mining = True
+
+
 
     def get_distance(self, villager, type_resource):
 
@@ -260,6 +278,7 @@ class AI:
             vill_list.append(self.get_new_distance(villager, "Arbre"))
             vill_list.append(self.get_new_distance(villager, "Carrière de pierre"))
             vill_list.append(self.get_new_distance(villager, "Or"))
+            vill_list.append(self.get_new_distance(villager, "Buisson"))
             vill_dict[str(i)] = vill_list
             vill_list = []
             i += 1
@@ -269,12 +288,6 @@ class AI:
     def get_new_resource(self, resource, i_th_time):
         dict_resource = self.find_new_resource()
         if (dict_resource == {}): return
-        # # Serializing json 
-        # json_object = json.dumps(dict_resource, indent = len(dict_resource.keys()))
-        
-        # # Writing to sample.json
-        # with open("sample.json", "w") as outfile:
-        #     outfile.write(json_object)
         if (resource == "Arbre"):
             min_dictance = 100  # out_of_map
             villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
@@ -323,6 +336,25 @@ class AI:
                 if (dict_resource[i][2][i_th_time][0] < min_dictance):
                     min_dictance = dict_resource[i][2][i_th_time][0]
                     villa_pos = (dict_resource[i][2][i_th_time][1], dict_resource[i][2][i_th_time][2], i)
+            if (villa_pos == (-1, -1, -1)): return
+            if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: 
+                return
+            else:
+                self.AI_villager[int(villa_pos[2])].set_target(
+                    (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
+                self.AI_villager[int(villa_pos[2])].in_work = True  # the villager is working
+                self.world.list_mining.append(self.world.world[villa_pos[0]][villa_pos[1]])
+                self.world.world[villa_pos[0]][villa_pos[1]]["mining_team"] = "Red"
+                self.world.events.getting_resource() 
+                self.world.mining = True
+        if (resource == "Buisson"):
+            min_dictance = 100  # out_of_map
+            villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
+            for i in dict_resource.keys():
+                if self.AI_villager[int(i)].in_work: continue  # if he/she is working, skip
+                if (dict_resource[i][3][i_th_time][0] < min_dictance):
+                    min_dictance = dict_resource[i][3][i_th_time][0]
+                    villa_pos = (dict_resource[i][3][i_th_time][1], dict_resource[i][3][i_th_time][2], i)
             if (villa_pos == (-1, -1, -1)): return
             if self.AI_villager[int(villa_pos[2])].world.world[villa_pos[0] + 1][villa_pos[1]]["collision"]: 
                 return
@@ -392,6 +424,7 @@ class AI:
                         self.get_resource("Arbre")
                         self.get_resource("Or")
                         self.get_resource("Carrière de pierre")
+                        self.get_resource("Buisson")
                     else:
                         print("U should update ur action")
 

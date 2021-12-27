@@ -15,6 +15,7 @@ class Event:
         self.resource_available = True
         self.dt = clock.tick(30) / 1000
         self.game_time = Game_time()
+        self.Save_game = False
 
     # capture the events
     def events(self):
@@ -37,6 +38,10 @@ class Event:
                 if event.key == pg.K_RETURN:
                     print("Enter function here")
 
+                if event.key == pg.K_SPACE:
+                    self.Save_game = True
+                    self.timer = 0.0001
+
     def set_destroy(self):
         self.destroy = True
         self.update_destroy()
@@ -56,6 +61,15 @@ class Event:
             else:
                 self.timer += self.dt
         return self.destroy
+
+    def update_save_game(self):
+        if (self.timer != 0):
+            if (self.timer > 0.5):
+                self.timer = 0
+                self.Save_game = False
+            else:
+                self.timer += self.dt
+        return self.Save_game
 
     def update_delete(self):
         if self.timer != 0:

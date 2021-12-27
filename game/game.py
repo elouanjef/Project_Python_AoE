@@ -1,6 +1,8 @@
 import pygame as pg
 import sys
 
+from game.save_game import Save_game
+
 from .world import World
 from settings import *
 from .utils import draw_text
@@ -43,6 +45,8 @@ class Game:
 
         self.AI = AI(self.game_time, self.world, self.resource_manager)
 
+        self.save_game = Save_game(self.world)
+
 
     # running
     def run(self):
@@ -67,6 +71,7 @@ class Game:
         self.gui.update()
         self.world.update(self.camera)
         self.game_time.update()
+        self.save_game.update()
 
     def draw(self):
         self.screen.fill(BLACK)  # On dessine un background noir sur lequel on dessine tout le GUI et la map

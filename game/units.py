@@ -30,7 +30,7 @@ class Unit:
 
         self.world.units[tile["grid"][0]][tile["grid"][1]] = self
 
-
+        self.pos = (tile["grid"][0],tile["grid"][1])
 
         self.world.list_troop.append(self)
         self.path_index = 0

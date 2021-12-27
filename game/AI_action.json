@@ -8,7 +8,8 @@
         {"Archery":"5,15"},
         {"Villager":"4,10"},
         {"Villager":"5,12"},
-        {"Villager":"5,5"}
+        {"Villager":"5,5"},
+        {"Villager":"5,6"}
     ],
     "00:03":[
         {"get_resource":"0,0"}
