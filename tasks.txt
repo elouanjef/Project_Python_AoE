@@ -1,6 +1,7 @@
 + menu                                                  ;zakaria	       (il reste à créer les autres sous-menus par exemple Options, Credits)
 + algo A*                                               ;Cong Khai             DONE
-+ sauvgarder                                            ;
++ sauvgarder                                            ;Cong Khai             DONE
++ charger le jeu                                        ;
 + gestion des unite/batiment                            ;Elouan                DONE
 + ajouter des personnages (one human + one I.A)         ;
 + la methode de la mini                                 ;Cong Khai             DONE
@@ -11,7 +12,7 @@
 + cheats commands                                       ;TUAN
 + resource ()                                           ;Elouan           DONE
 + fog of war et map                                     ;Cong Khai
-+ RTS
++ RTS                                                   ;Elouan et Cong Khai          (il manque une file d'attente pour une séquence d'action)
 
 
 
