@@ -16,12 +16,13 @@ class Building:
         self.health_ratio = self.health_max / self.health_bar_length
         self.team = team
         self.pos = pos
+        self.age_2 = False
         if not beginning:
             self.resource_manager.buy(self)
 
     def update(self):
         if self.health < self.health_max:
-            self.health += 2
+            self.health += 10
 
     def health_bar(self):
         for i in range(4):
@@ -31,10 +32,20 @@ class Building:
         pg.draw.rect(self.bar_image, GREEN, (1, 1, (self.health / self.health_ratio) - 9, 5))
         return self.bar_image
 
+    def passer_age(self):
+        if not self.age_2:
+            self.bar_image = self.secondage_image.copy()
+            self.image = self.secondage_image
+            self.health_max += 1000
+            self.age_2 = True
+            if self.health == self.health_max:
+                self.health += 1000
+
 
 class TownCenter(Building):
-    bar_image = towncenter.copy()
-    image = towncenter
+    bar_image = firstage_towncenter.copy()
+    image = firstage_towncenter
+    secondage_image = secondage_towncenter
     name = "TownCenter"
     game_name = "Forum"
     health = 0
@@ -42,8 +53,9 @@ class TownCenter(Building):
 
 
 class Barracks(Building):
-    bar_image = barracks.copy()
-    image = barracks
+    bar_image = firstage_barracks.copy()
+    image = firstage_barracks
+    secondage_image = secondage_barracks
     name = "Barracks"
     game_name = "Caserne"
     health = 0
@@ -51,8 +63,9 @@ class Barracks(Building):
 
 
 class Archery(Building):
-    bar_image = archery.copy()
-    image = archery
+    bar_image = firstage_archery.copy()
+    image = firstage_archery
+    secondage_image = secondage_archery
     name = "Archery"
     game_name = "Camp de tir à l'arc"
     health = 0

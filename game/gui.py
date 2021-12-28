@@ -202,14 +202,14 @@ class Gui:
                     self.events.get_troop()  # retourne villager
                     # Code pour le bouton permettant de créer un villageois
 
-                """button3 = Button(screen, (self.width * 0.6 - 90, self.height * 0.9 + 60), 'Z', 15, 'white on black')
+                button3 = Button(screen, (self.width * 0.6 - 300, self.height * 0.9 + 60), 'Âge II', 15, 'white on black')
                 button3.button()
                 # mouse_pos = pg.mouse.get_pos()
                 # mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button3.rect.collidepoint(mouse_pos):
                     self.events.remise()
                     button3.button("black on green")
-                    print('clicked2')"""
+                    self.events.set_age_sup()
 
             if self.examined_tile.name == "Barracks" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
@@ -282,9 +282,9 @@ class Gui:
         # all images are saved in folder assets/graphics
         # Rock_image = Rock_img
         # Tree_image = Tree_img
-        TownCenter = towncenter
-        Barracks = barracks
-        Archery = archery
+        TownCenter = firstage_towncenter
+        Barracks = firstage_barracks
+        Archery = firstage_archery
         Archer = archer
         Infantryman = infantryman
         Villager = villager

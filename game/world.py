@@ -37,7 +37,8 @@ class World:
         # convert_alpha():   change the pixel format of an image including per pixel alphas convert_alpha(Surface) -> Surface convert_alpha() -> Surface
         #                   Creates a new copy of the surface with the desired pixel format. The new surface will be in a format suited for quick blitting to the given format
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
-        self.tiles = self.load_images()
+        self.events = events
+        self.tiles = self.load_images(False)
         self.world = self.create_world()
         self.collision_matrix = self.create_collision_matrix()
         self.changed_tiles = []
@@ -49,7 +50,7 @@ class World:
         self.examine_tile = None
         self.examine_unit = None
 
-        self.events = events
+
         # choose Arbre, rock or gold
         self.choose = None
 
@@ -69,6 +70,8 @@ class World:
     def update(self, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
+
+
 
         if mouse_action[2]:
             self.examine_tile = None
@@ -259,6 +262,13 @@ class World:
                             # pass
                             # on mine la ressource tant que self.mining = True
 
+                    if self.events.get_age_sup():
+                        for building in self.entities:
+                            building.passer_age()
+                        self.examine_tile = None
+                        self.gui.examined_tile = None
+                        # self.events.remise_age()
+
                     if self.events.update_destroy():
                         # condition qui récupère la variable dans events permettant de savoir si on veut détruire
                         # en gros on supprimer toute trace du bâtiment et on enlève le GUI de ce dernier
@@ -388,6 +398,11 @@ class World:
                     self.changed_tiles.append(self.world[x][y]["grid"])
 
     def draw(self, screen, camera):
+
+        self.actual_age = self.events.get_age_sup()
+        if self.actual_age:
+            self.load_images(self.actual_age)
+        print(self.actual_age)
 
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
         for x in range(self.grid_size_x):
@@ -595,17 +610,16 @@ class World:
         return grid_x, grid_y
 
     # load our blocks into the game
-    def load_images(self):
+    def load_images(self, age):
         block = Block_img.convert_alpha()
         Arbre = Tree_img.convert_alpha()
         rock = Rock_img.convert_alpha()
         gold = Gold_img.convert_alpha()  # C'est ici que l'on va lier les entités du jeu à des images (sauf pour les troupes)
         bush = Bush_img.convert_alpha()
         water = Water_img.convert_alpha()
-        building1 = towncenter.convert_alpha()
-        # building2 = lumbermill.convert_alpha()
-        building3 = barracks.convert_alpha()
-        building4 = archery.convert_alpha()
+        building1 = firstage_towncenter.convert_alpha() if not age else secondage_barracks.convert_alpha()
+        building3 = firstage_barracks.convert_alpha() if not age else secondage_barracks.convert_alpha()
+        building4 = firstage_archery.convert_alpha() if not age else secondage_barracks.convert_alpha()
         images = {
             "building1": building1,
             # "building2": building2,

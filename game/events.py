@@ -12,6 +12,7 @@ class Event:
         self.timer = 0
         self.get_move_resource = False
         self.get_resource = False
+        self.age_sup = False
         self.resource_available = True
         self.dt = clock.tick(30) / 1000
         self.game_time = Game_time()
@@ -101,6 +102,15 @@ class Event:
 
     def getting_resource(self):
         self.get_resource = True
+
+    def set_age_sup(self):
+        self.age_sup = True
+
+    def remise_age(self):
+        self.age_sup = False
+
+    def get_age_sup(self):
+        return self.age_sup
 
 
 class Game_time:

@@ -59,10 +59,12 @@ Block_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "block_a
 Water_img = pg.transform.scale(pg.image.load(path.join(graphics_folder, "water.png")), (125, TILE_SIZE))
 
 # buildings
-towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder, "towncenter.png")), (143, 128))
-lumbermill = pg.transform.scale(pg.image.load(path.join(graphics_folder, "lumbermill.png")), (143, 128))
-barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barracks.png")), (143, 128))
-archery = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archery.png")), (143, 128))
+firstage_towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder, "firstage_towncenter.png")), (143, 128))
+firstage_barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder, "firstage_barracks.png")), (143, 128))
+firstage_archery = pg.transform.scale(pg.image.load(path.join(graphics_folder, "firstage_archery.png")), (143, 128))
+secondage_towncenter = pg.transform.scale(pg.image.load(path.join(graphics_folder, "secondage_towncenter.png")), (143, 128))
+secondage_barracks = pg.transform.scale(pg.image.load(path.join(graphics_folder, "secondage_barracks.png")), (143, 128))
+secondage_archery = pg.transform.scale(pg.image.load(path.join(graphics_folder, "secondage_archery.png")), (143, 128))
 towncenter_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "towncenter_icon.png")), (143, 128))
 barracks_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barracks_icon.png")), (143, 128))
 archery_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archery_icon.png")), (143, 128))
@@ -70,7 +72,7 @@ archery_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "arch
 # units
 archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer2.png")), (30, 40))
 infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barbarian2.png")), (38, 48))
-villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager2.png")), (30, 40))
+villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager.png")), (30, 40))
 
 # menu
 menuf = path.dirname(__file__)  # Path of the Project_Python_AoE foler
