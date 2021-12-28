@@ -45,6 +45,10 @@ class World:
 
         self.buildings = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.units = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        self.blue_team_ent = []
+        self.red_team_ent = []
+        self.age_2_blue = []
+        self.age_2_red = []
 
         self.temp_tile = None
         self.examine_tile = None
@@ -71,7 +75,19 @@ class World:
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
 
+        for ent in self.entities:
 
+            if ent.team == 'Blue' and (ent not in self.blue_team_ent):
+                self.blue_team_ent.append(ent)
+
+            if ent.team == 'Red' and (ent not in self.red_team_ent):
+                self.red_team_ent.append(ent)
+
+            if ent.age_2 and (ent not in self.age_2_blue):
+                self.age_2_blue.append(ent)
+
+            if ent.age_2 and (ent not in self.age_2_red):
+                self.age_2_red.append(ent)
 
         if mouse_action[2]:
             self.examine_tile = None
@@ -208,7 +224,6 @@ class World:
                         if not collision:  # and new_unit_pos_world["collision"])
                             # self.gui.examined_unit.change_tile(new_unit_pos)
                             self.gui.examined_unit.set_target((new_unit_pos[0], new_unit_pos[1]))
-                            print("moving", self.gui.examined_unit.name,"to", new_unit_pos)
                             self.events.remise_moving_troop()
                             self.mining_position = None
                             self.mining = False
@@ -262,13 +277,33 @@ class World:
                             # pass
                             # on mine la ressource tant que self.mining = True
 
+
+
                     if self.events.get_age_sup():
                         for building in self.entities:
                             if building.team == "Blue":
                                 building.passer_age()
                         self.examine_tile = None
                         self.gui.examined_tile = None
-                        # self.events.remise_age()
+                        self.events.remise_age()
+
+                    if self.age_2_blue != []:
+                        for building in self.blue_team_ent:
+                            if not building.age_2:
+                                building.passer_age()
+                        self.examine_tile = None
+                        self.gui.examined_tile = None
+                        self.events.remise_age()
+                    if self.age_2_red != []:
+                        for building in self.red_team_ent:
+                            if not building.age_2:
+                                building.passer_age()
+                        self.examine_tile = None
+                        self.gui.examined_tile = None
+                        self.events.remise_age()
+
+
+
 
                     if self.events.update_destroy():
                         # condition qui récupère la variable dans events permettant de savoir si on veut détruire
@@ -403,7 +438,6 @@ class World:
         self.actual_age = self.events.get_age_sup()
         if self.actual_age:
             self.load_images(self.actual_age)
-        print(self.actual_age)
 
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
         for x in range(self.grid_size_x):

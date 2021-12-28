@@ -24,7 +24,8 @@ class Resource:
             "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
             "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
             "Infantryman": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
-            "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50}
+            "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50},
+            "Secondage": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 800}
         }
 
     def is_affordable(self, ent):
@@ -35,13 +36,37 @@ class Resource:
         return affordable
 
     def buy(self, ent):
-        # print(ent.name)
+
+        achat = ent.name
+
         if ent.team == "Blue":
-            for resource, cost in self.costs[ent.name].items():
-                self.starting_resources[resource] -= cost
+            for resource, cost in self.costs[achat].items():
+                if self.starting_resources[resource] >= cost:
+                    self.starting_resources[resource] -= cost
+                else:
+                    print("not enough resources!!!!")
+                    return -1
         elif ent.team == "Red":
-            for resource, cost in self.costs[ent.name].items():
-                if self.starting_resources_AI[resource] > cost:
+            for resource, cost in self.costs[achat].items():
+                if self.starting_resources_AI[resource] >= cost:
                     self.starting_resources_AI[resource] -= cost
                 else:
                     print("not enough resources!!!!")
+                    return -1
+
+    def buy_age(self, ent):
+
+        achat = ent.age
+
+        if ent.team == "Blue":
+            for resource, cost in self.costs[achat].items():
+                if self.starting_resources[resource] >= cost:
+                    self.starting_resources[resource] -= cost
+                else:
+                    return -1
+        elif ent.team == "Red":
+            for resource, cost in self.costs[achat].items():
+                if self.starting_resources_AI[resource] >= cost:
+                    self.starting_resources_AI[resource] -= cost
+                else:
+                    return -1

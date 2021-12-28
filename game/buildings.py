@@ -17,6 +17,7 @@ class Building:
         self.team = team
         self.pos = pos
         self.age_2 = False
+        self.age = 'Firstage'
         if not beginning:
             self.resource_manager.buy(self)
 
@@ -33,13 +34,26 @@ class Building:
         return self.bar_image
 
     def passer_age(self):
-        if not self.age_2:
-            self.bar_image = self.secondage_image.copy()
-            self.image = self.secondage_image
-            self.health_max += 1000
-            self.age_2 = True
-            if self.health == self.health_max:
-                self.health += 1000
+        if self.game_name == 'Forum':
+            self.age = 'Secondage'
+            if self.resource_manager.buy_age(self) != -1 and not self.age_2:
+                self.bar_image = self.secondage_image.copy()
+                self.image = self.secondage_image
+                self.age_2 = True
+                self.health_max += 1000
+                if self.health == self.health_max:
+                    self.health += 1000
+            else:
+                self.age = 'Firstage'
+        else:
+            self.age = 'Secondage'
+            if not self.age_2:
+                self.bar_image = self.secondage_image.copy()
+                self.image = self.secondage_image
+                self.age_2 = True
+                self.health_max += 1000
+                if self.health == self.health_max:
+                    self.health += 1000
 
 
 class TownCenter(Building):
