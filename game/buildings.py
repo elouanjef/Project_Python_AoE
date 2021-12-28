@@ -43,6 +43,7 @@ class Building:
                 self.health_max += 1000
                 if self.health == self.health_max:
                     self.health += 1000
+                self.health_ratio = self.health_max / self.health_bar_length
             else:
                 self.age = 'Firstage'
         else:
@@ -54,7 +55,7 @@ class Building:
                 self.health_max += 1000
                 if self.health == self.health_max:
                     self.health += 1000
-
+                self.health_ratio = self.health_max / self.health_bar_length
 
 class TownCenter(Building):
     bar_image = firstage_towncenter.copy()

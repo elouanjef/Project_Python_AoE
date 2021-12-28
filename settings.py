@@ -70,8 +70,8 @@ barracks_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "bar
 archery_icon = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archery_icon.png")), (143, 128))
 
 # units
-archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer2.png")), (30, 40))
-infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "barbarian2.png")), (38, 48))
+archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer.png")), (30, 40))
+infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "pikeman.png")), (38, 48))
 villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager.png")), (30, 40))
 
 # menu

@@ -44,14 +44,12 @@ class Resource:
                 if self.starting_resources[resource] >= cost:
                     self.starting_resources[resource] -= cost
                 else:
-                    print("not enough resources!!!!")
                     return -1
         elif ent.team == "Red":
             for resource, cost in self.costs[achat].items():
                 if self.starting_resources_AI[resource] >= cost:
                     self.starting_resources_AI[resource] -= cost
                 else:
-                    print("not enough resources!!!!")
                     return -1
 
     def buy_age(self, ent):

@@ -48,7 +48,7 @@ class AI:
     def AI_construct_Towncenter(self, x, y):
         # print(f'construct a Towncenter at ({x},{y})')
         if not self.world.world[x][y]["collision"]:
-            ent = TownCenter((x, y), self.resource_manager, "Red", False)
+            ent = TownCenter((x, y), self.resource_manager, "Red", True)
             self.world.entities.append(ent)
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
@@ -208,7 +208,6 @@ class AI:
 
 
         if (resource == "Buisson"):
-            print("Buisson")
             min_dictance = 100  # out_of_map
             villa_pos = (-1, -1, -1)  # (x,y,keys_of_villager)
             for i in dict_resource.keys():

@@ -75,6 +75,10 @@ class World:
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
 
+        self.actual_age = self.events.get_age_sup()
+        if self.actual_age:
+            self.load_images(self.actual_age)
+
         for ent in self.entities:
 
             if ent.team == 'Blue' and (ent not in self.blue_team_ent):
@@ -161,6 +165,13 @@ class World:
                         self.examine_tile = grid_pos
                         self.gui.examined_tile = building
 
+                    # si on clic gauche sur aucun bâtiment on n'affiche plus son GUI
+                    if mouse_action[0] and (building is None):
+                        self.choosing_pos_x = None
+                        self.choosing_pos_y = None
+                        self.examine_tile = None
+                        self.gui.examined_tile = None
+
                     if mouse_action[0] and (
                             units is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
                         self.examine_unit = grid_pos
@@ -227,6 +238,7 @@ class World:
                             self.events.remise_moving_troop()
                             self.mining_position = None
                             self.mining = False
+                            self.examine_unit = new_unit_pos
 
                         elif new_unit_pos_world["collision"] and self.gui.examined_unit.name == "Archer":
                             print("j'attaque")
@@ -283,23 +295,17 @@ class World:
                         for building in self.entities:
                             if building.team == "Blue":
                                 building.passer_age()
-                        self.examine_tile = None
-                        self.gui.examined_tile = None
                         self.events.remise_age()
 
                     if self.age_2_blue != []:
                         for building in self.blue_team_ent:
                             if not building.age_2:
                                 building.passer_age()
-                        self.examine_tile = None
-                        self.gui.examined_tile = None
                         self.events.remise_age()
                     if self.age_2_red != []:
                         for building in self.red_team_ent:
                             if not building.age_2:
                                 building.passer_age()
-                        self.examine_tile = None
-                        self.gui.examined_tile = None
                         self.events.remise_age()
 
 
@@ -321,15 +327,11 @@ class World:
                                 self.events.remise()
                                 self.choosing_pos_x, self.choosing_pos_y = None, None
 
-                    # si on clic gauche sur aucun bâtiment on n'affiche plus son GUI
-                    elif mouse_action[0] and (building is None):
-                        self.choosing_pos_x = None
-                        self.choosing_pos_y = None
-                        self.examine_tile = None
-                        self.gui.examined_tile = None
+
+
 
         for unit in self.list_troop:
-            unit.health_bar()
+            # unit.health_bar()
             if unit.target is not None:
                 unit.update()
 
@@ -435,9 +437,7 @@ class World:
 
     def draw(self, screen, camera):
 
-        self.actual_age = self.events.get_age_sup()
-        if self.actual_age:
-            self.load_images(self.actual_age)
+
 
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
         for x in range(self.grid_size_x):
@@ -462,9 +462,22 @@ class World:
                 units = self.units[x][y]
                 if units is not None:
 
-                    screen.blit(units.health_bar(),
+                    screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                 render_pos[1] - (units.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
+                                 render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
+
+                    if self.examine_unit == (x,y+1) or (units.health < units.health_max):
+                        screen.blit(units.health_bar(),
+                                    (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                                     render_pos[1] - (units.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
+
+                    if self.examine_unit is not None:
+                        if (x == self.examine_unit[0]) and (y == self.examine_unit[1] - 1):
+                            mask = pg.mask.from_surface(units.image).outline()
+                            mask = [(x + render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                                     y + render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y)
+                                    for x, y in mask]
+                            pg.draw.polygon(screen, self.units[x][y].team, mask, 2)
 
                 building = self.buildings[x][y]
                 if building is not None:
