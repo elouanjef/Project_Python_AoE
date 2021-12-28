@@ -264,7 +264,8 @@ class World:
 
                     if self.events.get_age_sup():
                         for building in self.entities:
-                            building.passer_age()
+                            if building.team == "Blue":
+                                building.passer_age()
                         self.examine_tile = None
                         self.gui.examined_tile = None
                         # self.events.remise_age()
