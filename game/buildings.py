@@ -85,3 +85,12 @@ class Archery(Building):
     game_name = "Camp de tir à l'arc"
     health = 0
     health_max = 500
+
+class Stable(Building):
+    bar_image = stable.copy()
+    image = stable
+    secondage_image = stable
+    name = "Stable"
+    game_name = "Ecurie"
+    health = 0
+    health_max = 500

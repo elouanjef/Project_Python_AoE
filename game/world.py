@@ -3,8 +3,8 @@ from settings import *
 import random
 import noise
 from os import path
-from .buildings import TownCenter, Barracks, Archery
-from .units import Archer, Infantryman, Villager
+from .buildings import TownCenter, Barracks, Archery, Stable
+from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
 from .map_resource_class import *
 
@@ -70,14 +70,13 @@ class World:
 
         self.replace_water()
 
+
     # work in map
-    def update(self, camera):
+    def update(self, screen, camera):
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
 
         self.actual_age = self.events.get_age_sup()
-        if self.actual_age:
-            self.load_images(self.actual_age)
 
         for ent in self.entities:
 
@@ -131,22 +130,31 @@ class World:
                     pass
 
                 # ce bloc de code sert à construire un bâtiment à un endroit où il n'y a pas de collision
-                if mouse_action[0] and not collision:
-                    if self.gui.selected_tile["name"] == "TownCenter":
-                        ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
-                        self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
-                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                    elif self.gui.selected_tile["name"] == "Barracks":
-                        ent = Barracks(render_pos, self.resource_manager, "Blue", False)
-                        self.entities.append(ent)
-                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                    elif self.gui.selected_tile["name"] == "Archery":
-                        ent = Archery(render_pos, self.resource_manager, "Blue", False)
-                        self.entities.append(ent)
-                        self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                    self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
-                    self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
-                    self.gui.selected_tile = None
+                if mouse_action[0] and (not collision):
+                    grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                    building = self.buildings[grid_pos[0]][grid_pos[1]]
+                    if building is None:
+                        if self.gui.selected_tile["name"] == "TownCenter":
+                            ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
+                            self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
+                            self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                        elif self.gui.selected_tile["name"] == "Barracks":
+                            ent = Barracks(render_pos, self.resource_manager, "Blue", False)
+                            self.entities.append(ent)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                        elif self.gui.selected_tile["name"] == "Archery":
+                            ent = Archery(render_pos, self.resource_manager, "Blue", False)
+                            self.entities.append(ent)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                        elif self.gui.selected_tile["name"] == "Stable":
+                            ent = Stable(render_pos, self.resource_manager, "Blue", False)
+                            self.entities.append(ent)
+                            self.buildings[grid_pos[0]][grid_pos[1]] = ent
+                        self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
+                        self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
+                        self.gui.selected_tile = None
+                    else:
+                        pg.draw.polygon(screen, RED, iso_poly, 3)
 
 
         else:
@@ -221,6 +229,14 @@ class World:
                             elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable(
                                     "Villager"):
                                 v = Villager(self.world[pos_x][pos_y], self, self.resource_manager,
+                                         self.gui.examined_tile.team, False)
+                                self.list_troop.append(v)
+                                self.examine_tile = None
+                                self.gui.events.remise_troop()
+
+                            elif self.gui.events.get_troop() == 'cavalier' and self.resource_manager.is_affordable(
+                                    "Cavalier"):
+                                v = Cavalier(self.world[pos_x][pos_y], self, self.resource_manager,
                                          self.gui.examined_tile.team, False)
                                 self.list_troop.append(v)
                                 self.examine_tile = None
@@ -501,10 +517,13 @@ class World:
                             pg.draw.polygon(screen, self.buildings[x][y].team, mask, 2)
 
         if self.temp_tile is not None:
+            mouse_pos = pg.mouse.get_pos()
+            grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+            building = self.buildings[grid_pos[0]][grid_pos[1]]
             iso_poly = self.temp_tile["iso_poly"]
             iso_poly = [(x + self.grass_tiles.get_width() / 2 + camera.scroll.x, y + camera.scroll.y) for x, y in
                         iso_poly]
-            if self.temp_tile["collision"]:
+            if self.temp_tile["collision"] or building is not None:
                 pg.draw.polygon(screen, RED, iso_poly, 3)
             else:
                 pg.draw.polygon(screen, WHITE, iso_poly, 3)
@@ -666,11 +685,12 @@ class World:
         bush = Bush_img.convert_alpha()
         water = Water_img.convert_alpha()
         building1 = firstage_towncenter.convert_alpha() if not age else secondage_barracks.convert_alpha()
-        building3 = firstage_barracks.convert_alpha() if not age else secondage_barracks.convert_alpha()
-        building4 = firstage_archery.convert_alpha() if not age else secondage_barracks.convert_alpha()
+        building2 = firstage_barracks.convert_alpha() if not age else secondage_barracks.convert_alpha()
+        building3 = firstage_archery.convert_alpha() if not age else secondage_barracks.convert_alpha()
+        building4 = stable.convert_alpha()
         images = {
             "building1": building1,
-            # "building2": building2,
+            "building2": building2,
             "building3": building3,
             "building4": building4,
             "Arbre": Arbre,

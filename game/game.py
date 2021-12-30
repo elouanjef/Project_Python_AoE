@@ -69,9 +69,14 @@ class Game:
         self.camera.update()
         for e in self.entities: e.update()
         self.gui.update()
-        self.world.update(self.camera)
+        self.world.update(self.screen, self.camera)
         self.game_time.update()
         self.save_game.update()
+        if self.world.actual_age:
+            self.world.load_images(self.world.actual_age)
+            self.gui.icon_images = self.gui.load_icon_images(2)
+            self.gui.tiles = self.gui.create_build_gui()
+
 
     def draw(self):
         self.screen.fill(BLACK)  # On dessine un background noir sur lequel on dessine tout le GUI et la map

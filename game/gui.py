@@ -35,6 +35,9 @@ class Gui:
         pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [0, 0, border_width, self.build_rect.bottom*0.25]) # left line
         pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [self.build_rect.right*0.15 -1, 0, border_width, self.build_rect.bottom*0.25 + border_width]) # right line
 
+        self.icon_ligne = 1
+        self.icon_colonne = 1
+
         # select gui
         self.select_surface = pg.Surface((width * 0.3, height * 0.2), pg.SRCALPHA)
         self.select_rect = self.select_surface.get_rect(topleft=(self.width * 0.35, self.height * 0.79))
@@ -56,7 +59,7 @@ class Gui:
                   (width * 0.092, 10))
 
         self.images = self.load_images()
-        self.icon_images = self.load_icon_images()
+        self.icon_images = self.load_icon_images(1)
 
         # create a new gui
         self.tiles = self.create_build_gui()
@@ -68,16 +71,36 @@ class Gui:
         self.mining_gui = False
         self.examined_unit = None
 
+
+
     # afficher les batiments pour choisir et construire
     def create_build_gui(self):
-
+        self.icon_colonne = 1
+        self.icon_ligne = 1
         # position in the inventory
-        render_pos = [self.width * 0.84 + 10, self.height * 0.74 + 10]  # 0.84 0.74
+        render_pos = [self.width * 0.84 + self.build_surface.get_width()*0.04, self.height * 0.74+ self.build_surface.get_width()*0.03]  # 0.84 0.74
         object_width = self.build_surface.get_width() // 4
 
         tiles = []
         # print('create_build_gui')
         for image_name, image in self.icon_images.items():  # ajouter l'image dans la fonction load_image()
+
+
+            seconde_ligne = self.icon_colonne > 3 and self.icon_ligne == 1
+            troisieme_ligne = self.icon_colonne > 3 and self.icon_ligne == 2
+
+            if seconde_ligne:
+                self.icon_colonne = 1
+                self.icon_ligne = 2
+                render_pos[0] = self.width * 0.84 + self.build_surface.get_width()*0.04
+                render_pos[1] = self.height * 0.82
+
+            elif troisieme_ligne:
+                self.icon_colonne = 1
+                self.icon_ligne = 3
+                render_pos[0] = self.width * 0.84 + self.build_surface.get_width()*0.04
+                render_pos[1] = self.height * 0.9
+
             # print('in for create_build_gui')
             pos = render_pos.copy()
             image_tmp = image.copy()
@@ -91,13 +114,17 @@ class Gui:
                     "icon": image_scale,
                     "image": self.images[image_name],
                     "rect": rect,
-                    "affordable": True
+                    "affordable": True,
+                    "ligne": self.icon_ligne,
+                    "colonne": self.icon_colonne
                     # on peut ajouter plusieurs attributs ici
                 }
             )
 
             # position in inventory for each entity
-            render_pos[0] += image_scale.get_width() + 10
+            render_pos[0] += image_scale.get_width() + self.build_surface.get_width() * 0.085
+
+            self.icon_colonne += 1
 
         return tiles
 
@@ -137,7 +164,7 @@ class Gui:
         if mouse_action[0] and button6.rect.collidepoint(mouse_pos):
             print("pause")
 
-        if self.examined_unit is not None and (self.examined_unit.game_name in ("Archer", "Villageois", "Barbare")):
+        if self.examined_unit is not None and (self.examined_unit.game_name in ("Archer", "Villageois", "Barbare", "Cavalier")):
 
             img = self.examined_unit.image
             w, h = self.select_rect.width, self.select_rect.height
@@ -249,6 +276,25 @@ class Gui:
                     self.events.get_troop()
                     # Code pour le bouton permettant de créer un archer
 
+            if self.examined_tile.name == "Stable" and self.examined_tile.team == "Blue":
+                button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
+                button.button()
+                if mouse_action[0] and button.rect.collidepoint(mouse_pos):
+                    button.button("black on blue")
+                    self.events.set_destroy()
+                    # Code pour le bouton permettant de détruire la caserne
+
+                button2 = Button(screen, (self.width * 0.6 - 150, self.height * 0.95), 'Cavalier', 20,
+                                 'white on black')
+                button2.button()
+                if mouse_action[0] and button2.rect.collidepoint(mouse_pos):
+                    button2.button("black on green")
+                    self.events.remise()
+                    # print('Infantryman created')
+                    self.events.create_troop('cavalier')
+                    self.events.get_troop()
+                    # Code pour le bouton permettant de créer un barbare
+
         # icon for entity selecting
         for tile in self.tiles:
             icon = tile["icon"].copy()
@@ -264,16 +310,18 @@ class Gui:
             draw_text(screen, txt, 25, WHITE, (pos, 5))
             pos += 110
 
-    def load_icon_images(self):
+    def load_icon_images(self, age):
         TownCenter = towncenter_icon
         Barracks = barracks_icon
         Archery = archery_icon
+        Stable = stable_icon
 
         images = {
             "TownCenter": TownCenter,
             "Barracks": Barracks,
-            "Archery": Archery
+            "Archery": Archery,
         }
+        if age > 1: images.update({"Stable": Stable})
         return images
 
 
@@ -285,6 +333,7 @@ class Gui:
         TownCenter = firstage_towncenter
         Barracks = firstage_barracks
         Archery = firstage_archery
+        Stable = stable
         Archer = archer
         Infantryman = infantryman
         Villager = villager
@@ -300,6 +349,7 @@ class Gui:
             "TownCenter": TownCenter,
             "Barracks": Barracks,
             "Archery": Archery,
+            "Stable": Stable
             # "tree": Tree_img,
             # "rock": Rock_img
             # "Archer" : Archer

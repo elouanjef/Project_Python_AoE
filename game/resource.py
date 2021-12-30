@@ -22,9 +22,11 @@ class Resource:
             "Barracks": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
             "LumberMill": {"Wood": 50, "Rock": 0, "Gold": 0, "Food": 0},
             "Archery": {"Wood": 125, "Rock": 0, "Gold": 0, "Food": 0},
+            "Stable": {"Wood": 150, "Rock":0, "Gold":0, "Food":0},
             "Archer": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 20},
             "Infantryman": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
             "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50},
+            "Cavalier": {"Wood": 0, "Rock": 0, "Gold": 75, "Food": 60},
             "Secondage": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 800}
         }
 

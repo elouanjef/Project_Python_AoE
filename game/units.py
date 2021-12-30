@@ -23,8 +23,6 @@ class Unit:
         if not beginning:
             self.resource_manager.buy(self)
 
-        self.health = 35
-        self.health_max = 35
         self.health_bar_length = HEALTH_BAR_LENGTH_UNIT
         self.health_ratio = self.health_max / self.health_bar_length
 
@@ -157,3 +155,13 @@ class Infantryman(Unit):
     health_max = 50
     attack = 7
     velocity_inverse = 300
+
+class Cavalier(Unit):
+    bar_image = cavalier.copy()
+    image = cavalier
+    name = "Cavalier"
+    game_name = "Cavalier"
+    health = 125
+    health_max = 125
+    attack = 8
+    velocity_inverse = 65
