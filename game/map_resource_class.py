@@ -8,7 +8,6 @@ class MapResource:
     def __init__(self, resource_manager):
         self.resource_manager = resource_manager
         self.resource_cooldown = pg.time.get_ticks()
-
         self.available = True
 
     def mine(self, team = ""):
