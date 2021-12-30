@@ -33,6 +33,7 @@ class AI:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
                               self.create_Archer,self.create_Infantryman, self.create_villager, self.get_resource]
+        self.towncenter = self.AI_construct_Towncenter(5,10)
 
     def read_file(self):
         action_line = self.f.readline()
@@ -53,7 +54,12 @@ class AI:
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
             self.created_tc = True
-        # else: print("peux pas construire")
+            return ent
+        else: 
+            if (0 < y < 49):
+                return self.AI_construct_Towncenter(x, y+1)
+            elif ( 0 < x < 49):
+                return self.AI_construct_Towncenter(x+1, y)
 
     def AI_construct_Barracks(self, x, y):
         # print(f'construct a Barrack at ({x},{y})')
@@ -63,7 +69,11 @@ class AI:
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
             self.created_bar = True
-        # else: print("peux pas construire")
+        else: 
+            if (0 < y < 49):
+                self.AI_construct_Barracks(x, y+1)
+            elif ( 0 < x < 49):
+                self.AI_construct_Barracks(x+1, y)
 
     def AI_construct_Archery(self, x, y):
         # print(f'construct an Archery at ({x},{y})')
@@ -73,12 +83,11 @@ class AI:
             self.AI_batiment.append(ent)
             self.world.buildings[x][y] = ent
             self.created_arc = True
-        # else: print("peux pas construire")
-
-    def create_villager(self, pos):
-        if self.created_tc:
-            self.AI_villager.append(
-                Villager(self.world.world[pos[0]][pos[1]], self.world, self.resource_manager, "Red", False))
+        else: 
+            if (0 < y < 49):
+                self.AI_construct_Archery(x, y+1)
+            elif ( 0 < x < 49):
+                self.AI_construct_Archery(x+1, y)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     def find_resource(self):
         vill_dict = DefaultDict(list)
@@ -369,8 +378,32 @@ class AI:
             
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def choose_village(self):
-        pass
+    def create_villager(self, pos):
+        if self.created_tc:
+            for i in range(-1,3):
+                for j in range(-1,3):
+                    if not self.world.world[self.towncenter.pos[0] + i][self.towncenter.pos[1] + j]["collision"]:
+                        temp = Villager(self.world.world[self.towncenter.pos[0] + i][self.towncenter.pos[1] + j], self.world, self.resource_manager, "Red", False)
+                        self.AI_villager.append(temp)
+                        temp.set_target(pos)
+                        return 
+                # elif not self.world.world[self.towncenter.pos[0]][self.towncenter.pos[1] + 1]["collision"]:
+                #     self.AI_villager.append(
+                #         Villager(self.world.world[self.towncenter.pos[0]][self.towncenter.pos[1] + 1], self.world, self.resource_manager, "Red", False))
+                # elif not self.world.world[self.towncenter.pos[0] + 1][self.towncenter.pos[1]]["collision"]:
+                #     self.AI_villager.append(
+                #         Villager(self.world.world[self.towncenter.pos[0]][self.towncenter.pos[1]], self.world, self.resource_manager, "Red", False))
+    #mining ressource x = villager x - 1
+    def check_villager(self):
+        for i in self.AI_villager:
+            if not self.world.world[i.pos[0] - 1][i.pos[1]]["collision"]:
+                # print(i.in_work)
+                i.in_work = False
+        self.get_resource("Arbre")
+        self.get_resource("Or")
+        self.get_resource("Carrière de pierre")
+        self.get_resource("Buisson")
+                
 
     # create an Archer for each Archery
     def create_Archer(self,x,y):
@@ -397,13 +430,15 @@ class AI:
         temps = ((self.minute) * 60 + self.second) - self.previous_time
         self.time = "%02d:%02d" % (self.minute, self.second)
         if temps >= 1:
-
-            #print(self.world.resource_manager.starting_resources_AI)   #checking resource of AI
-            
-            
-            #il faut clicker sur resource encpre une fois pour mining
-            #for sur il'll try to fix it
             self.previous_time = (self.minute) * 60 + self.second
+            if self.world.resource_manager.starting_resources_AI["Wood"] < 50:
+                self.get_resource("Arbre")
+            if self.world.resource_manager.starting_resources_AI["Rock"] < 50:
+                self.get_resource("Carrière de pierre")
+            if self.world.resource_manager.starting_resources_AI["Gold"] < 50:
+                self.get_resource("Or")
+            if self.world.resource_manager.starting_resources_AI["Food"] < 50:
+                self.get_resource("Buisson")
             if self.time in self.data.keys():
                 i = self.data[self.time]
                 for j in i:
@@ -426,6 +461,11 @@ class AI:
                         self.get_resource("Buisson")
                     else:
                         print("U should update ur action")
+
+
+
+
+            self.check_villager()
 
                     
 #_____________________________________________________________________________________________________________________________________________________________                

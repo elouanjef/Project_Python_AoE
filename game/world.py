@@ -6,7 +6,7 @@ from os import path
 from .buildings import TownCenter, Barracks, Archery, Stable
 from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
-from .map_resource_class import *
+from .map_resource_class import Map_Tree,Map_Tile,Map_Bush,Map_Gold,Map_Rock,MapResource
 
 
 class World:
