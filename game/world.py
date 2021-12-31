@@ -6,7 +6,7 @@ from os import path
 from .buildings import TownCenter, Barracks, Archery, Stable
 from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
-from .map_resource_class import Map_Tree,Map_Tile,Map_Bush,Map_Gold,Map_Rock,MapResource
+from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
 
 class World:
@@ -25,9 +25,9 @@ class World:
         self.starting_resources = STARTING_RESOURCES
 
         self.perlin_scale = self.grid_size_x / 2
-        self.octave = random.randint(1,20)
-        self.modifier = random.randint(80,120)
-        self.random_noise = random.randint(1,2)
+        self.octave = random.randint(1, 20)
+        self.modifier = random.randint(80, 120)
+        self.random_noise = random.randint(1, 2)
 
         self.choosing_pos_x = None
         self.choosing_pos_y = None
@@ -54,7 +54,6 @@ class World:
         self.examine_tile = None
         self.examine_unit = None
 
-
         # choose Arbre, rock or gold
         self.choose = None
 
@@ -67,9 +66,10 @@ class World:
         self.list_mining = []
 
         self.list_troop = []
+        self.attacking = False
+        self.list_attacker_defender = []
 
         self.replace_water()
-
 
     # work in map
     def update(self, screen, camera):
@@ -213,7 +213,7 @@ class World:
                             if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable(
                                     "Archer"):
                                 a = Archer(self.world[pos_x][pos_y], self, self.resource_manager,
-                                       self.gui.examined_tile.team, False)
+                                           self.gui.examined_tile.team, False)
                                 self.list_troop.append(a)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -221,7 +221,7 @@ class World:
                             elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable(
                                     "Infantryman"):
                                 i = Infantryman(self.world[pos_x][pos_y], self, self.resource_manager,
-                                            self.gui.examined_tile.team, False)
+                                                self.gui.examined_tile.team, False)
                                 self.list_troop.append(i)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -229,7 +229,7 @@ class World:
                             elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable(
                                     "Villager"):
                                 v = Villager(self.world[pos_x][pos_y], self, self.resource_manager,
-                                         self.gui.examined_tile.team, False)
+                                             self.gui.examined_tile.team, False)
                                 self.list_troop.append(v)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -237,64 +237,78 @@ class World:
                             elif self.gui.events.get_troop() == 'cavalier' and self.resource_manager.is_affordable(
                                     "Cavalier"):
                                 v = Cavalier(self.world[pos_x][pos_y], self, self.resource_manager,
-                                         self.gui.examined_tile.team, False)
+                                             self.gui.examined_tile.team, False)
                                 self.list_troop.append(v)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
                         self.gui.events.remise_troop()
 
-                    if self.events.get_grid_pos_unit() and (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
-                        new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                        new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
-                        # si on clic droit autre part que sur une ressource:
-                        if not collision:  # and new_unit_pos_world["collision"])
-                            # self.gui.examined_unit.change_tile(new_unit_pos)
-                            self.gui.examined_unit.set_target((new_unit_pos[0], new_unit_pos[1]))
-                            self.events.remise_moving_troop()
-                            self.mining_position = None
-                            self.mining = False
-                            self.examine_unit = new_unit_pos
+                    grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                    building = self.buildings[grid_pos[0]][grid_pos[1]]
 
-                        elif new_unit_pos_world["collision"] and self.gui.examined_unit.name == "Archer":
-                            print("j'attaque")
+                    if self.events.get_grid_pos_unit():
+                        if (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
+                            new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                            new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
+                            # si on clic droit autre part que sur une ressource:
+                            if not collision:  # and new_unit_pos_world["collision"])
+                                # self.gui.examined_unit.change_tile(new_unit_pos)
+                                if building is not None and (building.team == 'Red'):
+                                    self.attacking = True
+                                    couple = (self.gui.examined_unit, building)
+                                    if couple not in self.list_attacker_defender:
+                                        self.list_attacker_defender.append((self.gui.examined_unit, building))
 
-                        # si on clic droit sur une ressource pour la miner avec un villageois:
-                        elif self.gui.examined_unit.name == "Villager" and collision:
-                            # self.gui.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
-                            new_unit_pos = (new_unit_pos[0] + 1, new_unit_pos[1])
-                            self.gui.examined_unit.set_target(new_unit_pos)
-                            # print("mining", self.gui.examined_unit.name, "to", new_unit_pos)
-                            self.events.remise_moving_troop()
-                            # on vérifie qu'on a bien sélectionné une ressource
-                            if self.gui.choose is not None:
-                                # et qu'elle dispose toujours de ressources
-                                if self.gui.choose["class"].available:
-                                    self.mining = True
-                                    # condition permettant de changer de ressource minée sans que la précédente soit toujours minée
-                                    if new_unit_pos != self.mining_position and (self.mining_position is not None):
-                                        self.list_mining.remove(self.mined)
-                                    self.mined = self.gui.choose
-                                    self.mined["mining_team"] = "Blue"
-                                    self.events.getting_resource()
-                                    # self.moving_to_resource = True
-                                    self.mining_position = self.gui.choose
-                                    # print("mining pos:", self.mining_position)
 
-                                    self.list_mining.append(self.mined)
-
-                                elif not self.gui.choose["class"].available:
-                                    # self.moving_to_resource = False
-                                    self.mining = False
-                                    self.events.getting_resource()
-                                    # condition permettant de vider la variable contenant l'objet ressource miné précédemment (peut être None)
-                                    if self.mined in self.list_mining:
-                                        self.list_mining.remove(self.mined)
-                                    self.mined = None
-                                    self.choose = None
-                                    self.gui.choose = None
+                                else:
+                                    self.gui.examined_unit.set_target((new_unit_pos[0], new_unit_pos[1]))
                                     self.mining_position = None
-                                    self.gui.mining_gui = False
+                                    if self.attacking:
+                                        self.attacking = False
+                                    self.mining = False
+                                    self.examine_unit = new_unit_pos
+                                    self.events.remise_moving_troop()
+
+
+
+
+                            # si on clic droit sur une ressource pour la miner avec un villageois:
+                            elif self.gui.examined_unit.name == "Villager" and collision:
+                                # self.gui.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
+                                new_unit_pos = (new_unit_pos[0] + 1, new_unit_pos[1])
+                                self.gui.examined_unit.set_target(new_unit_pos)
+                                # print("mining", self.gui.examined_unit.name, "to", new_unit_pos)
+                                self.events.remise_moving_troop()
+                                # on vérifie qu'on a bien sélectionné une ressource
+                                if self.gui.choose is not None:
+                                    # et qu'elle dispose toujours de ressources
+                                    if self.gui.choose["class"].available:
+                                        self.mining = True
+                                        # condition permettant de changer de ressource minée sans que la précédente soit toujours minée
+                                        if new_unit_pos != self.mining_position and (self.mining_position is not None):
+                                            self.list_mining.remove(self.mined)
+                                        self.mined = self.gui.choose
+                                        self.mined["mining_team"] = "Blue"
+                                        self.events.getting_resource()
+                                        # self.moving_to_resource = True
+                                        self.mining_position = self.gui.choose
+                                        # print("mining pos:", self.mining_position)
+
+                                        self.list_mining.append(self.mined)
+
+                                    elif not self.gui.choose["class"].available:
+                                        # self.moving_to_resource = False
+                                        self.mining = False
+                                        self.events.getting_resource()
+                                        # condition permettant de vider la variable contenant l'objet ressource miné précédemment (peut être None)
+                                        if self.mined in self.list_mining:
+                                            self.list_mining.remove(self.mined)
+                                        self.mined = None
+                                        self.choose = None
+                                        self.gui.choose = None
+                                        self.mining_position = None
+                                        self.gui.mining_gui = False
 
                     # if self.mining and self.moving_to_resource and self.events.getting_resource:
                     #     self.mined["class"].mine()
@@ -305,7 +319,26 @@ class World:
                             # pass
                             # on mine la ressource tant que self.mining = True
 
+                    if self.attacking:
+                        # ad est un tuple avec (attaquant, défenseur)
+                        # pour tous les tuples ad, on réalise des attaques avec la boucle for
+                        for ad in range(len(self.list_attacker_defender)):
+                            couple = self.list_attacker_defender[ad]
+                            if couple[1].health <= 0:  # on supprime le bâtiment
+                                bat_pos = couple[1].pos
+                                self.world[bat_pos[0]][bat_pos[1]]["collision"] = False
+                                index = self.entities.index(couple[1])
+                                self.examine_tile = None
+                                self.gui.examined_tile = None
+                                self.entities.pop(index)
+                                self.buildings[bat_pos[0]][bat_pos[1]] = None
+                                self.choosing_pos_x, self.choosing_pos_y = None, None
+                                self.attacking = False
+                                ind = self.list_attacker_defender.index(couple)
+                                self.list_attacker_defender.pop(ind)
 
+                            else:
+                                couple[0].kill(couple[1])
 
                     if self.events.get_age_sup():
                         for building in self.entities:
@@ -324,9 +357,6 @@ class World:
                                 building.passer_age()
                         self.events.remise_age()
 
-
-
-
                     if self.events.update_destroy():
                         # condition qui récupère la variable dans events permettant de savoir si on veut détruire
                         # en gros on supprimer toute trace du bâtiment et on enlève le GUI de ce dernier
@@ -342,9 +372,6 @@ class World:
                                 self.buildings[self.choosing_pos_x][self.choosing_pos_y] = None
                                 self.events.remise()
                                 self.choosing_pos_x, self.choosing_pos_y = None, None
-
-
-
 
         for unit in self.list_troop:
             # unit.health_bar()
@@ -381,14 +408,14 @@ class World:
                                    1)
 
                 elif tile == "Buisson":
-                # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
                     pg.draw.circle(screen, PINK, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
                                    1)
 
                 elif tile == "Eau":
-                # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
+                    # screen.blit(self.tiles[tile],(render_pos_mini[0],render_pos_mini[1]))
                     pg.draw.circle(screen, BLUE_SKY, (
                         render_pos_mini[0] + TILE_SIZE_MINI_MAP * 51 + minimap_offset[0],
                         render_pos_mini[1] + 50 - TILE_SIZE_MINI_MAP * 7 + minimap_offset[1]),
@@ -423,11 +450,12 @@ class World:
             return True if ind1[1] == ind2[1] + 1 or ind1[1] == ind2[1] - 1 else False
         elif ind1[1] == ind2[1]:
             return True if ind1[0] == ind2[0] + 1 or ind1[0] == ind2[0] - 1 else False
-        else: return False
+        else:
+            return False
 
     def neighbor_list(self, list, grid):
         neighbors = []
-        neighbors.append((grid[0],grid[1] + 1))
+        neighbors.append((grid[0], grid[1] + 1))
         neighbors.append((grid[0], grid[1] - 1))
         neighbors.append((grid[0] + 1, grid[1]))
         neighbors.append((grid[0] - 1, grid[1]))
@@ -453,8 +481,6 @@ class World:
 
     def draw(self, screen, camera):
 
-
-
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
@@ -473,8 +499,6 @@ class World:
                                     for x, y in mask]
                             pg.draw.polygon(screen, (255, 255, 255), mask, 3)
 
-
-
                 units = self.units[x][y]
                 if units is not None:
 
@@ -482,7 +506,7 @@ class World:
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
-                    if self.examine_unit == (x,y+1) or (units.health < units.health_max):
+                    if self.examine_unit == (x, y + 1) or (units.health < units.health_max):
                         screen.blit(units.health_bar(),
                                     (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                      render_pos[1] - (units.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
@@ -502,10 +526,11 @@ class World:
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
-                    if self.examine_tile == (x,y) or (building.health < building.health_max):
+                    if self.examine_tile == (x, y) or (building.health < building.health_max):
                         screen.blit(building.health_bar(),
                                     (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                     render_pos[1] - (building.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
+                                     render_pos[1] - (
+                                                 building.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
 
                     if self.examine_tile is not None:
                         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):
@@ -656,7 +681,6 @@ class World:
             "mining_team": mining_team
         }
 
-
         return out
 
     def cart_to_iso(self, x, y):
@@ -720,14 +744,13 @@ class World:
             ent = TownCenter(starting_pos, self.resource_manager, "Blue", True)
             self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
             self.buildings[starting_pos[0]][starting_pos[1]] = ent
-            villager_list = self.neighbor_list(self.get_grid_array(), (starting_pos[0], starting_pos[1]-1))
+            villager_list = self.neighbor_list(self.get_grid_array(), (starting_pos[0], starting_pos[1] - 1))
             for villager in villager_list:
                 index = villager_list.index(villager)
                 pos_villager = villager_list[index]
                 v = Villager(self.grid_to_world(pos_villager[0], pos_villager[1]), self, self.resource_manager,
-                        "Blue", True)
+                             "Blue", True)
                 self.list_troop.append(v)
 
-        else: print("je ne peux pas construire le tc ici")
-
-
+        else:
+            print("je ne peux pas construire le tc ici")

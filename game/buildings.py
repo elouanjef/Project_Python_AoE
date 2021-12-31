@@ -18,12 +18,20 @@ class Building:
         self.pos = pos
         self.age_2 = False
         self.age = 'Firstage'
+        self.attack_cooldown = pg.time.get_ticks()
+        self.constructed = False
         if not beginning:
             self.resource_manager.buy(self)
 
+
     def update(self):
-        if self.health < self.health_max:
-            self.health += 10
+        if not self.constructed:
+            if self.health < self.health_max:
+                self.health += 10
+                if self.health >= self.health_max:
+                    self.constructed = True
+        if self.age_2:
+            self.constructed = False
 
     def health_bar(self):
         for i in range(4):

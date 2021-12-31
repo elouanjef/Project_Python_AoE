@@ -17,7 +17,6 @@ class Unit:
         self.world = world
         self.tile = tile
         self.team = team  # blue team is the player's team
-        self.attack = 5
         self.alive = True
         self.resource_manager = resource_manager
         if not beginning:
@@ -33,6 +32,7 @@ class Unit:
         self.world.list_troop.append(self)
         self.path_index = 0
         self.move_timer = pg.time.get_ticks()
+        self.attack_cooldown = pg.time.get_ticks()
 
         self.target = None
 
@@ -63,6 +63,17 @@ class Unit:
         #     self.world.units[x][y+1] = self
         #     self.tile = self.world.world[x][y+1]
         #     return False
+
+    def kill(self, cible):
+        now = pg.time.get_ticks()
+        if now - self.attack_cooldown > 2000:
+            if cible.health <= 0:
+                cible.health = 0
+                print(cible, "meurt")
+                self.attack_cooldown = now
+            else:
+                cible.health -= self.attack
+                self.attack_cooldown = now
         
 
     def create_path(self, pos):
@@ -131,6 +142,7 @@ class Archer(Unit):
     health = 35
     health_max = 35
     attack = 5
+    range = 6
     velocity_inverse = 100
 
 
@@ -141,7 +153,8 @@ class Villager(Unit):
     game_name = "Villageois"
     health = 20
     health_max = 20
-    attack = 1
+    attack = 100
+    range = 4
     velocity_inverse = 200
     in_work = False
 
@@ -154,6 +167,7 @@ class Infantryman(Unit):
     health = 50
     health_max = 50
     attack = 7
+    range = 1
     velocity_inverse = 300
 
 class Cavalier(Unit):
@@ -164,4 +178,5 @@ class Cavalier(Unit):
     health = 125
     health_max = 125
     attack = 8
+    range = 1
     velocity_inverse = 65
