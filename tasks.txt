@@ -9,7 +9,7 @@
 + les themes/âges                                           
 + IA                                                    ;Cong Khai
 + randomising the map in intervalls                                            DONE
-+ cheats commands                                       ;TUAN
++ cheats commands                                       ;TUAN                  DONE
 + resource ()                                           ;Elouan                DONE
 + fog of war                                            ; 
 + map                                                   ;Cong Khai
