@@ -11,7 +11,7 @@
 + randomising the map in intervalls                                            DONE
 + cheats commands                                       ;TUAN                  DONE
 + resource ()                                           ;Elouan                DONE
-+ fog of war                                            ; 
++ fog of war                                            ; Hoai
 + map                                                   ;Cong Khai
 + RTS                                                   ;Elouan et Cong Khai   DONE       (il manque une file d'attente pour une séquence d'action)
 
