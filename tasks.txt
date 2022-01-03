@@ -17,7 +17,7 @@
 + attack						;Cong Khai et Elouan
 
 
-E: SAVE AND LOAD (seulement save)
+E: SAVE AND LOAD (seulement save de terminé)
 E: GRAPHICAL REPRESENTATION OF THE MAP  ✓
 E: GUI  ✓
 E: DONE IN PYTHON 3 ✓
