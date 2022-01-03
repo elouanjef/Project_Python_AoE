@@ -71,3 +71,15 @@ class Save_game:
             self.scan_map()
             self.scan_entities()
             self.scan_units()
+
+class  Load_game:
+    def __init__(self, world):
+        self.world = world
+        f_entities = open(save_entities)
+        f_map = open(save_map)
+        f_units = open(save_units)
+        self.load_map = json.load(f_map)
+        self.load_units = json.load(f_units)
+        self.load_entities = json.load(f_entities)
+    def load_game(self):
+        pass
