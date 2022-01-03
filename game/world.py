@@ -746,6 +746,10 @@ class World:
                 v = Villager(self.grid_to_world(pos_villager[0], pos_villager[1]), self, self.resource_manager,
                              "Blue", True)
                 self.list_troop.append(v)
-
         else:
             print("je ne peux pas construire le tc ici")
+
+
+
+
+    

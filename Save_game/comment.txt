@@ -5,7 +5,7 @@ data:
     {key:value}
     type(key) = 'string'
     type(value) = 'list'
-    value = [entity's team,entity's position, entity's health, entity's game_name]
+    value = [entity's team,entity's position, entity's health, entity's game_name, entity's age]
 
 
 save_map.json

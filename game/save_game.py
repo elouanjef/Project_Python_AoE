@@ -56,6 +56,7 @@ class Save_game:
             eleAttr.append(element.pos)
             eleAttr.append(element.health)
             eleAttr.append(element.name)
+            eleAttr.append(element.age)
             entities[str(temp_key)] = eleAttr
             temp_key += 1
             eleAttr = []

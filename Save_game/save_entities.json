@@ -3,10 +3,11 @@
         "Red",
         [
             5,
-            10
+            11
         ],
         1000,
-        "TownCenter"
+        "TownCenter",
+        "Firstage"
     ],
     "1": [
         "Blue",
@@ -15,7 +16,8 @@
             5
         ],
         1000,
-        "TownCenter"
+        "TownCenter",
+        "Firstage"
     ],
     "2": [
         "Red",
@@ -24,7 +26,8 @@
             11
         ],
         500,
-        "Barracks"
+        "Barracks",
+        "Firstage"
     ],
     "3": [
         "Red",
@@ -33,7 +36,8 @@
             13
         ],
         500,
-        "Barracks"
+        "Barracks",
+        "Firstage"
     ],
     "4": [
         "Red",
@@ -42,15 +46,7 @@
             15
         ],
         500,
-        "Archery"
-    ],
-    "5": [
-        "Blue",
-        [
-            -448,
-            832.0
-        ],
-        500,
-        "Barracks"
+        "Archery",
+        "Firstage"
     ]
 }
