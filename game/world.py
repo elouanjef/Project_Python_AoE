@@ -244,37 +244,33 @@ class World:
 
                         self.gui.events.remise_troop()
 
-                    grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-                    building = self.buildings[grid_pos[0]][grid_pos[1]]
-
                     if self.events.get_grid_pos_unit():
+                        grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
+                        building = self.buildings[grid_pos[0]][grid_pos[1]]
                         if (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
                             # si on clic droit autre part que sur une ressource:
                             if not collision:  # and new_unit_pos_world["collision"])
+                                couple = (self.gui.examined_unit, building)
                                 # self.gui.examined_unit.change_tile(new_unit_pos)
                                 if building is not None and (building.team == 'Red'):
+
                                     self.attacking = True
-                                    couple = (self.gui.examined_unit, building)
                                     if couple not in self.list_attacker_defender:
                                         self.list_attacker_defender.append((self.gui.examined_unit, building))
 
-
-                                else:
+                                elif mouse_action[2] and (building is None):
                                     self.gui.examined_unit.set_target((new_unit_pos[0], new_unit_pos[1]))
                                     self.mining_position = None
-                                    if self.attacking:
-                                        self.attacking = False
+                                    self.attacking = False
                                     self.mining = False
                                     self.examine_unit = new_unit_pos
                                     self.events.remise_moving_troop()
 
-
-
-
                             # si on clic droit sur une ressource pour la miner avec un villageois:
                             elif self.gui.examined_unit.name == "Villager" and collision:
+                                self.attacking = False
                                 # self.gui.examined_unit.change_tile((new_unit_pos[0]+1,new_unit_pos[1]))
                                 new_unit_pos = (new_unit_pos[0] + 1, new_unit_pos[1])
                                 self.gui.examined_unit.set_target(new_unit_pos)
@@ -294,7 +290,6 @@ class World:
                                         # self.moving_to_resource = True
                                         self.mining_position = self.gui.choose
                                         # print("mining pos:", self.mining_position)
-
                                         self.list_mining.append(self.mined)
 
                                     elif not self.gui.choose["class"].available:
@@ -530,7 +525,7 @@ class World:
                         screen.blit(building.health_bar(),
                                     (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                      render_pos[1] - (
-                                                 building.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
+                                             building.health_bar().get_height() - TILE_SIZE) + camera.scroll.y))
 
                     if self.examine_tile is not None:
                         if (x == self.examine_tile[0]) and (y == self.examine_tile[1]):

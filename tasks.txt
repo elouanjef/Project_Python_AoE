@@ -3,21 +3,21 @@
 + sauvgarder                                            ;Cong Khai             DONE
 + charger le jeu                                        ;
 + gestion des unite/batiment                            ;Elouan                DONE
-+ ajouter des personnages (one human + one I.A)         ;
++ ajouter des personnages (one human + one I.A) 	;Cong Khai	       DONE
 + la methode de la mini                                 ;Cong Khai             DONE
 + collision                                             ;Cong Khai             DONE
-+ les themes/âges                                           
-+ IA                                                    ;Cong Khai
++ les themes/âges                                       ;Elouan		       DONE
++ IA                                                    ;Cong Khai             
 + randomising the map in intervalls                                            DONE
 + cheats commands                                       ;TUAN                  DONE
 + resource ()                                           ;Elouan                DONE
 + fog of war                                            ; Hoai
-+ map                                                   ;Cong Khai
++ map                                                   ;Cong Khai et Elouan   DONE
 + RTS                                                   ;Elouan et Cong Khai   DONE       (il manque une file d'attente pour une séquence d'action)
++ attack						;Cong Khai et Elouan
 
 
-
-E: SAVE AND LOAD       
+E: SAVE AND LOAD (seulement save)
 E: GRAPHICAL REPRESENTATION OF THE MAP  ✓
 E: GUI  ✓
 E: DONE IN PYTHON 3 ✓
@@ -31,4 +31,4 @@ e: Fog of war
 Replay games
 e: More than 2 players
 e: AI vs AI
-e: Ages
+e: Ages ✓
