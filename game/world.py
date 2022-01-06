@@ -71,6 +71,9 @@ class World:
 
         self.replace_water()
 
+
+        self.load_game = None
+
     # work in map
     def update(self, screen, camera):
         mouse_pos = pg.mouse.get_pos()
@@ -750,6 +753,29 @@ class World:
             print("je ne peux pas construire le tc ici")
 
 
+    def reconstruct(self):
+        self.entities = []
+        # self.grass_tiles = []
+        # self.world = 
 
+        self.buildings = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        self.units = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
 
-    
+        self.blue_team_ent = []
+        self.red_team_ent = []
+
+        self.age_2_blue = []
+        self.age_2_red = []
+
+        self.mining = False
+        self.mined = None
+        self.mining_position = None
+        self.past_mining_pos = None
+
+        self.list_mining = []
+
+        self.list_troop = []
+        self.attacking = False
+        self.list_attacker_defender = []
+
+        self.replace_water() 

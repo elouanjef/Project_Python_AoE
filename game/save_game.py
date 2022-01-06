@@ -67,11 +67,16 @@ class Save_game:
             outfile.write(json_object)
     
     def update(self):
-        if self.world.events.update_save_game:
+        if self.world.events.update_save_game():
             #press SPACE to save game
             self.scan_map()
             self.scan_entities()
             self.scan_units()
+            # print(' save ')
+
+        else:
+            pass
+            # print('save nothing')
 
 class  Load_game:
     def __init__(self, world):
@@ -84,3 +89,9 @@ class  Load_game:
         self.load_entities = json.load(f_entities)
     def load_game(self):
         pass
+
+    def update(self):
+        if self.world.events.Load_game:
+            self.world.reconstruct()
+
+        self.world.events.update_load_game()

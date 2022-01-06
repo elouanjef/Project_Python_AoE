@@ -1,7 +1,7 @@
 import pygame as pg
 import sys
 
-from game.save_game import Save_game
+from game.save_game import Load_game, Save_game
 
 from .world import World
 from settings import *
@@ -39,6 +39,7 @@ class Game:
 
         # create the world with 50 by 50 grid
         self.world = World(self.resource_manager, self.entities, self.gui, MAP_SIZE, MAP_SIZE, self.width, self.height, self.events)
+
         self.camera = Camera(self.width, self.height)
 
         self.game_time = Game_time()
@@ -46,6 +47,10 @@ class Game:
         self.AI = AI(self.game_time, self.world, self.resource_manager)
 
         self.save_game = Save_game(self.world)
+
+        self.load_game = Load_game(self.world)
+
+        self.world.load_game = self.load_game
 
 
     # running
@@ -72,6 +77,7 @@ class Game:
         self.world.update(self.screen, self.camera)
         self.game_time.update()
         self.save_game.update()
+        self.load_game.update()
         if self.world.actual_age:
             self.world.load_images(self.world.actual_age)
             self.gui.icon_images = self.gui.load_icon_images(2)

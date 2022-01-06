@@ -17,6 +17,7 @@ class Event:
         self.dt = clock.tick(30) / 1000
         self.game_time = Game_time()
         self.Save_game = False
+        self.Load_game = False
 
     # capture the events
     def events(self):
@@ -43,6 +44,12 @@ class Event:
                     self.Save_game = True
                     self.timer = 0.0001
 
+                if event.key == pg.K_0:
+                    self.Load_game = True
+                    self.timer = 0.0001
+
+                
+
     def set_destroy(self):
         self.destroy = True
         self.update_destroy()
@@ -65,12 +72,24 @@ class Event:
 
     def update_save_game(self):
         if (self.timer != 0):
-            if (self.timer > 0.5):
+            if (self.timer > 0.05):
+                # print('too late')
                 self.timer = 0
                 self.Save_game = False
             else:
                 self.timer += self.dt
         return self.Save_game
+
+
+    def update_load_game(self):
+        if (self.timer != 0):
+            if (self.timer > 0.05):
+                # print('too late')
+                self.timer = 0
+                self.Load_game = False
+            else:
+                self.timer += self.dt
+        return self.Load_game
 
     def update_delete(self):
         if self.timer != 0:
