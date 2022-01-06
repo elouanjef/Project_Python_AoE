@@ -95,3 +95,26 @@ class  Load_game:
             self.world.reconstruct()
 
         self.world.events.update_load_game()
+
+    def get_buildings(self):
+        # buildings = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        # for i in self.load_entities.keys():
+        #     entity = self.load_entities[i]
+        #     ent = None
+        #     if entity[3] == "TownCenter":
+        #         ent = TownCenter(entity[2], self.resource_manager, entity[0], False)    # false is the age of this building
+        #     buildings[entity[2][0]][entity[2][1]] = ent
+
+        return self.load_entities
+
+            # if self.gui.selected_tile["name"] == "TownCenter":
+            #     ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
+            #     self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
+            #     self.buildings[grid_pos[0]][grid_pos[1]] = ent
+
+
+    def get_units(self):
+        pass
+
+    def get_map(self):
+        pass

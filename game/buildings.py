@@ -9,8 +9,7 @@ from os import path
 
 class Building:
     def __init__(self, pos, resource_manager, team, beginning):
-        self.rect = self.image.get_rect(topleft=pos)
-        # [ WOOD , ROCK , GOLD , FOOD ]
+        # self.rect = self.image.get_rect(topleft=pos)
         self.resource_manager = resource_manager
         self.health_bar_length = HEALTH_BAR_LENGTH_BUILDING
         self.health_ratio = self.health_max / self.health_bar_length
