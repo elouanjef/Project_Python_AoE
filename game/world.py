@@ -796,3 +796,6 @@ class World:
                 ent = Archery(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
+
+            # I didn't add another attribute of the building
+            # I will do it some day
