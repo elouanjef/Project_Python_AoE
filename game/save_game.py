@@ -37,6 +37,8 @@ class Save_game:
                 eleAttr.append(self.world.units[x][y].health)
                 eleAttr.append(self.world.units[x][y].name)
                 eleAttr.append(self.world.units[x][y].target)
+                if self.world.units[x][y].name == "Villager":
+                    eleAttr.append(self.world.units[x][y].in_work)
                 units[str(temp_key)] = eleAttr
                 eleAttr = []
                 temp_key += 1
@@ -114,7 +116,7 @@ class  Load_game:
 
 
     def get_units(self):
-        pass
+        return self.load_units
 
     def get_map(self):
-        pass
+        return self.load_map

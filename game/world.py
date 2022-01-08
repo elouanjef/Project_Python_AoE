@@ -806,3 +806,27 @@ class World:
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
 
+
+        for i in self.load_game.load_units.keys():
+            unit = self.load_game.load_units[i]
+            if unit[3] == "Villager":
+                un = Villager(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
+                                                    unit[0], False)
+                un.target = unit[4]
+                un.health = unit[2]
+                un.in_work = unit[5]
+                self.list_troop.append(un)
+            if unit[3] == "Infantryman":
+                un = Infantryman(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
+                                                    unit[0], False)
+                un.target = unit[4]
+                un.health = unit[2]
+                self.list_troop.append(un)
+            if unit[3] == "Archer":
+                un = Archer(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
+                                                    unit[0], False)
+                un.target = unit[4]
+                un.health = unit[2]
+                self.list_troop.append(un)
+            
+
