@@ -778,6 +778,13 @@ class World:
         self.attacking = False
         self.list_attacker_defender = []
 
+        # self.world = []
+        # for grid_x in range(self.grid_size_x):
+        #     self.world.append([])
+        #     for grid_y in range(self.grid_size_y):
+        #         self.world[grid_x].append(None)
+
+
 
         self.replace_water() 
 
@@ -828,5 +835,70 @@ class World:
                 un.target = unit[4]
                 un.health = unit[2]
                 self.list_troop.append(un)
+
+
+        for i in self.load_game.load_map.keys():
+            tile = self.load_game.load_map[i]
+            pos_s = i.split(',')
+            pos = [0 , 0]
+            pos[0] = int(pos_s[0])
+            pos[1] = int(pos_s[1])
+            map_resource = None
+            # rect = [
+            #     (grid_x * TILE_SIZE, grid_y * TILE_SIZE),
+            #     (grid_x * TILE_SIZE + TILE_SIZE, grid_y * TILE_SIZE),
+            #     (grid_x * TILE_SIZE + TILE_SIZE, grid_y * TILE_SIZE + TILE_SIZE),
+            #     (grid_x * TILE_SIZE, grid_y * TILE_SIZE + TILE_SIZE)
+            # ]
+            # rect_mini_map = [
+            #     (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
+            #     (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
+            #     (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP),
+            #     (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
+            # ]
+            # iso_poly = [self.cart_to_iso(x, y) for x, y in rect]
+            # iso_poly_mini = [self.cart_to_iso(x, y) for x, y in rect_mini_map]
+
+            # minx = min([x for x, y in iso_poly])
+            # miny = min([y for x, y in iso_poly])
+
+            # minx_mini = min([x for x, y in iso_poly_mini])
+            # miny_mini = min([y for x, y in iso_poly_mini])
+
+            mining_team = ""
+
+            if tile == "Arbre":
+                map_resource = Map_Tree(self.resource_manager)
+                collision = True
+
+            elif tile == "Carrière de pierre":
+                map_resource = Map_Rock(self.resource_manager)
+                collision = True
+
+            elif tile == "Or":
+                map_resource = Map_Gold(self.resource_manager)
+                collision = True
+
+            elif tile == "Buisson":
+                map_resource = Map_Bush(self.resource_manager)
+                collision = True
+
+            elif tile == "Eau":
+                map_resource = Map_Tree(self.resource_manager)
+                collision = True
+
+            elif tile == "":
+                map_resource = None
+                collision = False
+
+                # "tile": tile,
+                # "collision": False if tile == "" else True,
+                # "class": map_resource,
+                # "mining_team": mining_team
+            self.world[pos[0]][pos[1]]["tile"] = tile
+            self.world[pos[0]][pos[1]]["collision"] = collision
+            self.world[pos[0]][pos[1]]["class"] = map_resource
+            
+                
             
 
