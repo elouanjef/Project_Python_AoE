@@ -48,5 +48,25 @@
         500,
         "Archery",
         "Firstage"
+    ],
+    "5": [
+        "Red",
+        [
+            5,
+            20
+        ],
+        400,
+        "Archery",
+        "Firstage"
+    ],
+    "6": [
+        "Blue",
+        [
+            5,
+            15
+        ],
+        100,
+        "Archery",
+        "Firstage"
     ]
 }

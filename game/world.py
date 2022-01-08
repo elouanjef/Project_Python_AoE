@@ -786,16 +786,23 @@ class World:
             entity = self.load_game.load_entities[i]
             if entity[3] == "TownCenter":
                 ent = TownCenter(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent.team = entity[0]
+                ent.health = entity[2]
+                ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
             if entity[3] == "Barracks":
                 ent = Barracks(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent.team = entity[0]
+                ent.health = entity[2]
+                ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
             if entity[3] == "Archery":
                 ent = Archery(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent.team = entity[0]
+                ent.health = entity[2]
+                ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
 
-            # I didn't add another attribute of the building
-            # I will do it some day
