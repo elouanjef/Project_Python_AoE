@@ -597,8 +597,6 @@ class World:
 
         rect_mini_map = [
             (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
-            # (grid_x * TILE_SIZE_MINI_MAP, grid_y*TILE_SIZE_MINI_MAP + 5 * TILE_SIZE_MINI_MAP ), left and top
-            # location of every square in mini map
             (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
             (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP),
             (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
@@ -755,8 +753,6 @@ class World:
 
     def reconstruct(self):
         self.entities = []
-        # self.grass_tiles = []
-        # self.world = 
 
         self.buildings = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.units = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
@@ -779,14 +775,6 @@ class World:
         self.list_attacker_defender = []
 
         map_world = []
-
-        # self.world = []
-        # for grid_x in range(self.grid_size_x):
-        #     self.world.append([])
-        #     for grid_y in range(self.grid_size_y):
-        #         self.world[grid_x].append(None)
-
-
 
         self.replace_water() 
 

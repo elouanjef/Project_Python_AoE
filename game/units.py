@@ -110,17 +110,22 @@ class Unit:
             if self.target is not None:
                 self.create_path(self.target)
                 try:
-                    if [self.tile["grid"][0], self.tile["grid"][1]] == self.path[-1]:
-                        self.target = None
+                    try:
+                        if (self.path == []):
+                            self.path.append([self.tile["grid"][0], self.tile["grid"][1]])
+                        if [self.tile["grid"][0], self.tile["grid"][1]] == self.path[-1]:
+                            self.target = None
+                    except IndexError:
+                        print(self.path)
+                        print("------")
+                        print(self.tile["grid"])
                     else:
-                        try:
                             if len(self.path) > 1:
                                 new_pos = self.path[1]
                                 if (not self.change_tile(new_pos)):
                                     new_pos = self.path[2]
                                     self.change_tile(new_pos)
-                        except IndexError:
-                            pass
+
                 except AttributeError:
                     pass
         if temps > self.velocity_inverse:
