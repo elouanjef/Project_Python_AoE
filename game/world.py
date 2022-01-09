@@ -778,6 +778,8 @@ class World:
         self.attacking = False
         self.list_attacker_defender = []
 
+        map_world = []
+
         # self.world = []
         # for grid_x in range(self.grid_size_x):
         #     self.world.append([])
@@ -844,28 +846,7 @@ class World:
             pos[0] = int(pos_s[0])
             pos[1] = int(pos_s[1])
             map_resource = None
-            # rect = [
-            #     (grid_x * TILE_SIZE, grid_y * TILE_SIZE),
-            #     (grid_x * TILE_SIZE + TILE_SIZE, grid_y * TILE_SIZE),
-            #     (grid_x * TILE_SIZE + TILE_SIZE, grid_y * TILE_SIZE + TILE_SIZE),
-            #     (grid_x * TILE_SIZE, grid_y * TILE_SIZE + TILE_SIZE)
-            # ]
-            # rect_mini_map = [
-            #     (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
-            #     (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP),
-            #     (grid_x * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP),
-            #     (grid_x * TILE_SIZE_MINI_MAP, grid_y * TILE_SIZE_MINI_MAP + TILE_SIZE_MINI_MAP)
-            # ]
-            # iso_poly = [self.cart_to_iso(x, y) for x, y in rect]
-            # iso_poly_mini = [self.cart_to_iso(x, y) for x, y in rect_mini_map]
-
-            # minx = min([x for x, y in iso_poly])
-            # miny = min([y for x, y in iso_poly])
-
-            # minx_mini = min([x for x, y in iso_poly_mini])
-            # miny_mini = min([y for x, y in iso_poly_mini])
-
-            mining_team = ""
+            
 
             if tile == "Arbre":
                 map_resource = Map_Tree(self.resource_manager)
@@ -891,14 +872,17 @@ class World:
                 map_resource = None
                 collision = False
 
-                # "tile": tile,
-                # "collision": False if tile == "" else True,
-                # "class": map_resource,
-                # "mining_team": mining_team
             self.world[pos[0]][pos[1]]["tile"] = tile
             self.world[pos[0]][pos[1]]["collision"] = collision
             self.world[pos[0]][pos[1]]["class"] = map_resource
-            
-                
-            
+            map_world.append([pos[0],pos[1]])
+
+
+        for x in range(50):
+            for y in range(50):
+                if [x,y] not in map_world:
+                    self.world[x][y]["tile"] = ""
+                    self.world[x][y]["collision"] = False
+                    self.world[x][y]["class"] = None
+
 
