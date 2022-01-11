@@ -8,6 +8,10 @@ from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
 from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
+FOG_BLACK = -1
+FOG_GREY = 0
+FOG_NONE = 1
+
 
 class World:
 
@@ -39,12 +43,14 @@ class World:
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
         self.events = events
         self.tiles = self.load_images(False)
+        self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.world = self.create_world()
         self.collision_matrix = self.create_collision_matrix()
         self.changed_tiles = []
 
         self.buildings = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.units = [[None for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        
         self.blue_team_ent = []
         self.red_team_ent = []
         self.age_2_blue = []
@@ -477,9 +483,21 @@ class World:
                     self.world[x][y]["tile"] = ''
                     self.changed_tiles.append(self.world[x][y]["grid"])
 
-    def draw(self, screen, camera):
+    def mark_fog_to_none(self, unit_x, unit_y):
+        d = 2
+        for x in range(self.grid_size_x):
+            for y in range(self.grid_size_y):
+                if ((x-unit_x)**2 + (y-unit_y)**2) < d**2 :
+                    self.fog[x][y] = FOG_NONE
 
+    def draw(self, screen, camera):
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
+
+        for x in range(self.grid_size_x):
+            for y in range(self.grid_size_y):
+                if self.fog[x][y] == FOG_NONE:
+                    self.fog[x][y] = FOG_GREY
+
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
                 render_pos = self.world[x][y]["render_pos"]
@@ -499,7 +517,7 @@ class World:
 
                 units = self.units[x][y]
                 if units is not None:
-
+                    self.mark_fog_to_none(x,y)
                     screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
@@ -559,6 +577,18 @@ class World:
                     render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y
                 )
             )
+
+        for x in range(self.grid_size_x):
+            for y in range(self.grid_size_y):
+                if self.fog[x][y] != FOG_NONE:
+                    render_pos = self.world[x][y]["render_pos"]
+                    x_pixel = render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x
+                    y_pixel = render_pos[1] + camera.scroll.y
+                    rect = (x_pixel, y_pixel, TILE_SIZE, TILE_SIZE)
+                    color = (0, 0, 0, 160) if self.fog[x][y] == FOG_GREY else (0,0,0,255)
+                    shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+                    pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+                    screen.blit(shape_surf, rect)
 
     # create worlds based on created dimensions
     def create_world(self):
