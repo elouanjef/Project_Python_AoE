@@ -9,12 +9,12 @@ from .events import *
 from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
 
-class World:
+class Map:
 
     # create the dimensions of the world (isometric)
-    def __init__(self, resource_manager, entities, gui, grid_size_x, grid_size_y, width, height, events):
+    def __init__(self, resource_man, entities, gui, grid_size_x, grid_size_y, width, height, events):
 
-        self.resource_manager = resource_manager
+        self.resource_man = resource_man
         self.entities = entities
         self.gui = gui
         self.grid_size_x = grid_size_x  # number of square in x-dimension
@@ -39,7 +39,7 @@ class World:
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
         self.events = events
         self.tiles = self.load_images(False)
-        self.world = self.create_world()
+        self.world = self.build_world()
         self.collision_matrix = self.create_collision_matrix()
         self.changed_tiles = []
 
@@ -70,7 +70,6 @@ class World:
         self.list_attacker_defender = []
 
         self.replace_water()
-
 
         self.load_game = None
 
@@ -107,15 +106,15 @@ class World:
         self.temp_tile = None
 
         # je vais creer une fonction pour garder cette if-else condition
-        if self.gui.selected_tile is not None:
+        if self.gui.selecting_building is not None:
 
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
             # print(f"grid_pos(0): {grid_pos[0]}  grid_pos(1): {grid_pos[1]}")
             # on placer gui ici
-            if self.can_place_tile(grid_pos):
+            if self.allowed_tile(grid_pos):
 
                 # print('placer gui')
-                img = self.gui.selected_tile["image"].copy()
+                img = self.gui.selecting_building["image"].copy()
                 img.set_alpha(100)
 
                 # this if is to avoid the error: "index out of range" when your mouse run out of map
@@ -137,32 +136,32 @@ class World:
                     grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
                     if building is None:
-                        if self.gui.selected_tile["name"] == "TownCenter":
-                            ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
+                        if self.gui.selecting_building["name"] == "TownCenter":
+                            ent = TownCenter(render_pos, self.resource_man, "Blue", False)
                             self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
                             self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                        elif self.gui.selected_tile["name"] == "Barracks":
-                            ent = Barracks(render_pos, self.resource_manager, "Blue", False)
+                        elif self.gui.selecting_building["name"] == "Barracks":
+                            ent = Barracks(render_pos, self.resource_man, "Blue", False)
                             self.entities.append(ent)
                             self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                        elif self.gui.selected_tile["name"] == "Archery":
-                            ent = Archery(render_pos, self.resource_manager, "Blue", False)
+                        elif self.gui.selecting_building["name"] == "Archery":
+                            ent = Archery(render_pos, self.resource_man, "Blue", False)
                             self.entities.append(ent)
                             self.buildings[grid_pos[0]][grid_pos[1]] = ent
-                        elif self.gui.selected_tile["name"] == "Stable":
-                            ent = Stable(render_pos, self.resource_manager, "Blue", False)
+                        elif self.gui.selecting_building["name"] == "Stable":
+                            ent = Stable(render_pos, self.resource_man, "Blue", False)
                             self.entities.append(ent)
                             self.buildings[grid_pos[0]][grid_pos[1]] = ent
                         self.collision_matrix[grid_pos[1]][grid_pos[0]] = 0
                         self.world[grid_pos[0]][grid_pos[1]]["collision"] = True
-                        self.gui.selected_tile = None
+                        self.gui.selecting_building = None
                     else:
                         pg.draw.polygon(screen, RED, iso_poly, 3)
 
 
         else:
             grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
-            if self.can_place_tile(grid_pos):  # and wood > resource:
+            if self.allowed_tile(grid_pos):  # and wood > resource:
                 if grid_pos[0] < self.grid_size_x and grid_pos[1] < self.grid_size_y:
                     collision = self.world[grid_pos[0]][grid_pos[1]]["collision"]
                     building = self.buildings[grid_pos[0]][grid_pos[1]]
@@ -213,34 +212,59 @@ class World:
                             pos_y = pos[1]
                             # ce bloc est la réponse de l'appel de la fonction create_troop dans events en créant la
                             # troupe concernée
-                            if self.gui.events.get_troop() == 'archer' and self.resource_manager.is_affordable(
-                                    "Archer"):
-                                a = Archer(self.world[pos_x][pos_y], self, self.resource_manager,
-                                           self.gui.examined_tile.team, False)
+                            if self.gui.events.get_troop() == "archer" and self.resource_man.is_affordable(
+                                    "Archer"
+                            ):
+                                a = Archer(
+                                    self.world[pos_x][pos_y],
+                                    self,
+                                    self.resource_man,
+                                    self.gui.examined_tile.team,
+                                    False,
+                                )
                                 self.list_troop.append(a)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'infantryman' and self.resource_manager.is_affordable(
-                                    "Infantryman"):
-                                i = Infantryman(self.world[pos_x][pos_y], self, self.resource_manager,
-                                                self.gui.examined_tile.team, False)
+                            elif (
+                                    self.gui.events.get_troop() == "infantryman"
+                                    and self.resource_man.is_affordable("Infantryman")
+                            ):
+                                i = Infantryman(
+                                    self.world[pos_x][pos_y],
+                                    self,
+                                    self.resource_man,
+                                    self.gui.examined_tile.team,
+                                    False,
+                                )
                                 self.list_troop.append(i)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'villager' and self.resource_manager.is_affordable(
-                                    "Villager"):
-                                v = Villager(self.world[pos_x][pos_y], self, self.resource_manager,
-                                             self.gui.examined_tile.team, False)
+                            elif self.gui.events.get_troop() == "villager" and self.resource_man.is_affordable(
+                                    "Villager"
+                            ):
+                                v = Villager(
+                                    self.world[pos_x][pos_y],
+                                    self,
+                                    self.resource_man,
+                                    self.gui.examined_tile.team,
+                                    False,
+                                )
                                 self.list_troop.append(v)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
 
-                            elif self.gui.events.get_troop() == 'cavalier' and self.resource_manager.is_affordable(
-                                    "Cavalier"):
-                                v = Cavalier(self.world[pos_x][pos_y], self, self.resource_manager,
-                                             self.gui.examined_tile.team, False)
+                            elif self.gui.events.get_troop() == "cavalier" and self.resource_man.is_affordable(
+                                    "Cavalier"
+                            ):
+                                v = Cavalier(
+                                    self.world[pos_x][pos_y],
+                                    self,
+                                    self.resource_man,
+                                    self.gui.examined_tile.team,
+                                    False,
+                                )
                                 self.list_troop.append(v)
                                 self.examine_tile = None
                                 self.gui.events.remise_troop()
@@ -462,7 +486,6 @@ class World:
     def replace_water(self):
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
-                change_tile = False
                 tile = self.world[x][y]["tile"]
                 if tile == 'Eau' and not (self.world[x][y] in self.changed_tiles):
                     neighbors = self.neighbor_list(self.get_grid_array(), self.world[x][y]["grid"])
@@ -471,11 +494,10 @@ class World:
                         if checking_tile["tile"] == "Eau":
                             pass
                         else:
-                            change_tile = True
+                            self.changed_tiles.append(self.world[x][y])
 
-                if change_tile:
-                    self.world[x][y]["tile"] = ''
-                    self.changed_tiles.append(self.world[x][y]["grid"])
+        for changing_tiles in self.changed_tiles:
+            changing_tiles["tile"] = ''
 
     def draw(self, screen, camera):
 
@@ -561,7 +583,7 @@ class World:
             )
 
     # create worlds based on created dimensions
-    def create_world(self):
+    def build_world(self):
 
         world = []
 
@@ -644,18 +666,18 @@ class World:
 
         # We create the Arbre's object here
         if tile == "Arbre":
-            map_resource = Map_Tree(self.resource_manager)
+            map_resource = Map_Tree(self.resource_man)
         # We create the rock's object here
         elif tile == "Carrière de pierre":
-            map_resource = Map_Rock(self.resource_manager)
+            map_resource = Map_Rock(self.resource_man)
         # We create the gold's object here
         elif tile == "Or":
-            map_resource = Map_Gold(self.resource_manager)
+            map_resource = Map_Gold(self.resource_man)
         # We create the bush's object here
         elif tile == "Buisson":
-            map_resource = Map_Bush(self.resource_manager)
+            map_resource = Map_Bush(self.resource_man)
         elif tile == "Eau":
-            map_resource = Map_Tree(self.resource_manager)
+            map_resource = Map_Tree(self.resource_man)
 
         # Tile's Object
         else:
@@ -723,7 +745,7 @@ class World:
         return images
 
     # collision here
-    def can_place_tile(self, grid_pos):
+    def allowed_tile(self, grid_pos):
         mouse_on_panel = False
         for rect in [self.gui.resources_rect, self.gui.build_rect, self.gui.select_rect]:
             if rect.collidepoint(pg.mouse.get_pos()):
@@ -736,20 +758,27 @@ class World:
             return False
 
     def build_blue_camp(self, starting_pos):
+        self.constructed = False
         if not (self.grid_to_world(starting_pos[0], starting_pos[1]))["collision"]:
-            ent = TownCenter(starting_pos, self.resource_manager, "Blue", True)
+            ent = TownCenter(starting_pos, self.resource_man, "Blue", True)
             self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
             self.buildings[starting_pos[0]][starting_pos[1]] = ent
             villager_list = self.neighbor_list(self.get_grid_array(), (starting_pos[0], starting_pos[1] - 1))
             for villager in villager_list:
                 index = villager_list.index(villager)
                 pos_villager = villager_list[index]
-                v = Villager(self.grid_to_world(pos_villager[0], pos_villager[1]), self, self.resource_manager,
+                v = Villager(self.grid_to_world(pos_villager[0], pos_villager[1]), self, self.resource_man,
                              "Blue", True)
                 self.list_troop.append(v)
+            self.constructed = True
         else:
-            print("je ne peux pas construire le tc ici")
-
+            neighbors = self.neighbor_list(self.get_grid_array(), starting_pos)
+            for pos in neighbors:
+                if not (self.constructed and (self.grid_to_world(pos[0], pos[1])["collision"])):
+                    self.build_blue_camp(starting_pos)
+                    self.constructed = True
+            if not self.constructed:
+                print("Le Forum n'a pas pu être construit")
 
     def reconstruct(self):
         self.entities = []
@@ -776,84 +805,81 @@ class World:
 
         map_world = []
 
-        self.replace_water() 
-
+        self.replace_water()
 
         for i in self.load_game.load_entities.keys():
             entity = self.load_game.load_entities[i]
             if entity[3] == "TownCenter":
-                ent = TownCenter(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent = TownCenter(entity[1], self.resource_man, entity[0],
+                                 False)  # false is the age of this building
                 ent.team = entity[0]
                 ent.health = entity[2]
                 ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
             if entity[3] == "Barracks":
-                ent = Barracks(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent = Barracks(entity[1], self.resource_man, entity[0], False)  # false is the age of this building
                 ent.team = entity[0]
                 ent.health = entity[2]
                 ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
             if entity[3] == "Archery":
-                ent = Archery(entity[1], self.resource_manager, entity[0], False)    # false is the age of this building
+                ent = Archery(entity[1], self.resource_man, entity[0], False)  # false is the age of this building
                 ent.team = entity[0]
                 ent.health = entity[2]
                 ent.age = entity[4] == "Firstage"
                 self.entities.append(ent)
                 self.buildings[entity[1][0]][entity[1][1]] = ent
 
-
         for i in self.load_game.load_units.keys():
             unit = self.load_game.load_units[i]
             if unit[3] == "Villager":
-                un = Villager(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
-                                                    unit[0], False)
+                un = Villager(self.world[unit[1][0]][unit[1][1]], self, self.resource_man,
+                              unit[0], False)
                 un.target = unit[4]
                 un.health = unit[2]
                 un.in_work = unit[5]
                 self.list_troop.append(un)
             if unit[3] == "Infantryman":
-                un = Infantryman(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
-                                                    unit[0], False)
+                un = Infantryman(self.world[unit[1][0]][unit[1][1]], self, self.resource_man,
+                                 unit[0], False)
                 un.target = unit[4]
                 un.health = unit[2]
                 self.list_troop.append(un)
             if unit[3] == "Archer":
-                un = Archer(self.world[unit[1][0]][unit[1][1]], self, self.resource_manager,
-                                                    unit[0], False)
+                un = Archer(self.world[unit[1][0]][unit[1][1]], self, self.resource_man,
+                            unit[0], False)
                 un.target = unit[4]
                 un.health = unit[2]
                 self.list_troop.append(un)
 
-
         for i in self.load_game.load_map.keys():
             tile = self.load_game.load_map[i]
             pos_s = i.split(',')
-            pos = [0 , 0]
+            pos = [0, 0]
             pos[0] = int(pos_s[0])
             pos[1] = int(pos_s[1])
             map_resource = None
-            
 
             if tile == "Arbre":
-                map_resource = Map_Tree(self.resource_manager)
+                map_resource = Map_Tree(self.resource_man)
                 collision = True
 
             elif tile == "Carrière de pierre":
-                map_resource = Map_Rock(self.resource_manager)
+                map_resource = Map_Rock(self.resource_man)
                 collision = True
 
             elif tile == "Or":
-                map_resource = Map_Gold(self.resource_manager)
+                map_resource = Map_Gold(self.resource_man)
                 collision = True
 
             elif tile == "Buisson":
-                map_resource = Map_Bush(self.resource_manager)
+                map_resource = Map_Bush(self.resource_man)
                 collision = True
 
             elif tile == "Eau":
-                map_resource = Map_Tree(self.resource_manager)
+                map_resource = Map_Tree(self.resource_man)
                 collision = True
 
             elif tile == "":
@@ -863,14 +889,11 @@ class World:
             self.world[pos[0]][pos[1]]["tile"] = tile
             self.world[pos[0]][pos[1]]["collision"] = collision
             self.world[pos[0]][pos[1]]["class"] = map_resource
-            map_world.append([pos[0],pos[1]])
-
+            map_world.append([pos[0], pos[1]])
 
         for x in range(50):
             for y in range(50):
-                if [x,y] not in map_world:
+                if [x, y] not in map_world:
                     self.world[x][y]["tile"] = ""
                     self.world[x][y]["collision"] = False
                     self.world[x][y]["class"] = None
-
-

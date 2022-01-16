@@ -1,6 +1,6 @@
 import pygame as pg
 from settings import *
-from game.world import *
+from game.map import *
 from os import path
 
 
@@ -10,7 +10,7 @@ class MapResource:
         self.resource_cooldown = pg.time.get_ticks()
         self.available = True
 
-    def mine(self, team = ""):
+    def mine(self, team=""):
         if self.the_rest > 0 and self.available:
             now = pg.time.get_ticks()
             if now - self.resource_cooldown > 2000:
@@ -63,6 +63,7 @@ class Map_Bush(MapResource):
     the_rest = 150
     the_rest_max = 150
     resource_type = "Food"
+
 
 class Map_Tile:
     def __init__(self):

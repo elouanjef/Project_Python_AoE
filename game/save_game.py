@@ -1,32 +1,30 @@
-from settings import save_units,save_entities,save_map
+from settings import save_units, save_entities, save_map
 from typing import DefaultDict
 import json
 
 
-
-
-#press SPACE to save game
+# press SPACE to save game
 class Save_game:
     def __init__(self, world):
         self.world = world
 
-    #we can use this function to save and load game :)))
+    # we can use this function to save and load game :)))
     def scan_map(self):
         carte = DefaultDict(list)
         for x in range(self.world.grid_size_x):
             for y in range(self.world.grid_size_y):
                 if (self.world.world[x][y]["tile"] == ""):
                     continue
-                carte['%02d,%02d' % (x,y)] = self.world.world[x][y]["tile"]
+                carte['%02d,%02d' % (x, y)] = self.world.world[x][y]["tile"]
         # Serializing json 
-        json_object = json.dumps(carte, indent = 4)       
+        json_object = json.dumps(carte, indent=4)
         # Writing to sample.json
         with open(save_map, "w") as outfile:
             outfile.write(json_object)
 
     def scan_units(self):
         units = DefaultDict(list)
-        eleAttr = []    #team, pos, health, name, target_pos
+        eleAttr = []  # team, pos, health, name, target_pos
         temp_key = 0
         for x in range(self.world.grid_size_x):
             for y in range(self.world.grid_size_y):
@@ -44,14 +42,14 @@ class Save_game:
                 temp_key += 1
 
         # Serializing json 
-        json_object = json.dumps(units, indent = 4)       
+        json_object = json.dumps(units, indent=4)
         # Writing to sample.json
         with open(save_units, "w") as outfile:
             outfile.write(json_object)
-        
+
     def scan_entities(self):
         entities = DefaultDict(list)
-        eleAttr = []    #team, pos, health, name
+        eleAttr = []  # team, pos, health, name
         temp_key = 0
         for element in self.world.entities:
             eleAttr.append(element.team)
@@ -63,14 +61,14 @@ class Save_game:
             temp_key += 1
             eleAttr = []
         # Serializing json 
-        json_object = json.dumps(entities, indent = 4)       
+        json_object = json.dumps(entities, indent=4)
         # Writing to sample.json
         with open(save_entities, "w") as outfile:
             outfile.write(json_object)
-    
+
     def update(self):
         if self.world.events.update_save_game():
-            #press SPACE to save game
+            # press SPACE to save game
             self.scan_map()
             self.scan_entities()
             self.scan_units()
@@ -80,7 +78,8 @@ class Save_game:
             pass
             # print('save nothing')
 
-class  Load_game:
+
+class Load_game:
     def __init__(self, world):
         self.world = world
         f_entities = open(save_entities)
@@ -89,6 +88,7 @@ class  Load_game:
         self.load_map = json.load(f_map)
         self.load_units = json.load(f_units)
         self.load_entities = json.load(f_entities)
+
     def load_game(self):
         pass
 
@@ -109,11 +109,10 @@ class  Load_game:
 
         return self.load_entities
 
-            # if self.gui.selected_tile["name"] == "TownCenter":
-            #     ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
-            #     self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
-            #     self.buildings[grid_pos[0]][grid_pos[1]] = ent
-
+        # if self.gui.selected_tile["name"] == "TownCenter":
+        #     ent = TownCenter(render_pos, self.resource_manager, "Blue", False)
+        #     self.entities.append(ent)  # On ajoute le bâtiment à la liste des bâtiments
+        #     self.buildings[grid_pos[0]][grid_pos[1]] = ent
 
     def get_units(self):
         return self.load_units

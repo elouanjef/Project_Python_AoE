@@ -1,16 +1,16 @@
 import pygame as pg
 from settings import *
 from game.resource import *
-from game.world import *
+from game.map import *
 from os import path
 
 
 # from units import *
 
 class Building:
-    def __init__(self, pos, resource_manager, team, beginning):
+    def __init__(self, pos, resource_man, team, beginning):
         # self.rect = self.image.get_rect(topleft=pos)
-        self.resource_manager = resource_manager
+        self.resource_man = resource_man
         self.health_bar_length = HEALTH_BAR_LENGTH_BUILDING
         self.health_ratio = self.health_max / self.health_bar_length
         self.team = team
@@ -20,8 +20,7 @@ class Building:
         self.attack_cooldown = pg.time.get_ticks()
         self.constructed = False
         if not beginning:
-            self.resource_manager.buy(self)
-
+            self.resource_man.buy(self)
 
     def update(self):
         if not self.constructed:
@@ -43,7 +42,7 @@ class Building:
     def passer_age(self):
         if self.game_name == 'Forum':
             self.age = 'Secondage'
-            if self.resource_manager.buy_age(self) != -1 and not self.age_2:
+            if self.resource_man.buy_age(self) != -1 and not self.age_2:
                 self.bar_image = self.secondage_image.copy()
                 self.image = self.secondage_image
                 self.age_2 = True
@@ -63,6 +62,7 @@ class Building:
                 if self.health == self.health_max:
                     self.health += 1000
                 self.health_ratio = self.health_max / self.health_bar_length
+
 
 class TownCenter(Building):
     bar_image = firstage_towncenter.copy()
@@ -92,6 +92,7 @@ class Archery(Building):
     game_name = "Camp de tir à l'arc"
     health = 0
     health_max = 500
+
 
 class Stable(Building):
     bar_image = stable.copy()

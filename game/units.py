@@ -13,23 +13,23 @@ from pathfinding.finder.a_star import AStarFinder
 
 class Unit:
 
-    def __init__(self, tile, world, resource_manager, team, beginning):
-        self.world = world
+    def __init__(self, tile, map, resource_man, team, beginning):
+        self.map = map
         self.tile = tile
         self.team = team  # blue team is the player's team
         self.alive = True
-        self.resource_manager = resource_manager
+        self.resource_man = resource_man
         if not beginning:
-            self.resource_manager.buy(self)
+            self.resource_man.buy(self)
 
         self.health_bar_length = HEALTH_BAR_LENGTH_UNIT
         self.health_ratio = self.health_max / self.health_bar_length
 
-        self.world.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.map.units[tile["grid"][0]][tile["grid"][1]] = self
 
-        self.pos = (tile["grid"][0],tile["grid"][1])
+        self.pos = (tile["grid"][0], tile["grid"][1])
 
-        self.world.list_troop.append(self)
+        self.map.list_troop.append(self)
         self.path_index = 0
         self.move_timer = pg.time.get_ticks()
         self.attack_cooldown = pg.time.get_ticks()
@@ -46,18 +46,18 @@ class Unit:
 
     def die(self):
         self.alive = False
-        index = self.world.list_troop.index(self)
-        self.world.list_troop.pop(index)
-        self.world.gui.examined_unit = None
-        self.world.examine_unit = None
+        index = self.map.list_troop.index(self)
+        self.map.list_troop.pop(index)
+        self.map.gui.examined_unit = None
+        self.map.examine_unit = None
 
     def change_tile(self, pos):
         x = pos[0]
         y = pos[1]
-        self.world.units[self.tile["grid"][0]][self.tile["grid"][1]] = None   
-        if self.world.units[x][y] is None:
-            self.world.units[x][y] = self
-            self.tile = self.world.world[x][y]
+        self.map.units[self.tile["grid"][0]][self.tile["grid"][1]] = None
+        if self.map.units[x][y] is None:
+            self.map.units[x][y] = self
+            self.tile = self.map.world[x][y]
             return True
         # else:
         #     self.world.units[x][y+1] = self
@@ -74,7 +74,6 @@ class Unit:
             else:
                 cible.health -= self.attack
                 self.attack_cooldown = now
-        
 
     def create_path(self, pos):
         searching_for_path = True
@@ -84,15 +83,14 @@ class Unit:
                 y = 0
             else:
                 y = pos[1] - 1
-            if (self.world.world[x][y]["collision"]):
+            if (self.map.world[x][y]["collision"]):
                 return
-            if (self.world.units[x][y] is not None):
+            if (self.map.units[x][y] is not None):
                 return
-            dest_tile = self.world.world[x][y]
-
+            dest_tile = self.map.world[x][y]
 
             if not dest_tile["collision"]:
-                self.grid = Grid(matrix=self.world.collision_matrix)
+                self.grid = Grid(matrix=self.map.collision_matrix)
                 self.start = self.grid.node(self.tile["grid"][0], self.tile["grid"][1])
                 self.end = self.grid.node(x, y)
                 finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
@@ -101,7 +99,6 @@ class Unit:
 
     def set_target(self, pos):
         self.target = pos
-
 
     def update(self):
         temps_temp = pg.time.get_ticks()
@@ -120,11 +117,11 @@ class Unit:
                         print("------")
                         print(self.tile["grid"])
                     else:
-                            if len(self.path) > 1:
-                                new_pos = self.path[1]
-                                if (not self.change_tile(new_pos)):
-                                    new_pos = self.path[2]
-                                    self.change_tile(new_pos)
+                        if len(self.path) > 1:
+                            new_pos = self.path[1]
+                            if (not self.change_tile(new_pos)):
+                                new_pos = self.path[2]
+                                self.change_tile(new_pos)
 
                 except AttributeError:
                     pass
@@ -174,6 +171,7 @@ class Infantryman(Unit):
     attack = 7
     range = 1
     velocity_inverse = 300
+
 
 class Cavalier(Unit):
     bar_image = cavalier.copy()

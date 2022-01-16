@@ -10,9 +10,9 @@ from resource import *
 
 class Gui:
 
-    def __init__(self, resource_manager, width, height, events):
+    def __init__(self, resource_man, width, height, events):
 
-        self.resource_manager = resource_manager
+        self.resource_man = resource_man
         self.width = width
         self.height = height
         self.events = events
@@ -21,19 +21,24 @@ class Gui:
         border_width = 4
 
         # resource gui
-        self.resources_surface = pg.Surface((width, height * 0.025), pg.SRCALPHA)
+        self.resources_surface = pg.Surface((width, height * 0.035), pg.SRCALPHA)
         self.resources_rect = self.resources_surface.get_rect(topleft=(0, 0))
         self.resources_surface.fill(self.gui_colour)
-        pg.draw.rect(self.resources_surface, GUI_BORDER_COLOR, [0, self.resources_rect.bottom - 3.5, self.resources_rect.right, border_width])  # bottom line
+        pg.draw.rect(self.resources_surface, GUI_BORDER_COLOR,
+                     [0, self.resources_rect.bottom - 3.5, self.resources_rect.right, border_width])  # bottom line
 
         # building gui
         self.build_surface = pg.Surface((width * 0.15, height * 0.25), pg.SRCALPHA)
         self.build_rect = self.build_surface.get_rect(topleft=(self.width * 0.84, self.height * 0.74))
         self.build_surface.fill(self.gui_colour)
-        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [0, 0,  self.build_rect.right*0.15, border_width]) # top line
-        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [0, self.build_rect.bottom*0.25-1, self.build_rect.right*0.15, border_width]) # bottom line
-        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [0, 0, border_width, self.build_rect.bottom*0.25]) # left line
-        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [self.build_rect.right*0.15 -1, 0, border_width, self.build_rect.bottom*0.25 + border_width]) # right line
+        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR,
+                     [0, 0, self.build_rect.right * 0.15, border_width])  # top line
+        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR,
+                     [0, self.build_rect.bottom * 0.25 - 1, self.build_rect.right * 0.15, border_width])  # bottom line
+        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR,
+                     [0, 0, border_width, self.build_rect.bottom * 0.25])  # left line
+        pg.draw.rect(self.build_surface, GUI_BORDER_COLOR, [self.build_rect.right * 0.15 - 1, 0, border_width,
+                                                            self.build_rect.bottom * 0.25 + border_width])  # right line
 
         self.icon_ligne = 1
         self.icon_colonne = 1
@@ -42,21 +47,27 @@ class Gui:
         self.select_surface = pg.Surface((width * 0.3, height * 0.2), pg.SRCALPHA)
         self.select_rect = self.select_surface.get_rect(topleft=(self.width * 0.35, self.height * 0.79))
         self.select_surface.fill(self.gui_colour)
-        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [0, 0, self.select_rect.right, border_width]) # top line
-        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [0, self.select_rect.bottom * 0.2 - 1, self.select_rect.right, border_width]) # bottom line
-        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [0, 0, border_width, self.select_rect.bottom * 0.25])  # left line
-        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [self.select_rect.right*0.459, 0, border_width, self.select_rect.bottom*0.2 + border_width]) # right line
+        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [0, 0, self.select_rect.right, border_width])  # top line
+        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR,
+                     [0, self.select_rect.bottom * 0.2 - 1, self.select_rect.right, border_width])  # bottom line
+        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR,
+                     [0, 0, border_width, self.select_rect.bottom * 0.25])  # left line
+        pg.draw.rect(self.select_surface, GUI_BORDER_COLOR, [self.select_rect.right * 0.459, 0, border_width,
+                                                             self.select_rect.bottom * 0.2 + border_width])  # right line
 
         # minimap gui
         self.minimap_surface = pg.Surface((width * 0.215, height * 0.25), pg.SRCALPHA)
         self.minimap_rect = self.minimap_surface.get_rect(topleft=(self.width * 0.024, self.height * 0.74))
         self.minimap_surface.fill(self.minimap_gui)
-        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,[0, 0, self.minimap_rect.right, border_width])  # top line
-        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,[0, self.minimap_rect.bottom * 0.25 - 1, self.minimap_rect.right, border_width])  # bottom line
-        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,  [0, 0, border_width, self.minimap_rect.bottom * 0.25])  # left line
-        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR, [self.minimap_rect.right *0.89-1, 0, border_width,self.minimap_rect.bottom * 0.25 + border_width])  # right line
-        draw_text(self.minimap_surface, "Minimap", 20, WHITE,
-                  (width * 0.092, 10))
+        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR, [0, 0, self.minimap_rect.right, border_width])  # top line
+        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,
+                     [0, self.minimap_rect.bottom * 0.25 - 1, self.minimap_rect.right, border_width])  # bottom line
+        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR,
+                     [0, 0, border_width, self.minimap_rect.bottom * 0.25])  # left line
+        pg.draw.rect(self.minimap_surface, GUI_BORDER_COLOR, [self.minimap_rect.right * 0.89 - 1, 0, border_width,
+                                                              self.minimap_rect.bottom * 0.25 + border_width])  # right line
+        draw_text(self.minimap_surface, "Minimap", FONT_SIZE, WHITE,
+                  (width * 0.088, 10))
 
         self.images = self.load_images()
         self.icon_images = self.load_icon_images(1)
@@ -66,25 +77,23 @@ class Gui:
 
         # choose tree, rock or gold
         self.choose = None
-        self.selected_tile = None
+        self.selecting_building = None
         self.examined_tile = None
         self.mining_gui = False
         self.examined_unit = None
-
-
 
     # afficher les batiments pour choisir et construire
     def create_build_gui(self):
         self.icon_colonne = 1
         self.icon_ligne = 1
         # position in the inventory
-        render_pos = [self.width * 0.84 + self.build_surface.get_width()*0.04, self.height * 0.74+ self.build_surface.get_width()*0.03]  # 0.84 0.74
+        render_pos = [self.width * 0.84 + self.build_surface.get_width() * 0.04,
+                      self.height * 0.74 + self.build_surface.get_width() * 0.03]  # 0.84 0.74
         object_width = self.build_surface.get_width() // 4
 
         tiles = []
         # print('create_build_gui')
         for image_name, image in self.icon_images.items():  # ajouter l'image dans la fonction load_image()
-
 
             seconde_ligne = self.icon_colonne > 3 and self.icon_ligne == 1
             troisieme_ligne = self.icon_colonne > 3 and self.icon_ligne == 2
@@ -92,13 +101,13 @@ class Gui:
             if seconde_ligne:
                 self.icon_colonne = 1
                 self.icon_ligne = 2
-                render_pos[0] = self.width * 0.84 + self.build_surface.get_width()*0.04
+                render_pos[0] = self.width * 0.84 + self.build_surface.get_width() * 0.04
                 render_pos[1] = self.height * 0.82
 
             elif troisieme_ligne:
                 self.icon_colonne = 1
                 self.icon_ligne = 3
-                render_pos[0] = self.width * 0.84 + self.build_surface.get_width()*0.04
+                render_pos[0] = self.width * 0.84 + self.build_surface.get_width() * 0.04
                 render_pos[1] = self.height * 0.9
 
             # print('in for create_build_gui')
@@ -134,17 +143,17 @@ class Gui:
         mouse_action = pg.mouse.get_pressed()
         # unselect entity
         if mouse_action[2]:
-            self.selected_tile = None
+            self.selecting_building = None
 
         for tile in self.tiles:
-            if self.resource_manager.is_affordable(tile["name"]):
+            if self.resource_man.is_affordable(tile["name"]):
                 tile["affordable"] = True
             else:
                 tile["affordable"] = False
             if tile["rect"].collidepoint(mouse_pos) and tile["affordable"]:
                 # tile["rect"] is defined in create_build_gui()
                 if mouse_action[0]:
-                    self.selected_tile = tile
+                    self.selecting_building = tile
 
     def draw(self, screen):
 
@@ -164,7 +173,8 @@ class Gui:
         if mouse_action[0] and button6.rect.collidepoint(mouse_pos):
             print("pause")
 
-        if self.examined_unit is not None and (self.examined_unit.game_name in ("Archer", "Villageois", "Barbare", "Cavalier")):
+        if self.examined_unit is not None and (
+                self.examined_unit.game_name in ("Archer", "Villageois", "Barbare", "Cavalier")):
 
             img = self.examined_unit.image
             w, h = self.select_rect.width, self.select_rect.height
@@ -172,29 +182,30 @@ class Gui:
             img_scale = self.scale_image(img, h=h * 0.70)
             health = format(str(self.examined_unit.health))
             health_max = format(str(self.examined_unit.health_max))
-            draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE,
-                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.05))
-            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.01))
-            draw_text(screen, str(self.examined_unit.game_name), 20, WHITE,
-                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height * 0.02))
-            draw_text(screen, "{} team".format(self.examined_unit.team), 20, pg.Color(self.examined_unit.team),
-                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height*0.006))
+            draw_text(screen, f"Vie: {health} / {health_max}", FONT_SIZE, WHITE,
+                      (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.05))
+            screen.blit(img_scale, (self.width * 0.35 + self.width * 0.008, self.height * 0.79 + self.height * 0.01))
+            draw_text(screen, str(self.examined_unit.game_name), FONT_SIZE, WHITE,
+                      (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.02))
+            draw_text(screen, "{} team".format(self.examined_unit.team), FONT_SIZE, pg.Color(self.examined_unit.team),
+                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height * 0.006))
 
             if mouse_action[2]:
                 self.events.change_unit_pos()
 
-        if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in ("Arbre", "Carrière de pierre", "Or", "Buisson"):
-
+        if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in (
+        "Arbre", "Carrière de pierre", "Or", "Buisson"):
             img = self.choose["class"].image
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img_scale = self.scale_image(img, h=h * 0.9)
             rest = self.choose["class"].the_rest
             rest_max = self.choose["class"].the_rest_max
-            draw_text(screen, f"Reste: {rest} / {rest_max}", 20, GREEN,
-                      (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.05))
-            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.01))
-            draw_text(screen, self.choose["tile"], 40, WHITE, (self.width * 0.35 + self.width*0.17, self.height * 0.79 + self.height*0.01))
+            draw_text(screen, f"Reste: {rest} / {rest_max}", FONT_SIZE, GREEN,
+                      (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.05))
+            screen.blit(img_scale, (self.width * 0.35 + self.width * 0.008, self.height * 0.79 + self.height * 0.01))
+            draw_text(screen, self.choose["tile"], FONT_SIZE * 2, WHITE,
+                      (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.01))
 
         if self.examined_tile is not None:
 
@@ -202,14 +213,15 @@ class Gui:
             w, h = self.select_rect.width, self.select_rect.height
             screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
             img_scale = self.scale_image(img, h=h * 0.7)
-            screen.blit(img_scale, (self.width * 0.35 + self.width*0.008, self.height * 0.79 + self.height*0.04))
+            screen.blit(img_scale, (self.width * 0.35 + self.width * 0.008, self.height * 0.79 + self.height * 0.04))
             # text in information box
             health = format(str(self.examined_tile.health))
             health_max = format(str(self.examined_tile.health_max))
-            draw_text(screen, self.examined_tile.game_name, 40, WHITE, (self.select_rect.topleft[0]+45, self.select_rect.topleft[1]+6))
-            draw_text(screen, f"Vie: {health} / {health_max}", 20, WHITE, self.select_rect.center)
-            draw_text(screen, "{} team".format(self.examined_tile.team), 20, pg.Color(self.examined_tile.team),
-                      (self.width * 0.35 + self.width*0.25, self.height * 0.79 + self.height*0.006))
+            draw_text(screen, self.examined_tile.game_name, FONT_SIZE * 2, WHITE,
+                      (self.select_rect.topleft[0] + 45, self.select_rect.topleft[1] + 6))
+            draw_text(screen, f"Vie: {health} / {health_max}", FONT_SIZE, WHITE, self.select_rect.center)
+            draw_text(screen, "{} team".format(self.examined_tile.team), FONT_SIZE, pg.Color(self.examined_tile.team),
+                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height * 0.006))
 
             if self.examined_tile.name == "TownCenter" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')
@@ -229,7 +241,8 @@ class Gui:
                     self.events.get_troop()  # retourne villager
                     # Code pour le bouton permettant de créer un villageois
 
-                button3 = Button(screen, (self.width * 0.6 - 300, self.height * 0.9 + 60), 'Âge II', 15, 'white on black')
+                button3 = Button(screen, (self.width * 0.6 - 300, self.height * 0.9 + 60), 'Âge II', 15,
+                                 'white on black')
                 button3.button()
                 # mouse_pos = pg.mouse.get_pos()
                 # mouse_action = pg.mouse.get_pressed()
@@ -304,11 +317,15 @@ class Gui:
 
         # resource
         pos = self.width - 420  # resource info position
+        cpt_res_icon = 1
 
-        for resource, resource_value in self.resource_manager.starting_resources.items():
-            txt = resource + ": " + str(resource_value)
-            draw_text(screen, txt, 25, WHITE, (pos, 5))
+        for resource, resource_value in self.resource_man.starting_resources.items():
+            icon = self.resource_man.icons[cpt_res_icon]
+            screen.blit(icon.convert_alpha(), (pos, self.height * 0.005))
+            txt = "       : " + str(resource_value)
+            draw_text(screen, txt, FONT_SIZE, WHITE, (pos, self.height * 0.01))
             pos += 110
+            cpt_res_icon += 1
 
     def load_icon_images(self, age):
         TownCenter = towncenter_icon
@@ -323,7 +340,6 @@ class Gui:
         }
         if age > 1: images.update({"Stable": Stable})
         return images
-
 
     def load_images(self):
         # read images
@@ -375,6 +391,3 @@ class Gui:
             image = pg.transform.scale(image, (int(w), int(h)))
 
         return image
-
-
-
