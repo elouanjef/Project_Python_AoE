@@ -43,6 +43,7 @@ class Event:
                     self.timer = 0.0001
 
                 if event.key == pg.K_RETURN:
+                    self.chatbox.exit_box = False
                     while not self.chatbox.exit_box:
                         for event1 in pg.event.get():
                             self.chatbox.handle_event(event1)
@@ -50,7 +51,6 @@ class Event:
                         self.chatbox.draw(self.screen)
 
                         pg.display.flip()
-                    self.chatbox.exit_box = False
 
                 if event.key == pg.K_SPACE:
                     self.Save_game = True

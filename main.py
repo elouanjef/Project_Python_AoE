@@ -1,5 +1,7 @@
 import pygame as pg
 from game.game import Game
+from menu import all_menu
+from menu.all_menu import All_menus
 
 
 def main():
@@ -23,12 +25,18 @@ def main():
     game = Game(screen, clock)
 
     while running:
-
+        menu = All_menus()
+        menu.display_main()
         # start menu goes here
-
-        while playing:
-            # game loop here
-            game.run()
+        if menu.start:
+            while playing:
+                # game loop here
+                game.run()
+        if menu.load:
+            game.load = True
+            while playing:
+                # game loop here
+                game.run()
 
 
 if __name__ == '__main__':

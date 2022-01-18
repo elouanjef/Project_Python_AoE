@@ -12,6 +12,7 @@ STARTING_RESOURCES_AI = [400, 400, 200, 400]
 # Buttons
 HEIGHT_BUTTON = 50
 WIDTH_BUTTON = 250
+GAP = 75      # gap between the buttons
 FONT_SIZE = 15
 
 # Chat box
@@ -51,7 +52,7 @@ check_destroy = False
 
 # Paths definitions
 # Gameplay folder
-AOE_folder = path.dirname(__file__)  # Path of the Project_Python_AoE foler
+AOE_folder = path.dirname(__file__)  # Path of the Project_Python_AoE folder
 graphics_folder = path.join(AOE_folder, "assets/graphics")  # Path for graphics
 AI_action_JSONfile = path.join(AOE_folder, "game/AI_action.json")
 

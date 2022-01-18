@@ -24,6 +24,8 @@ class Game:
         self.width, self.height = self.screen.get_size()
         self.real_game = False
 
+
+        self.load = False
         # event
         self.events = Event(clock, screen)
 
@@ -55,28 +57,36 @@ class Game:
 
         self.map.load_game = self.load_game
 
+
+
     # running
     def run(self):
         self.playing = True
         while self.playing:
+            if self.load:
+                self.map.reconstruct()
             tick = self.clock.tick(60)  # Limiter le nombre de FPS à 60 (c'est déjà très bien)
             self.game_time.second += tick / 1000  # Compter le nombre de secondes écoulées depuis le lancement du jeu
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
-            if not self.real_game:
-                # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
-                self.start_real_game()
-                self.real_game = True
 
+            if self.load:
+                self.events.Load_game = True
             else:
-                self.AI.action_json()  # Dis à l'AI de commencer à jouer
+                if not self.real_game:
+                    # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
+                    self.start_real_game()
+
+                else:
+                    self.AI.action_json()  # Dis à l'AI de commencer à jouer
 
     def update(self):
         self.camera.update()
         for e in self.entities: e.update()
         self.gui.update()
         self.map.update(self.screen, self.camera)
+        self.chatbox = self.events.chatbox
         self.game_time.update()
         self.save_game.update()
         self.load_game.update()

@@ -31,9 +31,13 @@ class InputBox:
 
                 if event.key == pg.K_RETURN:
                     #Code for Resource
+                    #coinage for gold
+                    #pepperoni pizza for food
+                    #quarry for rock
+                    #woodstock for wood
+                    #rock wood gold food plus facile à retenir
                     if self.text == 'rock':
                         self.resource_man.starting_resources["Rock"] += 100
-                        print(self.resource_man.starting_resources)
                     if self.text == 'wood':
                         self.resource_man.starting_resources["Wood"] += 200
                     if self.text == 'gold':

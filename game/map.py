@@ -75,10 +75,12 @@ class Map:
 
     # work in map
     def update(self, screen, camera):
+
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
 
         self.actual_age = self.events.get_age_sup()
+
 
         for ent in self.entities:
 
