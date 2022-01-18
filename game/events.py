@@ -1,9 +1,11 @@
 import pygame as pg
 import sys
+from .resource import Resource
+from .cheat import *
 
 
 class Event:
-    def __init__(self, clock) -> None:
+    def __init__(self, clock, screen) -> None:
         self.destroy = False
         self.delete = False
         self.troop = None
@@ -18,6 +20,9 @@ class Event:
         self.game_time = Game_time()
         self.Save_game = False
         self.Load_game = False
+        self.screen = screen
+        self.resource_man = Resource()
+        self.chatbox = InputBox(50, 450, 150, 300, self.resource_man, False)
 
     # capture the events
     def events(self):
@@ -38,7 +43,14 @@ class Event:
                     self.timer = 0.0001
 
                 if event.key == pg.K_RETURN:
-                    print("Enter function here")
+                    while not self.chatbox.exit_box:
+                        for event1 in pg.event.get():
+                            self.chatbox.handle_event(event1)
+                        self.chatbox.update()
+                        self.chatbox.draw(self.screen)
+
+                        pg.display.flip()
+                    self.chatbox.exit_box = False
 
                 if event.key == pg.K_SPACE:
                     self.Save_game = True

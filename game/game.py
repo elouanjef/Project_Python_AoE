@@ -25,13 +25,16 @@ class Game:
         self.real_game = False
 
         # event
-        self.events = Event(clock)
+        self.events = Event(clock, screen)
 
         # entities
         self.entities = []
 
         # resource
-        self.resource_man = Resource()
+        self.resource_man = self.events.resource_man
+
+        #chatbox
+        self.chatbox = self.events.chatbox
 
         # gui
         self.gui = Gui(self.resource_man, self.width, self.height, self.events)
