@@ -25,7 +25,7 @@ class Unit:
         self.health_bar_length = HEALTH_BAR_LENGTH_UNIT
         self.health_ratio = self.health_max / self.health_bar_length
 
-        self.map.units[tile["grid"][0]][tile["grid"][1]] = self
+        self.map.units[tile["grid"][0]][tile["grid"][1]] = self             # it's too late, but if we replace tile["grid"][1] by tile["grid"][1] - 1, it'll be better
 
         self.pos = (tile["grid"][0], tile["grid"][1])
 
@@ -119,6 +119,7 @@ class Unit:
                     else:
                         if len(self.path) > 1:
                             new_pos = self.path[1]
+                            self.pos = new_pos
                             if (not self.change_tile(new_pos)):
                                 new_pos = self.path[2]
                                 self.change_tile(new_pos)
@@ -134,6 +135,16 @@ class Unit:
 
         pg.draw.rect(self.bar_image, GREEN, (1, 1, (self.health / self.health_ratio) - 9, 5))
         return self.bar_image
+
+    def get_attack_range(self):
+        x,y = self.pos
+        list_posible_range = []
+        for i in range(x-1, x+2):
+            for j in range(y-1, y+2):
+                list_posible_range.append((i,j))
+        list_posible_range.remove((x,y))
+        return list_posible_range
+
 
 
 class Archer(Unit):
@@ -155,7 +166,7 @@ class Villager(Unit):
     game_name = "Villageois"
     health = 20
     health_max = 20
-    attack = 100
+    attack = 3
     range = 4
     velocity_inverse = 200
     in_work = False

@@ -8,9 +8,9 @@ from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
 from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
-FOG_BLACK = -1
-FOG_GREY = 0
-FOG_NONE = 1
+# FOG_BLACK = -1
+# FOG_GREY = 0
+# FOG_NONE = 1
 
 class Map:
 
@@ -42,7 +42,7 @@ class Map:
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
         self.events = events
         self.tiles = self.load_images(False)
-        self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        # self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.world = self.build_world()
         self.collision_matrix = self.create_collision_matrix()
         self.changed_tiles = []
@@ -57,6 +57,7 @@ class Map:
         self.temp_tile = None
         self.examine_tile = None
         self.examine_unit = None
+        self.examine_target_unit = None
 
         # choose Arbre, rock or gold
         self.choose = None
@@ -71,7 +72,10 @@ class Map:
 
         self.list_troop = []
         self.attacking = False
+        self.attacking_unit = False
+
         self.list_attacker_defender = []
+        self.list_units_atk = []
 
         self.replace_water()
 
@@ -188,10 +192,30 @@ class Map:
                         self.examine_tile = None
                         self.gui.examined_tile = None
 
-                    if mouse_action[0] and (
-                            units is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
+                    if mouse_action[0] and (units is not None) and (self.examine_unit is None):  # Si on a selectionné une troupe avec le clic gauche on affiche
                         self.examine_unit = grid_pos
                         self.gui.examined_unit = units
+
+                    #attacker's target ici ??middle_mouse
+
+                    # if mouse_action[2] and (units is not None) and (self.examine_unit is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
+                    #     self.examine_target_unit = grid_pos
+                    #     target_unit = self.units[grid_pos[0]][grid_pos[1]-1]
+                    #     # print(grid_pos)
+                    #     # print(target_unit)
+                    #     # for x in range(0, 49):
+                    #     #     for y in range(0, 49):
+                    #     #         if (self.units[x][y] is not None):
+                    #     #             print(f"{self.units[x][y]} at {x}-{y}")
+                    #     atk_unit = self.units[self.examine_unit[0]][self.examine_unit[1]]
+                    #     atk_range = target_unit.get_attack_range()
+                    #     if self.examine_target_unit in atk_range:
+                    #         self.list_attacker_defender.append((atk_unit, target_unit))
+                    #     # self.examine_unit = None
+                    #     # self.examine_target_unit = None
+
+
+
 
                     if mouse_action[
                         0] and collision:  # Si on a selectionné une ressource avec le clic gauche on affiche
@@ -280,10 +304,18 @@ class Map:
                     if self.events.get_grid_pos_unit():
                         grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                         building = self.buildings[grid_pos[0]][grid_pos[1]]
+                        target_unit = self.units[grid_pos[0]][grid_pos[1]-1]
                         if (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
                             # si on clic droit autre part que sur une ressource:
+                            if target_unit is not None and (target_unit.team == "Red"):  # Si on a selectionné une troupe avec le clic gauche on affiche
+                                atk_range = self.gui.examined_unit.get_attack_range()
+                                couple_u = (self.gui.examined_unit, target_unit)
+                                if (target_unit.pos in atk_range):
+                                    self.attacking_unit = True
+                                    if couple_u not in self.list_units_atk:
+                                        self.list_units_atk.append(couple_u)
                             if not collision:  # and new_unit_pos_world["collision"])
                                 couple = (self.gui.examined_unit, building)
                                 # self.gui.examined_unit.change_tile(new_unit_pos)
@@ -300,6 +332,7 @@ class Map:
                                     self.mining = False
                                     self.examine_unit = new_unit_pos
                                     self.events.remise_moving_troop()
+
 
                             # si on clic droit sur une ressource pour la miner avec un villageois:
                             elif self.gui.examined_unit.name == "Villager" and collision:
@@ -367,6 +400,30 @@ class Map:
 
                             else:
                                 couple[0].kill(couple[1])
+
+
+
+
+
+
+
+                    if self.attacking_unit:
+                        for ad in self.list_units_atk:
+                            if ad[1].health <= 0:  
+                                m_x,n_y = ad[1].pos
+                                vill = self.list_troop.index(ad[1])
+                                self.examine_tile = None
+                                self.gui.examined_tile = None
+                                self.list_troop.pop(vill)
+                                self.units[m_x][n_y] = None
+                                self.choosing_pos_x, self.choosing_pos_y = None, None
+                                self.attacking_unit = False
+                                ind = self.list_units_atk.index(ad)
+                                (atker, defer) = self.list_units_atk.pop(ind)
+                                del atker
+                            else:
+                                ad[0].kill(ad[1])
+
 
                     if self.events.get_age_sup():
                         for building in self.entities:
@@ -505,22 +562,22 @@ class Map:
         for changing_tiles in self.changed_tiles:
             changing_tiles["tile"] = ''
 
-    def mark_fog_to_none(self, unit_x, unit_y, check_team):
-        d = 2
-        for x in range(self.grid_size_x):
-            for y in range(self.grid_size_y):
-                if check_team == "Blue":
-                    if ((x-unit_x)**2 + (y-unit_y)**2) < d**2 :
-                        self.fog[x][y] = FOG_NONE
+    # def mark_fog_to_none(self, unit_x, unit_y, check_team):
+    #     d = 2
+    #     for x in range(self.grid_size_x):
+    #         for y in range(self.grid_size_y):
+    #             if check_team == "Blue":
+    #                 if ((x-unit_x)**2 + (y-unit_y)**2) < d**2 :
+    #                     self.fog[x][y] = FOG_NONE
 
     def draw(self, screen, camera):
 
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
 
-        for x in range(self.grid_size_x):
-            for y in range(self.grid_size_y):
-                if self.fog[x][y] == FOG_NONE:
-                    self.fog[x][y] = FOG_GREY
+        # for x in range(self.grid_size_x):
+        #     for y in range(self.grid_size_y):
+        #         if self.fog[x][y] == FOG_NONE:
+        #             self.fog[x][y] = FOG_GREY
 
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
@@ -541,7 +598,7 @@ class Map:
 
                 units = self.units[x][y]
                 if units is not None:
-                    self.mark_fog_to_none(x,y,units.team)
+                    # self.mark_fog_to_none(x,y,units.team)
                     screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                 render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
@@ -565,7 +622,7 @@ class Map:
 
                 building = self.buildings[x][y]
                 if building is not None:
-                    self.mark_fog_to_none(x,y,building.team)
+                    # self.mark_fog_to_none(x,y,building.team)
                     screen.blit(building.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                 render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
@@ -609,17 +666,17 @@ class Map:
                     render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y
                 )
             )
-        for x in range(self.grid_size_x):
-            for y in range(self.grid_size_y):
-                if self.fog[x][y] != FOG_NONE:
-                    render_pos = self.world[x][y]["render_pos"]
-                    x_pixel = render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x
-                    y_pixel = render_pos[1] + camera.scroll.y
-                    rect = (x_pixel, y_pixel, TILE_SIZE, TILE_SIZE)
-                    color = (0, 0, 0, 160) if self.fog[x][y] == FOG_GREY else (0,0,0,255)
-                    shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
-                    pg.draw.rect(shape_surf, color, shape_surf.get_rect())
-                    screen.blit(shape_surf, rect)
+        # for x in range(self.grid_size_x):
+        #     for y in range(self.grid_size_y):
+        #         if self.fog[x][y] != FOG_NONE:
+        #             render_pos = self.world[x][y]["render_pos"]
+        #             x_pixel = render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x
+        #             y_pixel = render_pos[1] + camera.scroll.y
+        #             rect = (x_pixel, y_pixel, TILE_SIZE, TILE_SIZE)
+        #             color = (0, 0, 0, 160) if self.fog[x][y] == FOG_GREY else (0,0,0,255)
+        #             shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+        #             pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+        #             screen.blit(shape_surf, rect)
                     
     # create worlds based on created dimensions
     def build_world(self):
@@ -840,6 +897,7 @@ class Map:
 
         self.list_troop = []
         self.attacking = False
+        self.attacking_unit = False
         self.list_attacker_defender = []
 
         map_world = []

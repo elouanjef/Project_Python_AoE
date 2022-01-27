@@ -261,6 +261,7 @@ class AI:
         temp_list = []
         for i in distance_list:
             temp_list.append(i[2])  # the same pos index of distance_list
+        if (temp_list == []) : return []
         dictance_min = min(temp_list)
         return distance_list[temp_list.index(dictance_min)]
 
