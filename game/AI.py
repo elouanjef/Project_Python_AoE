@@ -35,6 +35,8 @@ class AI:
                               self.create_Archer, self.create_Infantryman, self.create_villager, self.get_resource]
         self.towncenter = self.AI_construct_Towncenter(5, 10)
 
+        self.all_in = False
+
     def read_file(self):
         action_line = self.f.readline()
         if (action_line == ''):
@@ -441,8 +443,70 @@ class AI:
     def group_attacking(self):
         pass
 
-    def auro_defense(self):
-        pass
+    def auto_defense(self):
+        if self.all_in == True:
+            return
+        for soldat in self.AI_unit:
+            if soldat.health <= 20:
+                if (soldat.pos[0] <= 3 and soldat.pos[1] <= 3):
+                    if not self.map.world[soldat.pos[0]+1][soldat.pos[1]+1]["collision"]:
+                        soldat.set_target((soldat.pos[0]+1,soldat.pos[1]+1))
+                        continue
+                    if self.map.world[soldat.pos[0]+1][soldat.pos[1]+1]["collision"]:
+                        soldat.set_target((soldat.pos[0]+2,soldat.pos[1]+2))
+                        continue
+                    if self.map.world[soldat.pos[0]+2][soldat.pos[1]+2]["collision"]:
+                        soldat.set_target((soldat.pos[0]+3,soldat.pos[1]+3))
+                        continue
+                elif ( 3 < soldat.pos[0] <= 30 and soldat.pos[1] <= 3):
+                    if not self.map.world[soldat.pos[0]+1][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]+1,soldat.pos[1]))
+                        continue
+                    if self.map.world[soldat.pos[0]+1][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]+2,soldat.pos[1]))
+                        continue
+                    if self.map.world[soldat.pos[0]+2][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]+3,soldat.pos[1]))
+                        continue
+                elif ( 30 < soldat.pos[0] <= 46 and soldat.pos[1] <= 3):
+                    if not self.map.world[soldat.pos[0]-1][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]-1,soldat.pos[1]))
+                        continue
+                    if self.map.world[soldat.pos[0]-1][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]-2,soldat.pos[1]))
+                        continue
+                    if self.map.world[soldat.pos[0]-2][soldat.pos[1]]["collision"]:
+                        soldat.set_target((soldat.pos[0]-3,soldat.pos[1]))
+                        continue
+                elif ( 30 < soldat.pos[0] <= 46 and 30 < soldat.pos[1] <= 46):
+                    if not self.map.world[soldat.pos[0]-1][soldat.pos[1]-1]["collision"]:
+                        soldat.set_target((soldat.pos[0]-1,soldat.pos[1]-1))
+                        continue
+                    if self.map.world[soldat.pos[0]-1][soldat.pos[1]-1]["collision"]:
+                        soldat.set_target((soldat.pos[0]-2,soldat.pos[1]-2))
+                        continue
+                    if self.map.world[soldat.pos[0]-2][soldat.pos[1]-2]["collision"]:
+                        soldat.set_target((soldat.pos[0]-3,soldat.pos[1]-3))
+                        continue
+
+                else:
+                    if (not self.map.world[3][3]["collision"]) and (self.map.units[3][3] is not None):
+                        soldat.set_target((3,3))
+                        continue
+                    if (not self.map.world[4][4]["collision"]) and (self.map.units[4][4] is not None):
+                        soldat.set_target((4,4))
+                        continue
+                    if (not self.map.world[5][4]["collision"]) and (self.map.units[5][4] is not None):
+                        soldat.set_target((5,4))
+                        continue
+                    if (not self.map.world[4][5]["collision"]) and (self.map.units[4][5] is not None):
+                        soldat.set_target((4,5))
+                        continue
+                    if (not self.map.world[1][1]["collision"]) and (self.map.units[1][1] is not None):
+                        soldat.set_target((1,1))
+                        continue
+
+
 
     # ================================================================================================================================================================
     # =============================================================          ACTION OF AI        =====================================================================
@@ -487,5 +551,6 @@ class AI:
 
             self.check_villager()
             self.auto_attack()
+            self.auto_defense()
 
 # _____________________________________________________________________________________________________________________________________________________________

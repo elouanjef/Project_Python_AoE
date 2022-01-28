@@ -152,8 +152,8 @@ class Archer(Unit):
     image = archer
     name = "Archer"
     game_name = "Archer"
-    health = 35
-    health_max = 35
+    health = 50
+    health_max = 50
     attack = 5
     range = 6
     velocity_inverse = 100
@@ -164,8 +164,8 @@ class Villager(Unit):
     image = villager
     name = "Villager"
     game_name = "Villageois"
-    health = 20
-    health_max = 20
+    health = 30
+    health_max = 30
     attack = 3
     range = 4
     velocity_inverse = 200
@@ -177,8 +177,8 @@ class Infantryman(Unit):
     image = infantryman
     name = "Infantryman"
     game_name = "Barbare"
-    health = 50
-    health_max = 50
+    health = 70
+    health_max = 70
     attack = 7
     range = 1
     velocity_inverse = 300

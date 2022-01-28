@@ -89,6 +89,13 @@ class Map:
     # work in map
     def update(self, screen, camera):
 
+        for uni in self.list_troop:
+            if uni.health <= 0:
+                self.units[uni.pos[0]][uni.pos[1]] = None
+                if uni in self.list_troop:
+                    self.list_troop.remove(uni)
+                    del uni
+
         self.pause = self.events.pause
 
         mouse_pos = pg.mouse.get_pos()
@@ -406,21 +413,28 @@ class Map:
 
                     if self.attacking_unit:
                         for ad in self.list_units_atk:
-                            if ad[1].health <= 0:
-                                m_x, n_y = ad[1].pos
-                                vill = self.list_troop.index(ad[1])
-                                self.examine_tile = None
-                                self.gui.examined_tile = None
-                                if (vill in self.list_troop):
-                                    self.list_troop.pop(vill)
-                                self.units[m_x][n_y] = None
-                                self.choosing_pos_x, self.choosing_pos_y = None, None
-                                self.attacking_unit = False
-                                ind = self.list_units_atk.index(ad)
-                                (atker, defer) = self.list_units_atk.pop(ind)
-                                del atker
+                            # if ad[1].health <= 0:
+                            #     m_x, n_y = ad[1].pos
+                            #     if ad[1] in self.list_troop:
+                            #         vill = self.list_troop.index(ad[1])
+                            #     self.examine_tile = None
+                            #     self.gui.examined_tile = None
+                            #     if (vill in self.list_troop):
+                            #         self.list_troop.pop(vill)
+                            #     self.units[m_x][n_y] = None
+                            #     self.choosing_pos_x, self.choosing_pos_y = None, None
+                            #     self.attacking_unit = False
+                            #     ind = self.list_units_atk.index(ad)
+                            #     (atker, defer) = self.list_units_atk.pop(ind)
+                            #     del atker
+                            # else:
+                            if (ad[0].health ==0 or ad[1].health == 0):
+                                self.list_units_atk.pop(self.list_units_atk.index(ad))
+                            atk_rg = ad[0].get_attack_range()
+                            if ad[1].pos in atk_rg:
+                                ad[0].kill(ad[1])              
                             else:
-                                ad[0].kill(ad[1])
+                                self.list_units_atk.pop(self.list_units_atk.index(ad))
 
                     if self.events.get_age_sup():
                         for building in self.entities:
