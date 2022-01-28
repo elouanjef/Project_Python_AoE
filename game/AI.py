@@ -412,6 +412,7 @@ class AI:
                 a = Archer(self.map.world[i.pos[0]][i.pos[1] + 1], self.map, self.map.resource_man,
                            "Red", False)
                 self.map.list_troop.append(a)
+                self.AI_unit.append(a)
                 a.set_target((x, y))
 
     # Create an Infrantryman for each Barracks
@@ -421,6 +422,7 @@ class AI:
                 a = Infantryman(self.map.world[i.pos[0]][i.pos[1] + 1], self.map, self.map.resource_man,
                                 "Red", False)
                 self.map.list_troop.append(a)
+                self.AI_unit.append(a)
                 a.set_target((x, y))
 
     # ================================================================================================================================================================
@@ -428,7 +430,13 @@ class AI:
     # ================================================================================================================================================================
 
     def auto_attack(self):
-        pass
+        for soldat in self.AI_unit:
+            atk_range = soldat.get_attack_range()
+            for targ in atk_range:
+                targ_soldat = self.map.units[targ[0]][targ[1]]
+                if ( targ_soldat is not None) and (targ_soldat.team == "Blue"):
+                    self.map.list_units_atk.append((soldat, targ_soldat))
+
 
     def group_attacking(self):
         pass
@@ -478,5 +486,6 @@ class AI:
                         print("U should update ur action")
 
             self.check_villager()
+            self.auto_attack()
 
 # _____________________________________________________________________________________________________________________________________________________________

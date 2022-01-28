@@ -75,6 +75,7 @@ class Map:
         self.list_mining = []
 
         self.list_troop = []
+
         self.attacking = False
         self.attacking_unit = False
 
@@ -410,7 +411,8 @@ class Map:
                                 vill = self.list_troop.index(ad[1])
                                 self.examine_tile = None
                                 self.gui.examined_tile = None
-                                self.list_troop.pop(vill)
+                                if (vill in self.list_troop):
+                                    self.list_troop.pop(vill)
                                 self.units[m_x][n_y] = None
                                 self.choosing_pos_x, self.choosing_pos_y = None, None
                                 self.attacking_unit = False
