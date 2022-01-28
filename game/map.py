@@ -8,6 +8,7 @@ from .units import Archer, Infantryman, Villager, Cavalier
 from .events import *
 from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
+
 # FOG_BLACK = -1
 # FOG_GREY = 0
 # FOG_NONE = 1
@@ -35,12 +36,15 @@ class Map:
         self.choosing_pos_x = None
         self.choosing_pos_y = None
 
+        self.pause = False
+
         self.grass_tiles = pg.Surface(
             (grid_size_x * TILE_SIZE * 2, grid_size_y * TILE_SIZE + 2 * TILE_SIZE)).convert_alpha()
         # convert_alpha():   change the pixel format of an image including per pixel alphas convert_alpha(Surface) -> Surface convert_alpha() -> Surface
         #                   Creates a new copy of the surface with the desired pixel format. The new surface will be in a format suited for quick blitting to the given format
         #                   with per pixel alpha. If no surface is given, the new surface will be optimized for blitting to the current display.
         self.events = events
+        self.actual_age = self.events.get_age_sup()
         self.tiles = self.load_images(False)
         # self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.world = self.build_world()
@@ -84,11 +88,10 @@ class Map:
     # work in map
     def update(self, screen, camera):
 
+        self.pause = self.events.pause
+
         mouse_pos = pg.mouse.get_pos()
         mouse_action = pg.mouse.get_pressed()
-
-        self.actual_age = self.events.get_age_sup()
-
 
         for ent in self.entities:
 
@@ -192,11 +195,12 @@ class Map:
                         self.examine_tile = None
                         self.gui.examined_tile = None
 
-                    if mouse_action[0] and (units is not None) and (self.examine_unit is None):  # Si on a selectionné une troupe avec le clic gauche on affiche
+                    if mouse_action[0] and (units is not None) and (
+                            self.examine_unit is None):  # Si on a selectionné une troupe avec le clic gauche on affiche
                         self.examine_unit = grid_pos
                         self.gui.examined_unit = units
 
-                    #attacker's target ici ??middle_mouse
+                    # attacker's target ici ??middle_mouse
 
                     # if mouse_action[2] and (units is not None) and (self.examine_unit is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
                     #     self.examine_target_unit = grid_pos
@@ -213,9 +217,6 @@ class Map:
                     #         self.list_attacker_defender.append((atk_unit, target_unit))
                     #     # self.examine_unit = None
                     #     # self.examine_target_unit = None
-
-
-
 
                     if mouse_action[
                         0] and collision:  # Si on a selectionné une ressource avec le clic gauche on affiche
@@ -304,12 +305,13 @@ class Map:
                     if self.events.get_grid_pos_unit():
                         grid_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                         building = self.buildings[grid_pos[0]][grid_pos[1]]
-                        target_unit = self.units[grid_pos[0]][grid_pos[1]-1]
+                        target_unit = self.units[grid_pos[0]][grid_pos[1] - 1]
                         if (self.gui.examined_unit is not None) and (self.gui.examined_unit.team == "Blue"):
                             new_unit_pos = self.mouse_to_grid(mouse_pos[0], mouse_pos[1], camera.scroll)
                             new_unit_pos_world = self.grid_to_world(new_unit_pos[0], new_unit_pos[1])
                             # si on clic droit autre part que sur une ressource:
-                            if target_unit is not None and (target_unit.team == "Red"):  # Si on a selectionné une troupe avec le clic gauche on affiche
+                            if target_unit is not None and (
+                                    target_unit.team == "Red"):  # Si on a selectionné une troupe avec le clic gauche on affiche
                                 atk_range = self.gui.examined_unit.get_attack_range()
                                 couple_u = (self.gui.examined_unit, target_unit)
                                 if (target_unit.pos in atk_range):
@@ -401,16 +403,10 @@ class Map:
                             else:
                                 couple[0].kill(couple[1])
 
-
-
-
-
-
-
                     if self.attacking_unit:
                         for ad in self.list_units_atk:
-                            if ad[1].health <= 0:  
-                                m_x,n_y = ad[1].pos
+                            if ad[1].health <= 0:
+                                m_x, n_y = ad[1].pos
                                 vill = self.list_troop.index(ad[1])
                                 self.examine_tile = None
                                 self.gui.examined_tile = None
@@ -423,7 +419,6 @@ class Map:
                                 del atker
                             else:
                                 ad[0].kill(ad[1])
-
 
                     if self.events.get_age_sup():
                         for building in self.entities:
@@ -601,7 +596,7 @@ class Map:
                     # self.mark_fog_to_none(x,y,units.team)
                     screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
+                                 render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
                     screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
@@ -625,7 +620,7 @@ class Map:
                     # self.mark_fog_to_none(x,y,building.team)
                     screen.blit(building.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
+                                 render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
 
                     screen.blit(building.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
@@ -677,7 +672,7 @@ class Map:
         #             shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
         #             pg.draw.rect(shape_surf, color, shape_surf.get_rect())
         #             screen.blit(shape_surf, rect)
-                    
+
     # create worlds based on created dimensions
     def build_world(self):
 

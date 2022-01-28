@@ -18,6 +18,7 @@ class Gui:
         self.events = events
         self.gui_colour = GUI_COLOUR
         self.minimap_gui = GUI_MINIMAP_COLOUR
+        self.pause = False
         border_width = 4
 
         # resource gui
@@ -171,6 +172,7 @@ class Gui:
         # select gui
 
         if mouse_action[0] and button6.rect.collidepoint(mouse_pos):
+            self.pause = True
             print("pause")
 
         if self.examined_unit is not None and (

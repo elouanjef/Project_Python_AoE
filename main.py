@@ -8,12 +8,11 @@ def main():
     running = True
     playing = True
 
-    pg.init()
-    pg.mixer.init()
-
     # problem solved!
     screen = pg.display.set_mode((0, 0), pg.NOFRAME)
     pg.display.toggle_fullscreen()
+
+    pg.mixer.init()
 
     # screen = pg.display.set_mode((1500, 950))
 
@@ -28,16 +27,10 @@ def main():
         menu = All_menus()
         menu.display_main()
         # start menu goes here
-        if menu.start:
-            while playing:
-                # game loop here
-                game.run()
-        if menu.load:
-            game.load = True
-            while playing:
-                # game loop here
-                game.run()
-
+        while playing:
+            # game loop here
+            game.load = menu.load
+            game.run()
 
 if __name__ == '__main__':
     main()

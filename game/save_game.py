@@ -88,13 +88,15 @@ class Load_game:
         self.load_map = json.load(f_map)
         self.load_units = json.load(f_units)
         self.load_entities = json.load(f_entities)
+        self.loaded = False
 
     def load_game(self):
         pass
 
     def update(self):
-        if self.world.events.Load_game:
+        if self.world.events.Load_game and not self.loaded:
             self.world.reconstruct()
+            self.loaded = True
 
         self.world.events.update_load_game()
 

@@ -23,6 +23,7 @@ class Event:
         self.screen = screen
         self.resource_man = Resource()
         self.chatbox = InputBox(50, 450, 150, 300, self.resource_man, False)
+        self.pause = False
 
     # capture the events
     def events(self):
@@ -35,8 +36,8 @@ class Event:
             if event.type == pg.KEYDOWN:
 
                 if event.key == pg.K_ESCAPE:
-                    pg.quit()
-                    sys.exit()
+                    self.pause = True
+                    self.timer = 0.0001
 
                 if event.key == pg.K_DELETE:
                     self.destroy = True

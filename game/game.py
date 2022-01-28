@@ -13,6 +13,7 @@ from .units import Archer, Infantryman, Villager
 from .buildings import TownCenter
 from .events import *
 from .AI import *
+from menu.all_menu import All_menus
 
 
 class Game:
@@ -24,8 +25,11 @@ class Game:
         self.width, self.height = self.screen.get_size()
         self.real_game = False
 
+        self.menu = All_menus()
 
         self.load = False
+        self.loaded = False
+
         # event
         self.events = Event(clock, screen)
 
@@ -57,29 +61,32 @@ class Game:
 
         self.map.load_game = self.load_game
 
+        self.menu.current = "Game"
+
+
 
 
     # running
     def run(self):
-        self.playing = True
+        if self.load and not self.loaded:
+            self.events.Load_game = True
+            self.loaded = True
+            self.playing = False
+        else:
+            self.playing = True
         while self.playing:
-            if self.load:
-                self.map.reconstruct()
             tick = self.clock.tick(60)  # Limiter le nombre de FPS à 60 (c'est déjà très bien)
             self.game_time.second += tick / 1000  # Compter le nombre de secondes écoulées depuis le lancement du jeu
             self.update()  # La fonction globale qui sert à mettre à jour sans arrêt l'état des unités, bâtiments etc...
             self.draw()  # Dessiner le GUI
             self.events.events()  # Démarre la boucle des évènements pour permettre de détecter toutes les actions dans le jeu
 
-            if self.load:
-                self.events.Load_game = True
-            else:
-                if not self.real_game:
-                    # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
-                    self.start_real_game()
+            if not self.real_game:
+                # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
+                self.start_real_game()
 
-                else:
-                    self.AI.action_json()  # Dis à l'AI de commencer à jouer
+            else:
+                self.AI.action_json()  # Dis à l'AI de commencer à jouer
 
     def update(self):
         self.camera.update()
@@ -90,6 +97,11 @@ class Game:
         self.game_time.update()
         self.save_game.update()
         self.load_game.update()
+        while self.map.events.pause:
+            if not self.menu.pause:
+                self.map.events.pause = False
+            self.menu.display_pause()
+        self.map.events.Save_game = self.menu.save
         if self.map.actual_age:
             self.map.load_images(self.map.actual_age)
             self.gui.icon_images = self.gui.load_icon_images(2)

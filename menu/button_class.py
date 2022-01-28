@@ -8,7 +8,6 @@ from pygame.locals import *
 
 
 class ButtonM():
-    pygame.init()
     def __init__(self, screen, x, y, text):
         self.screen = screen
         self.x = x
@@ -29,6 +28,7 @@ class ButtonM():
         action = False
 
         pos = pygame.mouse.get_pos()
+
         mouse_action = pygame.mouse.get_pressed()
 
         if self.button_rect.collidepoint(pos):
