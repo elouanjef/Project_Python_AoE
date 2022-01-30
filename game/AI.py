@@ -4,6 +4,7 @@ from pygame.mixer import find_channel
 from .events import *
 from settings import *
 from .buildings import *
+from .units import *
 import json
 
 action_dict = {
@@ -13,7 +14,10 @@ action_dict = {
     "Archer": 3,
     "Infantryman": 4,
     "Villager": 5,
-    "get_resource": 6
+    "get_resource": 6,
+    "next-age": 7,
+    "Stable": 8,
+    "Cavalier": 9
 }
 
 
@@ -29,10 +33,12 @@ class AI:
         self.AI_unit = []
         self.AI_villager = []
         self.AI_batiment = []
+        self.age = 1
         with open(AI_action_JSONfile) as f:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
-                              self.create_Archer, self.create_Infantryman, self.create_villager, self.get_resource]
+                              self.create_Archer, self.create_Infantryman, self.create_villager, self.get_resource, 
+                              self.next_age, self.AI_construct_Stable,self.create_Cavalier]
         self.towncenter = self.AI_construct_Towncenter(5, 10)
 
         self.all_in = False
@@ -71,11 +77,16 @@ class AI:
             self.AI_batiment.append(ent)
             self.map.buildings[x][y] = ent
             self.created_bar = True
-        else:
+        elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
             if (0 < y < 49):
                 self.AI_construct_Barracks(x, y + 1)
             elif (0 < x < 49):
                 self.AI_construct_Barracks(x + 1, y)
+        else:
+            if (0 < y < 49):
+                self.AI_construct_Barracks(x, y + 2)
+            elif (0 < x < 49):
+                self.AI_construct_Barracks(x + 2, y)
 
     def AI_construct_Archery(self, x, y):
         # print(f'construct an Archery at ({x},{y})')
@@ -85,11 +96,36 @@ class AI:
             self.AI_batiment.append(ent)
             self.map.buildings[x][y] = ent
             self.created_arc = True
-        else:
+        elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
             if (0 < y < 49):
                 self.AI_construct_Archery(x, y + 1)
             elif (0 < x < 49):
                 self.AI_construct_Archery(x + 1, y)
+        else:
+            if (0 < y < 49):
+                self.AI_construct_Archery(x, y + 2)
+            elif (0 < x < 49):
+                self.AI_construct_Archery(x + 2, y)
+
+
+    def AI_construct_Stable(self, x, y):
+        # print(f'construct an Archery at ({x},{y})')
+        if not self.map.world[x][y]["collision"]:
+            ent = Stable((x, y), self.resource_man, "Red", False)
+            self.map.entities.append(ent)
+            self.AI_batiment.append(ent)
+            self.map.buildings[x][y] = ent
+            self.created_arc = True
+        elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
+            if (0 < y < 49):
+                self.AI_construct_Stable(x, y + 1)
+            elif (0 < x < 49):
+                self.AI_construct_Stable(x + 1, y)
+        else:
+            if (0 < y < 49):
+                self.AI_construct_Stable(x, y + 2)
+            elif (0 < x < 49):
+                self.AI_construct_Stable(x + 2, y)
 
     # ================================================================================================================================================================
     # =============================================================       GETTING RESSOURCE      =====================================================================
@@ -228,22 +264,10 @@ class AI:
                     villa_pos = (dict_resource[i][3][0], dict_resource[i][3][1], i)
             if (villa_pos == (-1, -1, -1)): return
             if self.AI_villager[int(villa_pos[2])].map.world[villa_pos[0] + 1][villa_pos[1]]["collision"]:
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # print("change Buisson 1")
                 self.get_new_resource("Buisson", 1)
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # print("change Buisson 2")
                 self.get_new_resource("Buisson", 2)
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # print("change Buisson 3")
                 self.get_new_resource("Buisson", 3)
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
-                # print("change Buisson 4")
                 self.get_new_resource("Buisson", 4)
-                # ))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) 
             self.AI_villager[int(villa_pos[2])].set_target(
                 (villa_pos[0] + 1, villa_pos[1]))  # + 1 because of mining_position
             self.AI_villager[int(villa_pos[2])].in_work = True
@@ -427,6 +451,18 @@ class AI:
                 self.AI_unit.append(a)
                 a.set_target((x, y))
 
+
+
+
+    def create_Cavalier(self, x, y):
+        for i in self.map.entities:
+            if i.name == "Stable" and i.team == "Red":
+                a = Cavalier(self.map.world[i.pos[0]][i.pos[1] + 1], self.map, self.map.resource_man,
+                                "Red", False)
+                self.map.list_troop.append(a)
+                self.AI_unit.append(a)
+                a.set_target((x, y))
+
     # ================================================================================================================================================================
     # =============================================================       ATTACK AND DEFENSE     =====================================================================
     # ================================================================================================================================================================
@@ -506,6 +542,15 @@ class AI:
                         soldat.set_target((1,1))
                         continue
 
+    # ================================================================================================================================================================
+    # =============================================================           NEXT AGE           =====================================================================
+    # ================================================================================================================================================================
+
+
+    def next_age(self):
+        self.age = 2
+        for budi in self.AI_batiment:
+            budi.passer_age()
 
 
     # ================================================================================================================================================================
@@ -546,6 +591,14 @@ class AI:
                         self.get_resource("Or")
                         self.get_resource("Carrière de pierre")
                         self.get_resource("Buisson")
+                    elif action_dict.get(action) == 7:
+                        self.next_age()
+                    elif action_dict.get(action) == 8:
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos[0], pos[1])
+                    elif action_dict.get(action) == 9:
+                        act = self.function_list[action_dict.get(action)]
+                        act(pos[0],pos[1])
                     else:
                         print("U should update ur action")
 

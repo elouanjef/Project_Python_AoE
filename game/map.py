@@ -208,23 +208,6 @@ class Map:
                         self.examine_unit = grid_pos
                         self.gui.examined_unit = units
 
-                    # attacker's target ici ??middle_mouse
-
-                    # if mouse_action[2] and (units is not None) and (self.examine_unit is not None):  # Si on a selectionné une troupe avec le clic gauche on affiche
-                    #     self.examine_target_unit = grid_pos
-                    #     target_unit = self.units[grid_pos[0]][grid_pos[1]-1]
-                    #     # print(grid_pos)
-                    #     # print(target_unit)
-                    #     # for x in range(0, 49):
-                    #     #     for y in range(0, 49):
-                    #     #         if (self.units[x][y] is not None):
-                    #     #             print(f"{self.units[x][y]} at {x}-{y}")
-                    #     atk_unit = self.units[self.examine_unit[0]][self.examine_unit[1]]
-                    #     atk_range = target_unit.get_attack_range()
-                    #     if self.examine_target_unit in atk_range:
-                    #         self.list_attacker_defender.append((atk_unit, target_unit))
-                    #     # self.examine_unit = None
-                    #     # self.examine_target_unit = None
 
                     if mouse_action[
                         0] and collision:  # Si on a selectionné une ressource avec le clic gauche on affiche
@@ -413,21 +396,6 @@ class Map:
 
                     if self.attacking_unit:
                         for ad in self.list_units_atk:
-                            # if ad[1].health <= 0:
-                            #     m_x, n_y = ad[1].pos
-                            #     if ad[1] in self.list_troop:
-                            #         vill = self.list_troop.index(ad[1])
-                            #     self.examine_tile = None
-                            #     self.gui.examined_tile = None
-                            #     if (vill in self.list_troop):
-                            #         self.list_troop.pop(vill)
-                            #     self.units[m_x][n_y] = None
-                            #     self.choosing_pos_x, self.choosing_pos_y = None, None
-                            #     self.attacking_unit = False
-                            #     ind = self.list_units_atk.index(ad)
-                            #     (atker, defer) = self.list_units_atk.pop(ind)
-                            #     del atker
-                            # else:
                             if (ad[0].health ==0 or ad[1].health == 0):
                                 self.list_units_atk.pop(self.list_units_atk.index(ad))
                             atk_rg = ad[0].get_attack_range()

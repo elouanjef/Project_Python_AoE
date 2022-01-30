@@ -50,6 +50,15 @@ class Building:
                 if self.health == self.health_max:
                     self.health += 1000
                 self.health_ratio = self.health_max / self.health_bar_length
+            elif self.team == 'Red':
+                self.bar_image = self.secondage_image.copy()
+                self.image = self.secondage_image
+                self.age_2 = True
+                self.health_max += 1000
+                if self.health == self.health_max:
+                    self.health += 1000
+                self.health_ratio = self.health_max / self.health_bar_length
+
             else:
                 self.age = 'Firstage'
         else:
