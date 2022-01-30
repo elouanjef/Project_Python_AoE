@@ -17,7 +17,8 @@ action_dict = {
     "get_resource": 6,
     "next-age": 7,
     "Stable": 8,
-    "Cavalier": 9
+    "Cavalier": 9,
+    "All-attack": 10
 }
 
 
@@ -38,7 +39,7 @@ class AI:
             self.data = json.load(f)
         self.function_list = [self.AI_construct_Towncenter, self.AI_construct_Barracks, self.AI_construct_Archery,
                               self.create_Archer, self.create_Infantryman, self.create_villager, self.get_resource, 
-                              self.next_age, self.AI_construct_Stable,self.create_Cavalier]
+                              self.next_age, self.AI_construct_Stable,self.create_Cavalier,self.all_attack]
         self.towncenter = self.AI_construct_Towncenter(5, 10)
 
         self.all_in = False
@@ -78,14 +79,14 @@ class AI:
             self.map.buildings[x][y] = ent
             self.created_bar = True
         elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
-            if (0 < y < 49):
+            if not self.map.world[x][y+1]["collision"]:
                 self.AI_construct_Barracks(x, y + 1)
-            elif (0 < x < 49):
+            elif not self.map.world[x+1][y]["collision"]:
                 self.AI_construct_Barracks(x + 1, y)
         else:
-            if (0 < y < 49):
+            if not self.map.world[x][y+2]["collision"]:
                 self.AI_construct_Barracks(x, y + 2)
-            elif (0 < x < 49):
+            else:
                 self.AI_construct_Barracks(x + 2, y)
 
     def AI_construct_Archery(self, x, y):
@@ -97,14 +98,14 @@ class AI:
             self.map.buildings[x][y] = ent
             self.created_arc = True
         elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
-            if (0 < y < 49):
+            if not self.map.world[x][y+1]["collision"]:
                 self.AI_construct_Archery(x, y + 1)
-            elif (0 < x < 49):
+            elif not self.map.world[x+1][y]["collision"]:
                 self.AI_construct_Archery(x + 1, y)
         else:
-            if (0 < y < 49):
+            if not self.map.world[x][y+2]["collision"]:
                 self.AI_construct_Archery(x, y + 2)
-            elif (0 < x < 49):
+            else:
                 self.AI_construct_Archery(x + 2, y)
 
 
@@ -117,14 +118,14 @@ class AI:
             self.map.buildings[x][y] = ent
             self.created_arc = True
         elif (not self.map.world[x][y+1]["collision"]) or (not self.map.world[x+1][y]["collision"]):
-            if (0 < y < 49):
+            if not self.map.world[x][y+1]["collision"]:
                 self.AI_construct_Stable(x, y + 1)
-            elif (0 < x < 49):
+            elif not self.map.world[x+1][y]["collision"]:
                 self.AI_construct_Stable(x + 1, y)
         else:
-            if (0 < y < 49):
+            if not self.map.world[x][y+2]["collision"]:
                 self.AI_construct_Stable(x, y + 2)
-            elif (0 < x < 49):
+            else:
                 self.AI_construct_Stable(x + 2, y)
 
     # ================================================================================================================================================================
@@ -476,8 +477,42 @@ class AI:
                     self.map.list_units_atk.append((soldat, targ_soldat))
 
 
-    def group_attacking(self):
-        pass
+    def all_attack(self, x, y):
+        targ = None
+        li = self.find_target()
+        for it in li:
+            if x == 0 and y == 0 and it.name == "TownCenter":
+                targ = it
+                break
+            elif x == 0 and y == 1 and it.name == "Barracks":
+                targ = it
+                break
+            elif x == 0 and y == 2 and it.name == "Archery":
+                targ = it
+                break
+            elif x == 1 and y == 0 and it.name == "Stable":
+                targ = it
+                break
+        co = - 5
+        pos = targ.pos
+        for sol in self.AI_unit:
+            if sol.name == "Cavalier":
+                sol.set_target((pos[0]+co,pos[1]))
+                for x in range(sol.pos[0]-sol.range,sol.pos[0]+sol.range):
+                    for y in range(sol.pos[1]-sol.range,sol.pos[1]+sol.range):
+                        if self.map.units[x][y] is not None:
+                            self.map.list_units_atk.append((sol, self.map.units[x][y]))
+                            self.map.list_attacker_defender.append((sol, self.map.buildings[x][y]))
+                            co += 1
+            if sol.name == "Archer":
+                sol.set_target((pos[0],pos[1]+co))
+                for x in range(sol.pos[0]-sol.range,sol.pos[0]+sol.range):
+                    for y in range(sol.pos[1]-sol.range,sol.pos[1]+sol.range):
+                        if self.map.units[x][y] is not None:
+                            self.map.list_units_atk.append((sol, self.map.units[x][y]))
+                            co += 1
+
+
 
     def auto_defense(self):
         if self.all_in == True:
@@ -541,6 +576,22 @@ class AI:
                     if (not self.map.world[1][1]["collision"]) and (self.map.units[1][1] is not None):
                         soldat.set_target((1,1))
                         continue
+    # ================================================================================================================================================================
+    # =============================================================       TARGET RESEARCHING      ====================================================================
+    # ================================================================================================================================================================
+
+    def find_target(self):
+        list_target = []
+        for i in range(0,50):
+            for j in range(0,50):
+                if self.map.buildings[i][j] is not None:
+                    if self.map.buildings[i][j].team == "Blue":
+                        list_target.append(self.map.buildings[i][j])
+
+        return list_target
+
+
+
 
     # ================================================================================================================================================================
     # =============================================================           NEXT AGE           =====================================================================
@@ -599,6 +650,8 @@ class AI:
                     elif action_dict.get(action) == 9:
                         act = self.function_list[action_dict.get(action)]
                         act(pos[0],pos[1])
+                    elif action_dict.get(action) == 10:
+                        self.all_attack(pos[0], pos[1])
                     else:
                         print("U should update ur action")
 
