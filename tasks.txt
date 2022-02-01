@@ -1,15 +1,15 @@
-+ menu                                                  ;zakaria	       (il reste à créer les autres sous-menus par exemple Options, Credits)
++ menu                                                  ;zakaria	/ Elouan     DONE
 + algo A*                                               ;Cong Khai             DONE
 + sauvgarder                                            ;Cong Khai             DONE
 + charger le jeu                                        ;Cong Khai             Done
 + gestion des unite/batiment                            ;Elouan                DONE
-+ ajouter des personnages (one human + one I.A) 	;Cong Khai	                 DONE
++ ajouter des personnages (one human + one I.A) 	      ;Cong Khai	           DONE
 + la methode de la mini                                 ;Cong Khai             DONE
 + collision                                             ;Cong Khai             DONE
 + les themes/âges                                       ;Elouan		             DONE
 + IA                                                    ;Cong Khai             DONE             
-+ randomising the map in intervalls                     ;Cong Khai             DONE
-+ cheats commands                                       ;TUAN                  DONE
++ randomising the map in intervalls                     ;Cong Khai  / Elouan   DONE
++ cheats commands                                       ;TUAN / Elouan         DONE
 + resource ()                                           ;Elouan                DONE
 + fog of war                                            ; Hoai                 DONE
 + map                                                   ;Cong Khai et Elouan   DONE
