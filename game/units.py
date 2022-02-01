@@ -194,3 +194,14 @@ class Cavalier(Unit):
     attack = 8
     range = 1
     velocity_inverse = 65
+
+class Bigdaddy(Unit):
+    bar_image = supra.copy()
+    image = supra
+    name = "Bigdaddy"
+    game_name = "Bigdaddy"
+    health = 500
+    health_max = 500
+    attack = 600
+    range = 15
+    velocity_inverse = 25

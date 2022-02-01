@@ -84,9 +84,10 @@ class Game:
             if not self.real_game:
                 # Lancer une vraie partie, ne pas oublier de mettre à jour les starting resources
                 self.start_real_game()
-
-            else:
                 self.AI.action_json()  # Dis à l'AI de commencer à jouer
+            else:
+                self.AI.action_json()
+
 
     def update(self):
         self.camera.update()
@@ -97,15 +98,16 @@ class Game:
         self.game_time.update()
         self.save_game.update()
         self.load_game.update()
+        self.map.actual_age = self.gui.age_sup
+        if self.map.actual_age:
+            self.map.load_images(self.map.actual_age)
+            self.gui.icon_images = self.gui.load_icon_images(2)
+            self.gui.tiles = self.gui.create_build_gui()
         while self.map.events.pause:
             if not self.menu.pause:
                 self.map.events.pause = False
             self.menu.display_pause()
         self.map.events.Save_game = self.menu.save
-        if self.map.actual_age:
-            self.map.load_images(self.map.actual_age)
-            self.gui.icon_images = self.gui.load_icon_images(2)
-            self.gui.tiles = self.gui.create_build_gui()
 
     def draw(self):
         self.screen.fill(BLACK)  # On dessine un background noir sur lequel on dessine tout le GUI et la map

@@ -4,7 +4,7 @@ import random
 import noise
 from os import path
 from .buildings import TownCenter, Barracks, Archery, Stable
-from .units import Archer, Infantryman, Villager, Cavalier
+from .units import Archer, Infantryman, Villager, Cavalier, Bigdaddy
 from .events import *
 from .map_resource_class import Map_Tree, Map_Tile, Map_Bush, Map_Gold, Map_Rock, MapResource
 
@@ -89,6 +89,9 @@ class Map:
     # work in map
     def update(self, screen, camera):
 
+        self.gui.events.update_bigdaddy()
+        self.bigdaddy = self.gui.events.bigdaddy
+
         for uni in self.list_troop:
             if uni.health <= 0:
                 self.units[uni.pos[0]][uni.pos[1]] = None
@@ -114,6 +117,15 @@ class Map:
 
             if ent.age_2 and (ent not in self.age_2_red):
                 self.age_2_red.append(ent)
+
+        if self.age_2_blue != []:
+            for building in self.blue_team_ent:
+                building.passer_age()
+            self.events.remise_age()
+        if self.age_2_red != []:
+            for building in self.red_team_ent:
+                building.passer_age()
+            self.events.remise_age()
 
         if mouse_action[2]:
             self.examine_tile = None
@@ -227,6 +239,11 @@ class Map:
                         # self.mining = True  # on active le mode minage
                         self.gui.mining_gui = True  # et on active le gui de minage
 
+                    if self.gui.events.bigdaddy:
+                        self.bigdaddy_spawn()
+
+
+
                     if self.gui.events.get_troop() is not None:
                         if (self.examine_tile and self.gui.examined_tile) is not None:
                             pos = self.examine_tile
@@ -238,15 +255,16 @@ class Map:
                                     "Archer"
                             ):
                                 a = Archer(
-                                    self.world[pos_x][pos_y],
-                                    self,
-                                    self.resource_man,
-                                    self.gui.examined_tile.team,
-                                    False,
+                                    self.world[pos_x][pos_y], # position actuelle du bâtiment créant l'unité
+                                    self, # le monde actuel
+                                    self.resource_man, # instancie la classe ressource qui va "payer" l'unité
+                                    self.gui.examined_tile.team, # l'équipe du bâtiment qui crée l'unité
+                                    False, # indiquer que ce n'est pas le début de la partie, l'unité côute
+                                            # alors des ressources
                                 )
-                                self.list_troop.append(a)
+                                self.list_troop.append(a) # ajout de l'unité dans la liste d'unités
                                 self.examine_tile = None
-                                self.gui.events.remise_troop()
+                                self.gui.events.remise_troop() # pour éviter qu'on crée en boucle des unités
 
                             elif (
                                     self.gui.events.get_troop() == "infantryman"
@@ -403,23 +421,6 @@ class Map:
                                 ad[0].kill(ad[1])              
                             else:
                                 self.list_units_atk.pop(self.list_units_atk.index(ad))
-
-                    if self.events.get_age_sup():
-                        for building in self.entities:
-                            if building.team == "Blue":
-                                building.passer_age()
-                        self.events.remise_age()
-
-                    if self.age_2_blue != []:
-                        for building in self.blue_team_ent:
-                            if not building.age_2:
-                                building.passer_age()
-                        self.events.remise_age()
-                    if self.age_2_red != []:
-                        for building in self.red_team_ent:
-                            if not building.age_2:
-                                building.passer_age()
-                        self.events.remise_age()
 
                     if self.events.update_destroy():
                         # condition qui récupère la variable dans events permettant de savoir si on veut détruire
@@ -855,6 +856,17 @@ class Map:
             if not self.constructed:
                 print("Le Forum n'a pas pu être construit")
 
+    def bigdaddy_spawn(self):
+        a = Bigdaddy(
+            self.world[25][25],
+            self,
+            self.resource_man,
+            "Blue",
+            False,
+        )
+        self.list_troop.append(a)
+        self.examine_tile = None
+
     def reconstruct(self):
         self.entities = []
 
@@ -925,6 +937,12 @@ class Map:
                 self.list_troop.append(un)
             if unit[3] == "Archer":
                 un = Archer(self.world[unit[1][0]][unit[1][1]], self, self.resource_man,
+                            unit[0], False)
+                un.target = unit[4]
+                un.health = unit[2]
+                self.list_troop.append(un)
+            if unit[3] == "Bigdaddy":
+                un = Bigdaddy(self.world[unit[1][0]][unit[1][1]], self, self.resource_man,
                             unit[0], False)
                 un.target = unit[4]
                 un.health = unit[2]

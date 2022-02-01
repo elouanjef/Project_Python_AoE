@@ -15,6 +15,7 @@ class InputBox:
         self.resource_man = resource_man
         self.exit_box = exit_box
         self.total_text = ''
+        self.bigdaddy = False
 
     def handle_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -36,14 +37,25 @@ class InputBox:
                     #quarry for rock
                     #woodstock for wood
                     #rock wood gold food plus facile à retenir
-                    if self.text == 'rock':
+
+                    if self.text == 'ninjalui':
+                        self.resource_man.starting_resources["Rock"] += 10000
+                        self.resource_man.starting_resources["Wood"] += 10000
+                        self.resource_man.starting_resources["Gold"] += 10000
+                        self.resource_man.starting_resources["Food"] += 10000
+
+                    if self.text == 'bigdaddy':
+                        self.bigdaddy = True
+
+                    if self.text == 'quarry':
                         self.resource_man.starting_resources["Rock"] += 100
-                    if self.text == 'wood':
+                    if self.text == 'woodstock':
                         self.resource_man.starting_resources["Wood"] += 200
-                    if self.text == 'gold':
+                    if self.text == 'coinage':
                         self.resource_man.starting_resources["Gold"] += 100
-                    if self.text == 'food':
+                    if self.text == 'pepperoni':
                         self.resource_man.starting_resources["Food"] += 100
+
                     #Code for No Fog
                     if self.text == 'nofog':
                         pass

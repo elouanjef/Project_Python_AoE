@@ -27,6 +27,7 @@ class Resource:
             "Infantryman": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 30},
             "Villager": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 50},
             "Cavalier": {"Wood": 0, "Rock": 0, "Gold": 75, "Food": 60},
+            "Bigdaddy": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 0},
             "Secondage": {"Wood": 0, "Rock": 0, "Gold": 0, "Food": 800}
         }
 
@@ -45,9 +46,7 @@ class Resource:
         return affordable
 
     def buy(self, ent):
-
         achat = ent.name
-
         if ent.team == "Blue":
             for resource, cost in self.costs[achat].items():
                 if self.starting_resources[resource] >= cost:

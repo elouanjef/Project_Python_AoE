@@ -76,6 +76,8 @@ class Gui:
         # create a new gui
         self.tiles = self.create_build_gui()
 
+        self.age_sup = False
+
         # choose tree, rock or gold
         self.choose = None
         self.selecting_building = None
@@ -176,7 +178,7 @@ class Gui:
             print("pause")
 
         if self.examined_unit is not None and (
-                self.examined_unit.game_name in ("Archer", "Villageois", "Barbare", "Cavalier")):
+                self.examined_unit.game_name in ("Archer", "Villageois", "Barbare", "Cavalier", "Bigdaddy")):
 
             img = self.examined_unit.image
             w, h = self.select_rect.width, self.select_rect.height
@@ -249,9 +251,11 @@ class Gui:
                 # mouse_pos = pg.mouse.get_pos()
                 # mouse_action = pg.mouse.get_pressed()
                 if mouse_action[0] and button3.rect.collidepoint(mouse_pos):
+                    self.examined_tile.age_2 = True
                     self.events.remise()
                     button3.button("black on green")
                     self.events.set_age_sup()
+                    self.age_sup = self.events.get_age_sup()
 
             if self.examined_tile.name == "Barracks" and self.examined_tile.team == "Blue":
                 button = Button(screen, (self.width * 0.59, self.height * 0.95), 'Détruire', 20, 'white on red')

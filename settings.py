@@ -6,7 +6,7 @@ TILE_SIZE_MINI_MAP = 4
 MAP_SIZE = 50
 STARTING_POS = (int(0.8 * MAP_SIZE), int(0.1 * MAP_SIZE))
 STARTING_RESOURCES_SAND = [2000, 2000, 1000, 2000]
-STARTING_RESOURCES = [200, 200, 100, 500]
+STARTING_RESOURCES = [200, 200, 100, 900]
 STARTING_RESOURCES_AI = [2000, 400, 200, 400]
 
 # Buttons
@@ -88,6 +88,7 @@ archer = pg.transform.scale(pg.image.load(path.join(graphics_folder, "archer.png
 infantryman = pg.transform.scale(pg.image.load(path.join(graphics_folder, "pikeman.png")), (38, 48))
 villager = pg.transform.scale(pg.image.load(path.join(graphics_folder, "villager.png")), (30, 40))
 cavalier = pg.transform.scale(pg.image.load(path.join(graphics_folder, "cavalier.png")), (45, 55))
+supra = pg.transform.scale(pg.image.load(path.join(graphics_folder, "supra.png")), (75, 105))
 
 # menu
 menuf = path.dirname(__file__)  # Path of the Project_Python_AoE foler

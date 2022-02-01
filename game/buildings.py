@@ -41,11 +41,13 @@ class Building:
 
     def passer_age(self):
         if self.game_name == 'Forum':
+            print('je suis là')
             self.age = 'Secondage'
-            if self.resource_man.buy_age(self) != -1 and not self.age_2:
+            if self.resource_man.buy_age(self) != -1 and self.age_2:
                 self.bar_image = self.secondage_image.copy()
                 self.image = self.secondage_image
-                self.age_2 = True
+                self.age_2 = False
+                print("et ici")
                 self.health_max += 1000
                 if self.health == self.health_max:
                     self.health += 1000
@@ -53,7 +55,7 @@ class Building:
             elif self.team == 'Red':
                 self.bar_image = self.secondage_image.copy()
                 self.image = self.secondage_image
-                self.age_2 = True
+                self.age_2 = False
                 self.health_max += 1000
                 if self.health == self.health_max:
                     self.health += 1000
@@ -63,10 +65,10 @@ class Building:
                 self.age = 'Firstage'
         else:
             self.age = 'Secondage'
-            if not self.age_2:
+            if self.age_2:
                 self.bar_image = self.secondage_image.copy()
                 self.image = self.secondage_image
-                self.age_2 = True
+                self.age_2 = False
                 self.health_max += 1000
                 if self.health == self.health_max:
                     self.health += 1000

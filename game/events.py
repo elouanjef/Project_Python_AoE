@@ -61,7 +61,9 @@ class Event:
                     self.Load_game = True
                     self.timer = 0.0001
 
-                
+    def update_bigdaddy(self):
+        self.bigdaddy = self.chatbox.bigdaddy
+        self.chatbox.bigdaddy = False
 
     def set_destroy(self):
         self.destroy = True
