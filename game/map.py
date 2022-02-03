@@ -46,7 +46,7 @@ class Map:
         self.events = events
         self.actual_age = self.events.get_age_sup()
         self.tiles = self.load_images(False)
-        # self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
+        self.fog = [[FOG_BLACK for x in range(self.grid_size_x)] for y in range(self.grid_size_y)]
         self.world = self.build_world()
         self.collision_matrix = self.create_collision_matrix()
         self.changed_tiles = []
@@ -542,22 +542,22 @@ class Map:
         for changing_tiles in self.changed_tiles:
             changing_tiles["tile"] = ''
 
-    # def mark_fog_to_none(self, unit_x, unit_y, check_team):
-    #     d = 2
-    #     for x in range(self.grid_size_x):
-    #         for y in range(self.grid_size_y):
-    #             if check_team == "Blue":
-    #                 if ((x-unit_x)**2 + (y-unit_y)**2) < d**2 :
-    #                     self.fog[x][y] = FOG_NONE
+    def mark_fog_to_none(self, unit_x, unit_y, check_team):
+         d = 2
+         for x in range(self.grid_size_x):
+             for y in range(self.grid_size_y):
+                 if check_team == "Blue":
+                     if ((x-unit_x)**2 + (y-unit_y)**2) < d**2 :
+                         self.fog[x][y] = FOG_NONE
 
     def draw(self, screen, camera):
 
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
 
-        # for x in range(self.grid_size_x):
-        #     for y in range(self.grid_size_y):
-        #         if self.fog[x][y] == FOG_NONE:
-        #             self.fog[x][y] = FOG_GREY
+        for x in range(self.grid_size_x):
+             for y in range(self.grid_size_y):
+                 if self.fog[x][y] == FOG_NONE:
+                     self.fog[x][y] = FOG_GREY
 
         for x in range(self.grid_size_x):
             for y in range(self.grid_size_y):
@@ -578,7 +578,7 @@ class Map:
 
                 units = self.units[x][y]
                 if units is not None:
-                    # self.mark_fog_to_none(x,y,units.team)
+                    self.mark_fog_to_none(x,y,units.team)
                     screen.blit(units.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (units.image.get_height() - TILE_SIZE) + camera.scroll.y))
@@ -602,7 +602,7 @@ class Map:
 
                 building = self.buildings[x][y]
                 if building is not None:
-                    # self.mark_fog_to_none(x,y,building.team)
+                    self.mark_fog_to_none(x,y,building.team)
                     screen.blit(building.image,
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (building.image.get_height() - TILE_SIZE) + camera.scroll.y))
@@ -646,17 +646,18 @@ class Map:
                     render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y
                 )
             )
-        # for x in range(self.grid_size_x):
-        #     for y in range(self.grid_size_y):
-        #         if self.fog[x][y] != FOG_NONE:
-        #             render_pos = self.world[x][y]["render_pos"]
-        #             x_pixel = render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x
-        #             y_pixel = render_pos[1] + camera.scroll.y
-        #             rect = (x_pixel, y_pixel, TILE_SIZE, TILE_SIZE)
-        #             color = (0, 0, 0, 160) if self.fog[x][y] == FOG_GREY else (0,0,0,255)
-        #             shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
-        #             pg.draw.rect(shape_surf, color, shape_surf.get_rect())
-        #             screen.blit(shape_surf, rect)
+        if self.events.chatbox.fog:
+            for x in range(self.grid_size_x):
+                 for y in range(self.grid_size_y):
+                     if self.fog[x][y] != FOG_NONE:
+                         render_pos = self.world[x][y]["render_pos"]
+                         x_pixel = render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x
+                         y_pixel = render_pos[1] + camera.scroll.y
+                         rect = (x_pixel, y_pixel, TILE_SIZE, TILE_SIZE)
+                         color = (0, 0, 0, 160) if self.fog[x][y] == FOG_GREY else (0,0,0,255)
+                         shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+                         pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+                         screen.blit(shape_surf, rect)
 
     # create worlds based on created dimensions
     def build_world(self):

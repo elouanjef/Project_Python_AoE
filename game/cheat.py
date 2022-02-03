@@ -16,6 +16,7 @@ class InputBox:
         self.exit_box = exit_box
         self.total_text = ''
         self.bigdaddy = False
+        self.fog = True
 
     def handle_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -58,7 +59,10 @@ class InputBox:
 
                     #Code for No Fog
                     if self.text == 'nofog':
-                        pass
+                        if self.fog:
+                            self.fog = False
+                        else:
+                            self.fog = True
                     self.text = ''
                     self.exit_box = True
                 elif event.key == pg.K_BACKSPACE:

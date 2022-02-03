@@ -182,19 +182,20 @@ class Gui:
 
             img = self.examined_unit.image
             w, h = self.select_rect.width, self.select_rect.height
-            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
+            screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79)) # dessine le rectangle
+                                                                            # regroupant les informations
             img_scale = self.scale_image(img, h=h * 0.70)
             health = format(str(self.examined_unit.health))
             health_max = format(str(self.examined_unit.health_max))
-            draw_text(screen, f"Vie: {health} / {health_max}", FONT_SIZE, WHITE,
+            draw_text(screen, f"Vie: {health} / {health_max}", FONT_SIZE, WHITE, # donne l'information de la vie de l'unité
                       (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.05))
             screen.blit(img_scale, (self.width * 0.35 + self.width * 0.008, self.height * 0.79 + self.height * 0.01))
-            draw_text(screen, str(self.examined_unit.game_name), FONT_SIZE, WHITE,
+            draw_text(screen, str(self.examined_unit.game_name), FONT_SIZE, WHITE, # donne son nom
                       (self.width * 0.35 + self.width * 0.17, self.height * 0.79 + self.height * 0.02))
             draw_text(screen, "{} team".format(self.examined_unit.team), FONT_SIZE, pg.Color(self.examined_unit.team),
-                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height * 0.006))
+                      (self.width * 0.35 + self.width * 0.25, self.height * 0.79 + self.height * 0.006)) # puis son équipe
 
-            if mouse_action[2]:
+            if mouse_action[2]: # action de déplacement (clic droit)
                 self.events.change_unit_pos()
 
         if self.choose is not None and (not self.mining_gui) and self.choose["tile"] in (
@@ -322,7 +323,7 @@ class Gui:
             screen.blit(icon, tile["rect"].topleft)
 
         # resource
-        pos = self.width - 420  # resource info position
+        pos = self.width - 440  # resource info position
         cpt_res_icon = 1
 
         for resource, resource_value in self.resource_man.starting_resources.items():

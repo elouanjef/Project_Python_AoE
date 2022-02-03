@@ -6,7 +6,6 @@ from .settings_for_menu import WHITE, YELLOW_LIGHT, GREEN_DARK, BLACK, BEIGE, HE
 import pygame
 from pygame.locals import *
 
-
 class ButtonM():
     def __init__(self, screen, x, y, text):
         self.screen = screen
