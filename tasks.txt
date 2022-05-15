@@ -1,5 +1,5 @@
 + menu                                                  ;zakaria	/ Elouan     DONE
-+ algo A*                                               ;Cong Khai             DONE
++ algo A*                                               ;TUAN                  DONE
 + sauvgarder                                            ;Cong Khai             DONE
 + charger le jeu                                        ;Cong Khai             Done
 + gestion des unite/batiment                            ;Elouan                DONE
@@ -7,9 +7,9 @@
 + la methode de la mini                                 ;Cong Khai             DONE
 + collision                                             ;Cong Khai             DONE
 + les themes/âges                                       ;Elouan		             DONE
-+ IA                                                    ;Cong Khai             DONE             
++ IA                                                    ;TUAN                  DONE             
 + randomising the map in intervalls                     ;Cong Khai  / Elouan   DONE
-+ cheats commands                                       ;TUAN / Elouan         DONE
++ cheats commands                                       ;TUAN                  DONE
 + resource ()                                           ;Elouan                DONE
 + fog of war                                            ; Hoai                 DONE
 + map                                                   ;Cong Khai et Elouan   DONE
